@@ -1,29 +1,43 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
  
 public class LasFileReader {
-	private String lasFilePath = "C:\\Users\\justi\\Desktop\\ForgeOil\\LAS\\";
+	private String lasFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\LasFiles\\";
 	
-//	public boolean readFile(String lasFile, TopData topData) { 
-//		
-//	}
+	public LasData readFile(TopData topData) { 
+		try {
+			String lasFile = convertUwi(topData.getUwi()); 
+			String fileLocation = lasFilePath + lasFile; 
+			String line = null; 
+			FileReader fileReader = new FileReader(fileLocation); 
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			LasData lasContainer = new LasData(topData.getUwi()); 
+			
+			while((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith("~A")) {
+					lasContainer.addHeader(line);
+				}
+				if (line.startsWith("      ")) {
+					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
+							&& Double.parseDouble(line.substring(0, 15)) <= topData.getUpperBound()) {
+						lasContainer.addRow(line);
+					}
+				}
+			}   
+			bufferedReader.close(); 
+			return lasContainer;
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 	
-	public static void main(String[] args) throws IOException { 
-		String lasFilePath = "C:\\Users\\justi\\Desktop\\ForgeOil\\LAS\\100010203726W400_1000_MD_COMBINED_MERGED.las";
-		String line = null; 
-		FileReader fileReader = new FileReader(lasFilePath); 
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		
-		 while((line = bufferedReader.readLine()) != null) {
-			 if (line.startsWith("~A")) {
-				 System.out.println(line);
-			 }
-//			 if (line.startsWith("      ")) {
-//				 if (Double.parseDouble(line.substring(6, 15)) > 1400  && Double.parseDouble(line.substring(6, 15)) < 1800)
-//			 	System.out.println(line);
-//			 }
-         }   
-         bufferedReader.close();      
+	public String convertUwi(String uwi) {
+		String fileUwi = uwi.replaceAll("/", "");
+		fileUwi = fileUwi.replaceAll("-", "");
+		fileUwi = "1" + fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+		return fileUwi;
 	}
 }

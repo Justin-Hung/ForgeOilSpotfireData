@@ -5,7 +5,17 @@ public class TopData {
 	private String uwi; 
 	private ArrayList<String> form; 
 	private ArrayList<Double> tvDepth; 
-	private int index; 
+	
+	public String getUwi() {
+		return uwi;
+	}
+	public double getLowerBound() {
+		return tvDepth.get(0) - 5.2; 
+	}
+	
+	public double getUpperBound() { 
+		return tvDepth.get(tvDepth.size()-2) + 5.0; 
+	}
 	
 	public TopData(ArrayList<String> data) { 
 		form = new ArrayList<String>();

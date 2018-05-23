@@ -22,7 +22,7 @@ public class TopFileReader {
 		data = new ArrayList<String>();
 	}
 	
-	public void readFile() throws IOException { 
+	public ArrayList<TopData> readFile() throws IOException { 
 		FileInputStream inputStream = new FileInputStream(new File(topFilePath)); 
 		
 		Workbook workbook = new XSSFWorkbook(inputStream); 
@@ -70,20 +70,6 @@ public class TopFileReader {
 		topDataList.add(new TopData(data));
 		workbook.close(); 
 		inputStream.close();
-	}
-	
-	public void test() {
-		topDataList.get(topDataList.size()-1).displayTop();
-	}
-	
-	public static void main(String[] args) { 
-		TopFileReader fileReader = new TopFileReader(); 
-		try {
-			fileReader.readFile();
-			fileReader.test();
-		}
-		catch(Exception e) { 
-			e.printStackTrace();
-		}
+		return topDataList;
 	}
 }
