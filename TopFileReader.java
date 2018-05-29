@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\GeorgeTopsT37R26_Filtered.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\GeorgeTopsT35R23_Filtered.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
@@ -50,22 +50,15 @@ public class TopFileReader {
 						if (index == 2) {
 							data.add(cell.getStringCellValue());
 						}
-						//System.out.print(cell.getStringCellValue());
 						break; 
-					case Cell.CELL_TYPE_BOOLEAN:
-						//System.out.print(cell.getBooleanCellValue());
-						break;
 					case Cell.CELL_TYPE_NUMERIC: 
 						if (index == 3) {
 							data.add(String.valueOf(cell.getNumericCellValue()));
 						}
-						//System.out.print(cell.getNumericCellValue());
 						break; 
 				}
-				//System.out.print(";");
 				index++; 
 			}
-			//System.out.println(); 
 		}
 		topDataList.add(new TopData(data));
 		workbook.close(); 

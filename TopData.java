@@ -6,15 +6,30 @@ public class TopData {
 	private ArrayList<String> form; 
 	private ArrayList<Double> tvDepth; 
 	
+	public String getFormation(Double depth) {
+		for (int i = 0; i < tvDepth.size(); i++) {
+			if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
+				if (form.get(i).equals(" VKNS UNCF")) {
+					return "VKNS";
+				}
+				if (form.get(i).equals(" VKNS") && form.get(i+1).equals(" VKNS UNCF")) {
+					return "VKNS UNCF";
+				}
+				return form.get(i).substring(1);
+			}
+		}
+		return "BFS";
+	}
+	
 	public String getUwi() {
 		return uwi;
 	}
 	public double getLowerBound() {
-		return tvDepth.get(0) - 5.2; 
+		return tvDepth.get(0) - 5.1; 
 	}
 	
 	public double getUpperBound() { 
-		return tvDepth.get(tvDepth.size()-2) + 5.0; 
+		return tvDepth.get(tvDepth.size()-2) + 5.1; 
 	}
 	
 	public TopData(ArrayList<String> data) { 

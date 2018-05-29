@@ -33,4 +33,8 @@ public class LasData {
 		}
 		System.out.println("uwi: " + uwi);
 	}
+	
+	public int getSize() {
+		return rows.size();
+	}
 }
