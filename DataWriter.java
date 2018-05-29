@@ -27,12 +27,7 @@ public class DataWriter {
 			
 			formattedData.addRow(formatRow);
 		}
-		
-		if (uwiInfo.startsWith("1W40352317110300")) { 
-			System.out.println(uwiInfo);
-		}
 
-		// formattedData.display();
 		WriteToCSV writer = new WriteToCSV(formattedData);
 		writer.write();
 	}

@@ -34,6 +34,10 @@ public class LasData {
 		System.out.println("uwi: " + uwi);
 	}
 	
+	public boolean isEmpty() {
+		return rows.isEmpty();
+	}
+	
 	public int getSize() {
 		return rows.size();
 	}

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +12,10 @@ public class LasFileReader {
 			String lasFile = convertUwi(topData.getUwi(), dir); 
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
+			File fileTest = new File(fileLocation);
+			if(!fileTest.exists()) { 
+				return null; 
+			}
 			FileReader fileReader = new FileReader(fileLocation); 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			LasData lasContainer = new LasData(topData.getUwi()); 
@@ -26,10 +31,12 @@ public class LasFileReader {
 					}
 				}
 			}   
-			if (topData.getUpperBound() == 1450.1) {
-				lasContainer.display();
-			}
 			bufferedReader.close(); 
+			
+			if (lasContainer.isEmpty()) {
+				return null;
+			}
+			
 			return lasContainer;
 		}
 		catch (Exception e) {

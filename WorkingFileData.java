@@ -24,6 +24,10 @@ public class WorkingFileData {
 		return header;
 	}
 	
+	public int getSize() {
+		return rows.size();
+	}
+	
 	public void display() {
 		System.out.println(header);
 		for(int i = 0; i < rows.size(); i++) {
