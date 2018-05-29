@@ -5,10 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
  
 public class LasFileReader {
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T35R23\\T35R23\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T35R24\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
 		try {
+			String bit = null;
+			String serviceCo = null;
 			String lasFile = convertUwi(topData.getUwi(), dir); 
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
@@ -21,13 +23,22 @@ public class LasFileReader {
 			LasData lasContainer = new LasData(topData.getUwi()); 
 
 			while((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith(" BS  .MM")) {
+					bit = line.substring(12,18);
+				}
+				if (line.startsWith(" BS  .IN")) {
+					bit = String.valueOf(Double.parseDouble(line.substring(12,18)) * 25.4);
+				}
+				if (line.startsWith(" SRVC.")) {
+					serviceCo = line.substring(12,49);
+				}
 				if (line.startsWith("~A")) {
-					lasContainer.addHeader(line);
+					lasContainer.addHeader(line + "            Bit       Service_Co." );
 				}
 				if (line.startsWith("      ")) {
-					if (Double.parseDouble(line.substring(0, 15)) >= topData.getLowerBound() 
+					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
-						lasContainer.addRow(line);
+						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
 					}
 				}
 			}   
@@ -36,7 +47,7 @@ public class LasFileReader {
 			if (lasContainer.isEmpty()) {
 				return null;
 			}
-			
+			//lasContainer.display();
 			return lasContainer;
 		}
 		catch (Exception e) {
@@ -53,6 +64,7 @@ public class LasFileReader {
 		else { 
 			fileUwi = "1" + fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
 		}
+		//System.out.println(fileUwi);
 		return fileUwi;
 	}
 }

@@ -28,6 +28,7 @@ public class DataWriter {
 			formattedData.addRow(formatRow);
 		}
 
+
 		WriteToCSV writer = new WriteToCSV(formattedData);
 		writer.write();
 	}

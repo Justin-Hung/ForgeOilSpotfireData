@@ -25,7 +25,7 @@ public class TopData {
 		return uwi;
 	}
 	public double getLowerBound() {
-		return tvDepth.get(0) - 5.1; 
+		return tvDepth.get(0) - 5.1001; 
 	}
 	
 	public double getUpperBound() { 
