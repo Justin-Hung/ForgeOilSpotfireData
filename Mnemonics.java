@@ -7,18 +7,43 @@ import java.util.Arrays;
 public class Mnemonics {
 	private String fileLocation = "C:\\Users\\jhung\\SpotfireDataFiles\\lasMnemonics.csv";
 	private ArrayList<String> gamma; 
+	public int getGammaSize() { return gamma.size(); }
+	
 	private ArrayList<String> density;
+	public int getDensitySize() { return density.size(); }
+	
 	private ArrayList<String> neutron;
+	public int getNeutronSize() { return neutron.size(); } 
+	
 	private ArrayList<String> shallow;
+	public int getShallowSize() { return shallow.size(); }
+	
 	private ArrayList<String> medium;
+	public int getMediumSize() { return medium.size(); } 
+	
 	private ArrayList<String> deep;
+	public int getDeepSize() { return deep.size(); } 
+	
 	private ArrayList<String> sp;
+	public int getSpSize() { return sp.size(); }
+	
 	private ArrayList<String> sonic;
+	public int getSonicSize() { return sonic.size(); }
+	
 	private ArrayList<String> bulkDensity; 
+	public int getBulkDensitySize() { return bulkDensity.size(); }
+	
 	private ArrayList<String> pe;
+	public int getPeSize() { return pe.size(); }
+	
 	private ArrayList<String> caliper; 
+	public int getCaliperSize() { return caliper.size(); }
+	
 	private ArrayList<String> densityCorrection;
+	public int getDensityCorrectionSize() { return densityCorrection.size(); }
+	
 	private ArrayList<String> tension;
+	public int getTensionSize() { return tension.size(); }
 	
 	public String getGamma(int i) { 
 		return gamma.get(i);
@@ -120,7 +145,6 @@ public class Mnemonics {
 				if (line.startsWith("Tension of Cable")) { 
 					tension = new ArrayList<String>( Arrays.asList( formatLine.substring(17).split(",")));
 				}
-				System.out.println(formatLine);
 				
 			}
 		}

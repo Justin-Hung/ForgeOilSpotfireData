@@ -7,6 +7,7 @@ public class Main {
 		TopFileReader topFileReader = new TopFileReader(); 
 		LasFileReader lasFileReader = new LasFileReader(); 
 		Mnemonics mnemonics = new Mnemonics();
+		mnemonics.readFile();
 		DataWriter dataWriter = new DataWriter(mnemonics);
 
 		int workingWellRow = 0; 
@@ -16,7 +17,7 @@ public class Main {
 			ArrayList<TopData> topDataList = topFileReader.readFile();
 			WorkingFileData workingData = workingFileReader.readFile();
 			
-			while (workingWellRow < workingData.getSize()) {
+			//while (workingWellRow < workingData.getSize()) {
 				
 				if (topDataList.get(topRow).getUwi().equals(workingData.getRow(workingWellRow).substring(18, 37))) {
 					LasData lasData = null;
@@ -42,7 +43,7 @@ public class Main {
 					System.err.println(workingData.getRow(workingWellRow).substring(18, 37) + " Does not have a Top");
 					workingWellRow++; 
 				}
-			}
+			//}
 		}
 		catch(Exception e) { 
 			//e.printStackTrace();
