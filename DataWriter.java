@@ -17,14 +17,15 @@ public class DataWriter {
 		position = new int[15];
 	}
 
-	public void formatData(String uwiInfo, LasData lasData, TopData topData) {
+	public FormattedData formatData(String uwiInfo, LasData lasData, TopData topData) {
 		FormattedData formattedData = new FormattedData();
 
 		String formattedHeader = lasData.getHeader().trim().replaceAll(" +", ",");
+
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
-		
+		System.out.println("TEST");
 		String finalHeader = header; 
 		
 		for (int j = 0 ; j < position.length-1 ; j++) {
@@ -35,15 +36,15 @@ public class DataWriter {
 				finalHeader += ",";
 			}
 		}
-		
+		System.out.println("TEST");
 		finalHeader = addCalcHeaders(finalHeader);
 		
 		finalHeader += "Service Co.";
 		
 		formattedData.addHeader(finalHeader);
-		
+		System.out.println("TEST");
 		for (int i = 0; i < lasData.getSize(); i++) {
-			String formatRow = lasData.getRow(i).trim().replaceAll(" +", ",");
+			String formatRow = lasData.getRow(i).trim().replaceAll(" +", ",") + ",";
 
 			Double depth = Double.parseDouble(formatRow.substring(0, formatRow.indexOf(",")));
 
@@ -56,8 +57,9 @@ public class DataWriter {
 			String formattedRow = generalWellInfo + data; 
 			
 			String finalRow = generalWellInfo + ",";
-			
+			System.out.println(formattedRow);	
 			for (int j = 0 ; j < position.length ; j++) {
+				System.out.println(position[j]);
 				if (position[j] != 0){
 					finalRow += getCol(formattedRow, position[j]) + ","; 			
 				}
@@ -65,42 +67,47 @@ public class DataWriter {
 					finalRow += ",";
 				}
 			}
-			
+			System.out.println("TEST");
 			finalRow = addCalcValues(finalRow);
-			//System.out.println(finalRow);
 			formattedData.addRow(finalRow);
 		}
-
-		WriteToCSV writer = new WriteToCSV(formattedData);
-		writer.write();
+		resetPosition();
+		System.out.println("good");
+		return formattedData;
 	}
-	public String addCalcValues(String row) {
-		String separation = "";
-		if (!getCol(row, 26).equals(",") || !getCol(row, 25).equals("")) {
-			separation = String.valueOf(Double.parseDouble(getCol(row, 26)) - Double.parseDouble(getCol(row, 25)));
-		}
-		//System.out.println(separation);
-		
-		String mediumSeparation = "";
-		if (!getCol(row, 28).equals(",") || !getCol(row, 27).equals(",")) {
-			mediumSeparation = String.valueOf(Double.parseDouble(getCol(row, 28)) - Double.parseDouble(getCol(row, 27)));		
-		}
-		//System.out.println(mediumSeparation);
-		
-		String deepSeparation = "";
-		if (!getCol(row, 29).equals(",") || !getCol(row, 28).equals(",")) {
-			deepSeparation = String.valueOf(Double.parseDouble(getCol(row, 29)) - Double.parseDouble(getCol(row, 28)));
-		}
-		//System.out.println(deepSeparation);
-		
-		String mudCake = "";
-		if (!getCol(row, 34).equals(",") || !getCol(row, 36).equals(",")) {
-			mudCake = String.valueOf(Double.parseDouble(getCol(row, 34)) - Double.parseDouble(getCol(row, 36)));
-		}
-		//System.out.println(mudCake);		
 	
-		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + separation + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
-		 + "," + mediumSeparation + "," + deepSeparation + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + mudCake 
+	public void resetPosition() {
+		position = new int[15];
+	}
+	
+	public String addCalcValues(String row) {
+//		System.out.println(row);
+//		String separation = "";
+//		if (!getCol(row, 26).equals(",") && !getCol(row, 25).equals("")) {
+//			separation = String.valueOf(Double.parseDouble(getCol(row, 26)) - Double.parseDouble(getCol(row, 25)));
+//		}
+//		System.out.println(separation);
+//		
+//		String mediumSeparation = "";
+//		if (!getCol(row, 28).equals(",") && !getCol(row, 27).equals(",")) {
+//			mediumSeparation = String.valueOf(Double.parseDouble(getCol(row, 28)) - Double.parseDouble(getCol(row, 27)));		
+//		}
+//		System.out.println(mediumSeparation);
+//		
+//		String deepSeparation = "";
+//		if (!getCol(row, 29).equals(",") && !getCol(row, 28).equals(",")) {
+//			deepSeparation = String.valueOf(Double.parseDouble(getCol(row, 29)) - Double.parseDouble(getCol(row, 28)));
+//		}
+//		System.out.println(deepSeparation);
+//		
+//		String mudCake = "";
+//		if (!getCol(row, 34).equals(",") && !getCol(row, 36).equals(",")) {
+//			mudCake = String.valueOf(Double.parseDouble(getCol(row, 34)) - Double.parseDouble(getCol(row, 36)));
+//		}
+//		System.out.println(mudCake);		
+	
+		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + "" + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
+		 + "," + "" + "," + "" + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + "" 
 		 + row.substring(ordinalIndexOf(row, ",", 37));
 		//System.out.println(temp);
 		

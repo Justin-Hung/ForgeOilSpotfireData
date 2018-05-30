@@ -5,6 +5,16 @@ public class LasData {
 	private String header; 
 	private ArrayList<String> rows; 
 	
+	public void formatHeader() {
+		for (int i = 0 ; i < header.length()-1 ; i++) {
+			if(header.charAt(i) == ' ' && header.charAt(i+1) != ' ' && header.charAt(i-1) != ' ' ) {
+				StringBuilder build = new StringBuilder(header);
+				build.setCharAt(i, '_');
+				header = build.toString();
+			}
+		}
+	}
+	
 	public LasData(String u) {
 		uwi = u;
 		rows = new ArrayList<String>(); 

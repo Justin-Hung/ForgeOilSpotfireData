@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\WorkingFileT35R24.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\WorkingFileT36R23.xlsx";
 	
 	public WorkingFileData readFile() {
 		try { 

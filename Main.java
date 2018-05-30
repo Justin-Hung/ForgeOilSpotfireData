@@ -9,6 +9,7 @@ public class Main {
 		Mnemonics mnemonics = new Mnemonics();
 		mnemonics.readFile();
 		DataWriter dataWriter = new DataWriter(mnemonics);
+		ArrayList<FormattedData> formattedDataList = new ArrayList<FormattedData>();
 
 		int workingWellRow = 0; 
 		int topRow = 0; 
@@ -17,7 +18,7 @@ public class Main {
 			ArrayList<TopData> topDataList = topFileReader.readFile();
 			WorkingFileData workingData = workingFileReader.readFile();
 			
-			//while (workingWellRow < workingData.getSize()) {
+			while (workingWellRow < workingData.getSize()) {
 				
 				if (topDataList.get(topRow).getUwi().equals(workingData.getRow(workingWellRow).substring(18, 37))) {
 					LasData lasData = null;
@@ -30,8 +31,9 @@ public class Main {
 					}
 					
 					if (lasData != null) { 
-						dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+						FormattedData formattedData = dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
 						System.out.println(topDataList.get(topRow).getUwi());
+						formattedDataList.add(formattedData);
 					}
 					else { 
 						System.err.println(topDataList.get(topRow).getUwi() + " Error in lasFile");
@@ -43,11 +45,14 @@ public class Main {
 					System.err.println(workingData.getRow(workingWellRow).substring(18, 37) + " Does not have a Top");
 					workingWellRow++; 
 				}
-			//}
+			}
 		}
 		catch(Exception e) { 
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		
+		WriteToCSV writer = new WriteToCSV(formattedDataList);
+		writer.write();
+		System.out.println("DONE");
 	}
 }
