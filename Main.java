@@ -6,7 +6,8 @@ public class Main {
 		WorkingFileReader workingFileReader = new WorkingFileReader(); 
 		TopFileReader topFileReader = new TopFileReader(); 
 		LasFileReader lasFileReader = new LasFileReader(); 
-		DataWriter dataWriter = new DataWriter();
+		Mnemonics mnemonics = new Mnemonics();
+		DataWriter dataWriter = new DataWriter(mnemonics);
 
 		int workingWellRow = 0; 
 		int topRow = 0; 

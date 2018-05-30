@@ -4,6 +4,11 @@ public class DataWriter {
 
 	private final String header = "Sort UWI,UWI,Current License,Bottom Hole Latitude,Bottom Hole Longitude,KB Elevation (m),Ground Elevation (m),Max True Vertical Depth (m),Total True Vertical Depth (m),Total Depth (m),Fluid,Mode,Lahee,Type,License Date,Spud Date,Rig Release Date,Producing Zone,Field,DEPT,Subsea,Formation,VKNS Isopach,Interval (step),";
 	private int row;
+	private Mnemonics mnemonics;
+	
+	public DataWriter(Mnemonics m) { 
+		mnemonics = m;
+	}
 
 	public void formatData(String uwiInfo, LasData lasData, TopData topData) {
 		FormattedData formattedData = new FormattedData();
@@ -27,7 +32,6 @@ public class DataWriter {
 			
 			formattedData.addRow(formatRow);
 		}
-
 
 		WriteToCSV writer = new WriteToCSV(formattedData);
 		writer.write();

@@ -33,9 +33,17 @@ public class WorkingFileReader {
 					
 					switch(cell.getCellType()) {
 						case Cell.CELL_TYPE_STRING:
-							row += cell.getStringCellValue();
-							col++;
-							break; 
+							if (cell.getStringCellValue().contains(",")) {
+								String s = cell.getStringCellValue().replaceAll(",", "&");
+								row += s;
+								col++; 
+								break; 
+							}
+							else {
+								row += cell.getStringCellValue();
+								col++;
+								break;
+							}
 						case Cell.CELL_TYPE_NUMERIC: 
 							if (col > 13 && col < 17)
 							{
