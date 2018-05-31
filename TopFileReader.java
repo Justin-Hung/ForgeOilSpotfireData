@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T37\\GeorgeTopsT37R25_Filtered.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\AllGeorgeTopsMikwan.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
@@ -21,7 +21,6 @@ public class TopFileReader {
 	private String bottomForm;
 	private double formBuffer;
 	
-	//String top, String bottom, String town, double buffer
 	public TopFileReader(String top, String bottom, String town, double buffer) {
 		topForm = top;
 		bottomForm = bottom; 
@@ -38,6 +37,7 @@ public class TopFileReader {
 		Sheet firstSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = firstSheet.iterator(); 
 		iterator.next(); 
+		boolean topCheck = false;
 		
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
@@ -46,25 +46,44 @@ public class TopFileReader {
 			int index = 0; 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				switch(cell.getCellType()) {
-					case Cell.CELL_TYPE_STRING:
-						if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
-							if (!data.isEmpty()) {
-								topDataList.add(new TopData(data));
-							}
-							data = new ArrayList<String>(); 
-							currentUwi = cell.getStringCellValue();
-							data.add(currentUwi);
-						}
-						if (index == 2) {
-							data.add(cell.getStringCellValue());
-						}
-						break; 
-					case Cell.CELL_TYPE_NUMERIC: 
-						if (index == 3) {
-							data.add(String.valueOf(cell.getNumericCellValue()));
-						}
-						break; 
+				if (index == 0 && !cell.getStringCellValue().substring(9, 17).equals(township))	{
+					index++;
+					break;
+				}
+				
+				if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
+					if (!data.isEmpty()) {
+						topDataList.add(new TopData(data));
+						topCheck = false;
+					}
+					data = new ArrayList<String>(); 
+					currentUwi = cell.getStringCellValue();
+					data.add(currentUwi);
+				}
+				
+				if (index == 2) {
+					if (cell.getStringCellValue().substring(1).equals(bottomForm)) {
+						data.add(cell.getStringCellValue());
+						cell = cellIterator.next(); 
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						index++; 
+						break;
+					}
+					if (cell.getStringCellValue().substring(1).equals(topForm)) {
+						topCheck = true; 
+						index++;
+						break;
+					}
+					if (topCheck) {
+						data.add(cell.getStringCellValue());
+					}
+				}
+				
+				if (index == 3) {
+					if (topCheck) {
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						break;
+					}
 				}
 				index++; 
 			}
@@ -73,5 +92,21 @@ public class TopFileReader {
 		workbook.close(); 
 		inputStream.close();
 		return topDataList;
+	}
+	
+	public static void main(String[] args) { 
+		UserInput userInput = new UserInput();
+		userInput.readInput();
+		TopFileReader topFileReader = new TopFileReader(userInput.getTopForm(), userInput.getBottomForm()
+				, userInput .getTownship(), userInput.getFormBuffer()); 
+		try {
+			ArrayList<TopData> topDataList = topFileReader.readFile();
+			for (int i = 0; i < topDataList.size(); i++) {
+				topDataList.get(i).displayTop();
+			}
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

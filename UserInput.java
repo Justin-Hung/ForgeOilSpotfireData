@@ -32,6 +32,7 @@ public class UserInput {
 		topForm = scanner.next().toUpperCase(); 
 		System.out.println("Enter buffer region (number) : " );
 		formBuffer = scanner.nextDouble();	
+		scanner.close();
 	}
 	
 	public void display() {
