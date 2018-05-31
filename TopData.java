@@ -8,17 +8,17 @@ public class TopData {
 	
 	public String getFormation(Double depth) {
 		if (depth >= tvDepth.get(tvDepth.size()-1) && depth < getUpperBound()) {
-			return form.get(tvDepth.size()-1).substring(1);
+			return form.get(tvDepth.size()-1);
 		}
 		for (int i = 0; i < tvDepth.size(); i++) {
 			if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
-				if (form.get(i).equals(" VKNS UNCF")) {
+				if (form.get(i).equals("VKNS UNCF")) {
 					return "VKNS";
 				}
-				if (form.get(i).equals(" VKNS") && form.get(i+1).equals(" VKNS UNCF")) {
+				if (form.get(i).equals("VKNS") && form.get(i+1).equals("VKNS UNCF")) {
 					return "VKNS UNCF";
 				}
-				return form.get(i).substring(1);
+				return form.get(i);
 			}
 		}
 		return "BFS";
