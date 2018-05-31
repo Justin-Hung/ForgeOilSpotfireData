@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T36\\GeorgeTopsT36R23_NoJLFUA.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T37\\GeorgeTopsT37R25_Filtered.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 

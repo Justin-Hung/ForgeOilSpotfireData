@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
  
 public class LasFileReader {
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T36R23\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T37R25\\T37R25\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
 		try {
