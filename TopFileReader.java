@@ -12,12 +12,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\GeorgeTopsT36R23_Filtered.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T36\\GeorgeTopsT36R23_NoJLFUA.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
+	private String township;
+	private String topForm;
+	private String bottomForm;
+	private double formBuffer;
 	
+	//String top, String bottom, String town, double buffer
 	public TopFileReader() {
+//		topForm = top;
+//		bottomForm = bottom; 
+//		township = town; 
+//		formBuffer = buffer;
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}

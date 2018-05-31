@@ -3,6 +3,9 @@ import java.util.ArrayList;
 public class Main {
 	
 	public static void main(String[] args) { 
+		
+		UserInput userInput = new UserInput();
+		
 		WorkingFileReader workingFileReader = new WorkingFileReader(); 
 		TopFileReader topFileReader = new TopFileReader(); 
 		LasFileReader lasFileReader = new LasFileReader(); 
@@ -50,9 +53,9 @@ public class Main {
 		catch(Exception e) { 
 			e.printStackTrace();
 		}
-		
 		WriteToCSV writer = new WriteToCSV(formattedDataList);
 		writer.write();
 		System.out.println("DONE");
+		
 	}
 }

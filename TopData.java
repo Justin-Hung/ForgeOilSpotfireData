@@ -7,6 +7,9 @@ public class TopData {
 	private ArrayList<Double> tvDepth; 
 	
 	public String getFormation(Double depth) {
+		if (depth >= tvDepth.get(tvDepth.size()-1) && depth < getUpperBound()) {
+			return form.get(tvDepth.size()-1).substring(1);
+		}
 		for (int i = 0; i < tvDepth.size(); i++) {
 			if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
 				if (form.get(i).equals(" VKNS UNCF")) {
@@ -29,7 +32,7 @@ public class TopData {
 	}
 	
 	public double getUpperBound() { 
-		return tvDepth.get(tvDepth.size()-2) + 5.1; 
+		return tvDepth.get(tvDepth.size()-1) + 5.1; 
 	}
 	
 	public TopData(ArrayList<String> data) { 

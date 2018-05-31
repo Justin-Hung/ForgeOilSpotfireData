@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Mnemonics {
-	private String fileLocation = "C:\\Users\\jhung\\SpotfireDataFiles\\lasMnemonics.csv";
+	private String fileLocation = "lasMnemonics.csv";
 	private ArrayList<String> gamma; 
 	public int getGammaSize() { return gamma.size(); }
 	
