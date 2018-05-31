@@ -24,7 +24,7 @@ public class UserInput {
 	}
 	public void readInput() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter Township in format TTT-RR : " );
+		System.out.println("Enter Township in format ttt-rrWw : " );
 		township = scanner.next();
 		System.out.println("Enter bottom formation: " );
 		bottomForm = scanner.next().toUpperCase();

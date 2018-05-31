@@ -22,11 +22,11 @@ public class TopFileReader {
 	private double formBuffer;
 	
 	//String top, String bottom, String town, double buffer
-	public TopFileReader() {
-//		topForm = top;
-//		bottomForm = bottom; 
-//		township = town; 
-//		formBuffer = buffer;
+	public TopFileReader(String top, String bottom, String town, double buffer) {
+		topForm = top;
+		bottomForm = bottom; 
+		township = town; 
+		formBuffer = buffer;
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}
