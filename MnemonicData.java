@@ -16,5 +16,4 @@ public class MnemonicData {
 	public String getName() { 
 		return name; 
 	}
-	
 }
