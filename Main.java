@@ -13,7 +13,8 @@ public class Main {
 		mnemonics.readFile();
 		DataWriter dataWriter = new DataWriter(mnemonics);
 		ArrayList<FormattedData> formattedDataList = new ArrayList<FormattedData>();
-
+		
+		int wellsCompleted = 0; 
 		int workingWellRow = 0; 
 		int topRow = 0; 
 		
@@ -46,6 +47,7 @@ public class Main {
 						FormattedData formattedData = dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
 						System.out.println(topDataList.get(topRow).getUwi());
 						formattedDataList.add(formattedData);
+						wellsCompleted++;
 					}
 					else { 
 						System.err.println(topDataList.get(topRow).getUwi() + " Error in lasFile");
@@ -65,6 +67,7 @@ public class Main {
 		WriteToCSV writer = new WriteToCSV(formattedDataList);
 		writer.write();
 		System.out.println("DONE");
+		System.out.println("wells completed: " + wellsCompleted);
 		
 	}
 }
