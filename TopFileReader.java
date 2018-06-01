@@ -83,8 +83,8 @@ public class TopFileReader {
 			for (int i = 0; i < topDataList.size() ; i++) {
 				topDataList.get(i).displayTop();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
