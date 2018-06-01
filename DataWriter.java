@@ -402,10 +402,10 @@ public class DataWriter {
 		position[12] = headerArray.length-2; 
 		position[14] = headerArray.length-1;
 		
-		for (int i = 0; i < position.length ; i++) {
-			System.out.print(position[i] + "|");
-		}
-		System.out.println();
+//		for (int i = 0; i < position.length ; i++) {
+//			System.out.print(position[i] + "|");
+//		}
+//		System.out.println();
 	}
 
 	public String getCol(String row, int index) {

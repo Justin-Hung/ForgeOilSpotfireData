@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T36\\GeorgeTopsT36R23_NoJLFUA.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\kc_bellatrixVKNGTopsFilteredAgain.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
@@ -73,5 +73,19 @@ public class TopFileReader {
 		workbook.close(); 
 		inputStream.close();
 		return topDataList;
+	}
+	
+	public static void main(String[] args) { 
+		TopFileReader topFileReader = new TopFileReader(); 
+		ArrayList<TopData> topDataList;
+		try {
+			topDataList = topFileReader.readFile();
+			for (int i = 0; i < topDataList.size() ; i++) {
+				topDataList.get(i).displayTop();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

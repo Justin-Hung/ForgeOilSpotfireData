@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
  
 public class LasFileReader {
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T36R23\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T35R12toT42R8\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
 		try {
@@ -60,10 +60,20 @@ public class LasFileReader {
 		String fileUwi = uwi.replaceAll("/", "");
 		fileUwi = fileUwi.replaceAll("-", "");
 		if (dir) { 
-			fileUwi = "1" + fileUwi + "0_1000_TVD_COMBINED_MERGED.las"; 
+			if (uwi.startsWith("0")) {
+				fileUwi = "1" + fileUwi + "0_1000_TVD_COMBINED_MERGED.las"; 
+			}
+			else {
+				fileUwi = fileUwi + "0_1000_TVD_COMBINED_MERGED.las";
+			}
 		}
 		else { 
-			fileUwi = "1" + fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+			if (uwi.startsWith("0")) {
+				fileUwi = "1" + fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+			}
+			else {
+				fileUwi = fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+			}
 		}
 		//System.out.println(fileUwi);
 		return fileUwi;

@@ -16,14 +16,23 @@ public class Main {
 
 		int workingWellRow = 0; 
 		int topRow = 0; 
-
+		
+		System.out.println("working.....");
+		
 		try {
 			ArrayList<TopData> topDataList = topFileReader.readFile();
 			WorkingFileData workingData = workingFileReader.readFile();
 			
 			while (workingWellRow < workingData.getSize()) {
+//				System.out.println("---------");
+//				System.out.println(topDataList.get(topRow).getUwi());
+//				System.out.println(workingData.getRow(workingWellRow).substring(17, 37));
 				
-				if (topDataList.get(topRow).getUwi().equals(workingData.getRow(workingWellRow).substring(18, 37))) {
+				String topUwi = topDataList.get(topRow).getUwi(); 
+				if (topUwi.startsWith("1")) {
+					topUwi = topUwi.substring(1);
+				}
+				if (topUwi.equals(workingData.getRow(workingWellRow).substring(18, 37))) {
 					LasData lasData = null;
 					if (!dataWriter.getCol(workingData.getRow(workingWellRow), 13).equals("Vertical"))
 					{
