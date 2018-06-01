@@ -41,7 +41,12 @@ public class TopData {
 		uwi = data.get(0);
 		for (int i = 1; i < data.size(); i++) {
 			if (i % 2 == 1) {
-				form.add(data.get(i));
+				if (data.get(i).startsWith(" ")) {
+					form.add(data.get(i).substring(1));
+				}
+				else {
+					form.add(data.get(i));
+				}
 			}
 			if (i % 2 == 0) {
 				tvDepth.add(Double.parseDouble(data.get(i)));
