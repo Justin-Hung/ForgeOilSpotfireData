@@ -8,8 +8,8 @@ public class Main {
 		userInput.readInput();
 		userInput.display();
 		
-		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getTownship()); 
-		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getTownship()); 
+		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi()); 
+		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi()); 
 		LasFileReader lasFileReader = new LasFileReader(); 
 		Mnemonics mnemonics = new Mnemonics();
 		mnemonics.readFile();
@@ -27,9 +27,6 @@ public class Main {
 			WorkingFileData workingData = workingFileReader.readFile();
 			
 			while (workingWellRow < workingData.getSize()) {
-//				System.out.println("---------");
-//				System.out.println(topDataList.get(topRow).getUwi());
-//				System.out.println(workingData.getRow(workingWellRow).substring(17, 37));
 				
 				String topUwi = topDataList.get(topRow).getUwi(); 
 				if (topUwi.startsWith("1")) {

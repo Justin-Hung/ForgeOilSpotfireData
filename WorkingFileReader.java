@@ -12,11 +12,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class WorkingFileReader {
 	
 	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\All_VKNG_Well_Data.xlsx";
-	private String township;
+	private int upperbound;
+	private int lowerbound; 
 	
-	public WorkingFileReader(String town) {
-		township = "W" + town.substring(7,8) + town.substring(0,3) + town.substring(4,6); 
-		System.out.println(township);
+	public WorkingFileReader(int nw, int se) {
+		upperbound = nw; 
+		lowerbound = se;
 	}
 	
 	public WorkingFileData readFile() {
@@ -38,8 +39,12 @@ public class WorkingFileReader {
 				int col = 0; 
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
-					if (col == 0 && rowNum > 0 && !cell.getStringCellValue().substring(1, 8).equals(township)){
-						break;
+					
+					if (col == 0 && rowNum > 0) {
+						int sortUwi = Integer.parseInt(cell.getStringCellValue().substring(2, 10)); 
+						if ( sortUwi < lowerbound || sortUwi > upperbound) {
+							break;
+						}
 					}
 					switch(cell.getCellType()) {
 						case Cell.CELL_TYPE_STRING:
@@ -79,6 +84,8 @@ public class WorkingFileReader {
 			}
 			workbook.close(); 
 			inputStream.close();
+			System.out.println("upper" + upperbound); 
+			System.out.println("Lower" + lowerbound);
 			return data;
 		}
 		catch (Exception e) {
@@ -90,7 +97,7 @@ public class WorkingFileReader {
 	public static void main(String[] args) { 
 		UserInput user = new UserInput(); 
 		user.readInput();
-		WorkingFileReader workingFileReader = new WorkingFileReader(user.getTownship()); 
+		WorkingFileReader workingFileReader = new WorkingFileReader(user.getNwSortUwi(), user.getSeSortUwi()); 
 		workingFileReader.readFile().display();
 	}
 }
