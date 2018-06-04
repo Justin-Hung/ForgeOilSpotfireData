@@ -27,9 +27,6 @@ public class Main {
 			WorkingFileData workingData = workingFileReader.readFile();
 			
 			while (workingWellRow < workingData.getSize()) {
-//				System.out.println("---------");
-//				System.out.println(topDataList.get(topRow).getUwi());
-//				System.out.println(workingData.getRow(workingWellRow).substring(17, 37));
 				
 				String topUwi = topDataList.get(topRow).getUwi(); 
 				if (topUwi.startsWith("1")) {
