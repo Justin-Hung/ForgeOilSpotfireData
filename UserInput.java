@@ -1,20 +1,17 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class UserInput {
 
-	private String topForm;
-	private String bottomForm; 
+	private ArrayList<String> formations;
 	private String township;
 	private double formBuffer; 
 	
-	public String getTopForm() {
-		return topForm;
+	public ArrayList<String> getFormations() {
+		return formations;
 	}
-	
-	public String getBottomForm() {
-		return bottomForm; 
-	}
-	
+
 	public String getTownship() { 
 		return township;
 	}
@@ -24,18 +21,20 @@ public class UserInput {
 	}
 	public void readInput() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter Township in format TTT-RR : " );
-		township = scanner.next();
-		System.out.println("Enter bottom formation: " );
-		bottomForm = scanner.next().toUpperCase();
-		System.out.println("Enter top formation: " );
-		topForm = scanner.next().toUpperCase(); 
-		System.out.println("Enter buffer region (number) : " );
-		formBuffer = scanner.nextDouble();	
+//		System.out.println("Enter Township in format TTT-RR : " );
+//		township = scanner.next();
+//		System.out.println("Enter buffer region (number) : " );
+//		formBuffer = scanner.nextDouble();	
+		System.out.println("Enter formations separated by commas: "); 
+		formations = new ArrayList<String>(Arrays.asList(scanner.next().split(","))); 
 	}
 	
 	public void display() {
-		System.out.println("top:" + topForm + " bottom:" + bottomForm + " township:" + township + " formbuffer:" + formBuffer);
+		System.out.println("township: " + township + " formbuffer: " + formBuffer);
+		System.out.println("Formations: ");
+		for (int i = 0; i < formations.size() ; i++) {
+			System.out.println(formations.get(i));
+		}
 	}
 	
 	public static void main (String [] args) {
