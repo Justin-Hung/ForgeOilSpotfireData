@@ -8,7 +8,7 @@ public class Main {
 		userInput.readInput();
 		userInput.display();
 		
-		WorkingFileReader workingFileReader = new WorkingFileReader(); 
+		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getTownship()); 
 		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getTownship()); 
 		LasFileReader lasFileReader = new LasFileReader(); 
 		Mnemonics mnemonics = new Mnemonics();

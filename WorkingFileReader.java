@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
 	
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T35\\WorkingFileT35R22.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\All_VKNG_Well_Data.xlsx";
 	private String township;
 	
 	public WorkingFileReader(String town) {
@@ -22,13 +22,14 @@ public class WorkingFileReader {
 	public WorkingFileData readFile() {
 		try { 
 			WorkingFileData data = new WorkingFileData(); 
-		
+			
 			FileInputStream inputStream = new FileInputStream(new File(workingFilePath)); 
 			
 			Workbook workbook = new XSSFWorkbook(inputStream); 
 			Sheet firstSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = firstSheet.iterator(); 
 			
+			int rowNum = 0;
 			while (iterator.hasNext()) {
 				String row = "";
 				Row nextRow = iterator.next();
@@ -37,48 +38,51 @@ public class WorkingFileReader {
 				int col = 0; 
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
+					if (col == 0 && rowNum > 0 && !cell.getStringCellValue().substring(1, 8).equals(township)){
+						break;
+					}
 					switch(cell.getCellType()) {
 						case Cell.CELL_TYPE_STRING:
-						if (cell.getStringCellValue().contains(",")) {
-							String s = cell.getStringCellValue().replaceAll(",", "&");
-							row += s;
-							col++; 
-							break; 
-						}
-						else {
-							row += cell.getStringCellValue();
-							col++;
-							break;
-						}
-						
+							if (cell.getStringCellValue().contains(",")) {
+								String s = cell.getStringCellValue().replaceAll(",", "&");
+								row += s;
+								col++; 
+								break; 
+							}
+							else {
+								row += cell.getStringCellValue();
+								col++;
+								break;
+							}
 						case Cell.CELL_TYPE_NUMERIC: 
-						if (col > 13 && col < 17)
-						{
-							row += cell.getDateCellValue().getMonth()+1 + "/" + cell.getDateCellValue().getDate() + "/" + cell.getDateCellValue().toString().substring(24);
-							col++;
-							break;
-						}
-						else {
-							row += String.valueOf(cell.getNumericCellValue());
-							col++;
-							break; 
-						}
+							if (col > 13 && col < 17)
+							{
+								row += cell.getDateCellValue().getMonth()+1 + "/" + cell.getDateCellValue().getDate() + "/" + cell.getDateCellValue().toString().substring(24);
+								col++;
+								break;
+							}
+							else {
+								row += String.valueOf(cell.getNumericCellValue());
+								col++;
+								break; 
+							}
 					}
-					
 					row += ",";
-					if (row.startsWith("Sort")) {
-						data.addHeader(row);
-					}
-					else {
-						data.addRow(row);
-					}
 				}
+				if (row.startsWith("Sort")) {
+					data.addHeader(row);
+				}
+				else if (!row.equals("")) {
+					data.addRow(row);
+				}
+				rowNum++;
 			}
 			workbook.close(); 
 			inputStream.close();
 			return data;
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
