@@ -9,7 +9,7 @@ public class Main {
 		userInput.display();
 		
 		WorkingFileReader workingFileReader = new WorkingFileReader(); 
-		TopFileReader topFileReader = new TopFileReader(); 
+		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getTownship()); 
 		LasFileReader lasFileReader = new LasFileReader(); 
 		Mnemonics mnemonics = new Mnemonics();
 		mnemonics.readFile();

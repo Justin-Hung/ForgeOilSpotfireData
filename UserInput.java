@@ -21,12 +21,14 @@ public class UserInput {
 	}
 	public void readInput() {
 		Scanner scanner = new Scanner(System.in);
-//		System.out.println("Enter Township in format TTT-RR : " );
-//		township = scanner.next();
+		System.out.println("Enter Township in format TTT-RRW? : " );
+		township = scanner.next();
 //		System.out.println("Enter buffer region (number) : " );
 //		formBuffer = scanner.nextDouble();	
 		System.out.println("Enter formations separated by commas: "); 
 		formations = new ArrayList<String>(Arrays.asList(scanner.next().split(","))); 
+		scanner.close();
+
 	}
 	
 	public void display() {

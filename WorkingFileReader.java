@@ -10,7 +10,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
+	
 	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T35\\WorkingFileT35R22.xlsx";
+	private String township;
+	
+	public WorkingFileReader(String town) {
+		township = "W" + town.substring(7,8) + town.substring(0,3) + town.substring(4,6); 
+		System.out.println(township);
+	}
 	
 	public WorkingFileData readFile() {
 		try { 
@@ -30,40 +37,41 @@ public class WorkingFileReader {
 				int col = 0; 
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
-					
 					switch(cell.getCellType()) {
 						case Cell.CELL_TYPE_STRING:
-							if (cell.getStringCellValue().contains(",")) {
-								String s = cell.getStringCellValue().replaceAll(",", "&");
-								row += s;
-								col++; 
-								break; 
-							}
-							else {
-								row += cell.getStringCellValue();
-								col++;
-								break;
-							}
+						if (cell.getStringCellValue().contains(",")) {
+							String s = cell.getStringCellValue().replaceAll(",", "&");
+							row += s;
+							col++; 
+							break; 
+						}
+						else {
+							row += cell.getStringCellValue();
+							col++;
+							break;
+						}
+						
 						case Cell.CELL_TYPE_NUMERIC: 
-							if (col > 13 && col < 17)
-							{
-								row += cell.getDateCellValue().getMonth()+1 + "/" + cell.getDateCellValue().getDate() + "/" + cell.getDateCellValue().toString().substring(24);
-								col++;
-								break;
-							}
-							else {
-								row += String.valueOf(cell.getNumericCellValue());
-								col++;
-								break; 
-							}
+						if (col > 13 && col < 17)
+						{
+							row += cell.getDateCellValue().getMonth()+1 + "/" + cell.getDateCellValue().getDate() + "/" + cell.getDateCellValue().toString().substring(24);
+							col++;
+							break;
+						}
+						else {
+							row += String.valueOf(cell.getNumericCellValue());
+							col++;
+							break; 
+						}
 					}
+					
 					row += ",";
-				}
-				if (row.startsWith("Sort")) {
-					data.addHeader(row);
-				}
-				else {
-					data.addRow(row);
+					if (row.startsWith("Sort")) {
+						data.addHeader(row);
+					}
+					else {
+						data.addRow(row);
+					}
 				}
 			}
 			workbook.close(); 
@@ -76,7 +84,9 @@ public class WorkingFileReader {
 	}
 	
 	public static void main(String[] args) { 
-		WorkingFileReader workingFileReader = new WorkingFileReader(); 
+		UserInput user = new UserInput(); 
+		user.readInput();
+		WorkingFileReader workingFileReader = new WorkingFileReader(user.getTownship()); 
 		workingFileReader.readFile().display();
 	}
 }

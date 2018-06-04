@@ -12,32 +12,36 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\T35\\GeorgeTopsT35R22_Filtered.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\AllGeorgeTopsMikwan.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
 	private String township;
-	private String topForm;
-	private String bottomForm;
-	private double formBuffer;
+	private ArrayList<String> formations;
 	
-	//String top, String bottom, String town, double buffer
 	public TopFileReader() {
-//		topForm = top;
-//		bottomForm = bottom; 
-//		township = town; 
-//		formBuffer = buffer;
+		topDataList = new ArrayList<TopData>();
+		data = new ArrayList<String> ();
+		formations = new ArrayList<String>();
+		formations.add("BFS");
+		formations.add("JLFU");
+		township = "035-22W4";
+	}
+	
+	public TopFileReader(ArrayList<String> forms, String town) {
+		formations = forms;
+		township = town; 
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}
 	
 	public ArrayList<TopData> readFile() throws IOException { 
 		FileInputStream inputStream = new FileInputStream(new File(topFilePath)); 
-		
 		Workbook workbook = new XSSFWorkbook(inputStream); 
 		Sheet firstSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = firstSheet.iterator(); 
 		iterator.next(); 
+		boolean topCheck = false;
 		
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
@@ -46,25 +50,46 @@ public class TopFileReader {
 			int index = 0; 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				switch(cell.getCellType()) {
-					case Cell.CELL_TYPE_STRING:
-						if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
-							if (!data.isEmpty()) {
-								topDataList.add(new TopData(data));
-							}
-							data = new ArrayList<String>(); 
-							currentUwi = cell.getStringCellValue();
-							data.add(currentUwi);
-						}
-						if (index == 2) {
-							data.add(cell.getStringCellValue());
-						}
-						break; 
-					case Cell.CELL_TYPE_NUMERIC: 
-						if (index == 3) {
-							data.add(String.valueOf(cell.getNumericCellValue()));
-						}
-						break; 
+				//System.out.println(cell.getStringCellValue().substring(9, 17));
+				if (index == 0 && !cell.getStringCellValue().substring(9, 17).equals(township))	{
+					index++;
+					break;
+				}
+				
+				if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
+					if (!data.isEmpty()) {
+						topDataList.add(new TopData(data));
+						topCheck = false;
+					}
+					data = new ArrayList<String>(); 
+					currentUwi = cell.getStringCellValue();
+					data.add(currentUwi);
+				}
+				
+				if (index == 2) {
+					if (cell.getStringCellValue().substring(1).equals(formations.get(formations.size()-1))) {
+						data.add(cell.getStringCellValue());
+						cell = cellIterator.next(); 
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						index++; 
+						topCheck = false; 
+						break;
+					}
+					if (cell.getStringCellValue().substring(1).equals(formations.get(0))) {
+						topCheck = true; 
+						index++;
+						break;
+					}
+					if (topCheck) {
+						data.add(cell.getStringCellValue());
+					}
+				}
+				
+				if (index == 3) {
+					if (topCheck) {
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						break;
+					}
 				}
 				index++; 
 			}
@@ -76,15 +101,15 @@ public class TopFileReader {
 	}
 	
 	public static void main(String[] args) { 
+
 		TopFileReader topFileReader = new TopFileReader(); 
-		ArrayList<TopData> topDataList;
 		try {
-			topDataList = topFileReader.readFile();
-			for (int i = 0; i < topDataList.size() ; i++) {
+			ArrayList<TopData> topDataList = topFileReader.readFile();
+			for (int i = 0; i < topDataList.size(); i++) {
 				topDataList.get(i).displayTop();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
