@@ -16,26 +16,21 @@ public class TopFileReader {
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
-	private String township;
+	private int upperbound;
+	private int lowerbound; 
+	
 	private ArrayList<String> formations;
 	
-	public TopFileReader() {
-		topDataList = new ArrayList<TopData>();
-		data = new ArrayList<String> ();
-		formations = new ArrayList<String>();
-		formations.add("BFS");
-		formations.add("JLFU");
-		township = "035-22W4";
-	}
-	
-	public TopFileReader(ArrayList<String> forms, String town) {
+	public TopFileReader(ArrayList<String> forms, int nw, int se) {
 		formations = forms;
-		township = town; 
+		upperbound = nw; 
+		lowerbound = se;
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}
 	
 	public ArrayList<TopData> readFile() throws IOException { 
+		UserInput sort = new UserInput(); 
 		FileInputStream inputStream = new FileInputStream(new File(topFilePath)); 
 		Workbook workbook = new XSSFWorkbook(inputStream); 
 		Sheet firstSheet = workbook.getSheetAt(0);
@@ -50,10 +45,11 @@ public class TopFileReader {
 			int index = 0; 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				//System.out.println(cell.getStringCellValue().substring(9, 17));
-				if (index == 0 && !cell.getStringCellValue().substring(9, 17).equals(township))	{
-					index++;
-					break;
+				if (index == 0)	{
+					int sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
+					if (sortUwi < lowerbound || sortUwi > upperbound) {
+						break;
+					}
 				}
 				
 				if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
@@ -101,8 +97,9 @@ public class TopFileReader {
 	}
 	
 	public static void main(String[] args) { 
-
-		TopFileReader topFileReader = new TopFileReader(); 
+		UserInput user = new UserInput(); 
+		user.readInput();
+		TopFileReader topFileReader = new TopFileReader(user.getFormations(), user.getNwSortUwi(), user.getSeSortUwi()); 
 		try {
 			ArrayList<TopData> topDataList = topFileReader.readFile();
 			for (int i = 0; i < topDataList.size(); i++) {
