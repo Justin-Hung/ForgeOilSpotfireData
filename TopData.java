@@ -7,6 +7,7 @@ public class TopData {
 	private ArrayList<Double> tvDepth; 
 	private double upperbuffer; 
 	private double lowerbuffer;
+	private String upperFormation; 
 	
 	public String getFormation(Double depth) {
 		if (depth >= tvDepth.get(tvDepth.size()-1) && depth < getUpperBound()) {
@@ -23,7 +24,7 @@ public class TopData {
 				return form.get(i);
 			}
 		}
-		return "BFS";
+		return upperFormation;
 	}
 	
 	public String getUwi() {
@@ -37,7 +38,8 @@ public class TopData {
 		return tvDepth.get(tvDepth.size()-1) + lowerbuffer + 0.1; 
 	}
 	
-	public TopData(ArrayList<String> data, double upper, double lower) { 
+	public TopData(ArrayList<String> data, double upper, double lower, String upperForm) { 
+		upperFormation = upperForm;
 		upperbuffer = upper; 
 		lowerbuffer = lower;
 		form = new ArrayList<String>();

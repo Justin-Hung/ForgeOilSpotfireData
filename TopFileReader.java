@@ -20,15 +20,17 @@ public class TopFileReader {
 	private int lowerbound; 
 	private double upperbuffer;
 	private double lowerbuffer; 
+	private String upperFormation; 
 	
 	private ArrayList<String> formations;
 	
-	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff) {
+	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff, String upperForm) {
 		upperbuffer = upperbuff; 
 		lowerbuffer = lowerbuff;
 		formations = forms;
 		upperbound = nw; 
 		lowerbound = se;
+		upperFormation = upperForm;
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}
@@ -58,7 +60,7 @@ public class TopFileReader {
 				
 				if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
 					if (!data.isEmpty()) {
-						topDataList.add(new TopData(data, upperbuffer, lowerbuffer));
+						topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation));
 						topCheck = false;
 					}
 					data = new ArrayList<String>(); 
@@ -94,7 +96,7 @@ public class TopFileReader {
 				index++; 
 			}
 		}
-		topDataList.add(new TopData(data, upperbuffer, lowerbuffer));
+		topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation));
 		workbook.close(); 
 		inputStream.close();
 		return topDataList;
