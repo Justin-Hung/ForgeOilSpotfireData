@@ -58,7 +58,11 @@ public class DataWriter {
 			
 			String finalRow = generalWellInfo + ",";	
 			for (int j = 0 ; j < position.length ; j++) {
-				if (position[j] != 0){
+				boolean checkNum = true; 
+				if (j == 12 && Double.parseDouble(getCol(formattedRow, position[j])) == 0) {
+					checkNum = false;
+				}
+				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999") && checkNum){
 					if (j == 1 || j == 2) {
 						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
 						if ( porosity < 1.0 && porosity > -1.0) {
@@ -83,13 +87,45 @@ public class DataWriter {
 		return formattedData;
 	}
 	
+	public boolean isNum(String str) { 
+		try  
+		  {  
+		    double d = Double.parseDouble(str);  
+		  }  
+		  catch(NumberFormatException nfe)  
+		  {  
+		    return false;  
+		  }  
+		  return true;  
+	}
+	
 	public void resetPosition() {
 		position = new int[15];
 	}
 	
 	public String addCalcValues(String row) {
-//		System.out.println(row);
-//		String separation = "";
+		String[] rowArray = row.split(",");
+	
+		String separation = "";
+		if (!rowArray[26].equals("") && !rowArray[25].equals("")) {
+			separation = String.valueOf(Double.parseDouble(rowArray[26]) - Double.parseDouble(rowArray[25]));
+		}
+		
+		String mediumSeparation = "";
+		if (!rowArray[28].equals("") && !rowArray[27].equals("")) {
+			mediumSeparation = String.valueOf(Double.parseDouble(rowArray[28]) - Double.parseDouble(rowArray[27]));
+		}
+		
+		String deepSeparation = "";
+		if (!rowArray[29].equals("") && !rowArray[28].equals("")) {
+			deepSeparation = String.valueOf(Double.parseDouble(rowArray[29]) - Double.parseDouble(rowArray[28]));
+		}
+		
+		String mudCake = "";
+		if (!rowArray[34].equals("") && !rowArray[36].equals("")) {
+			mudCake = String.valueOf(Double.parseDouble(rowArray[34]) - Double.parseDouble(rowArray[36]));
+		}
+		
 //		if (!getCol(row, 26).equals(",") && !getCol(row, 25).equals("")) {
 //			separation = String.valueOf(Double.parseDouble(getCol(row, 26)) - Double.parseDouble(getCol(row, 25)));
 //		}
@@ -113,16 +149,16 @@ public class DataWriter {
 //		}
 //		System.out.println(mudCake);		
 	
-		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + "" + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
-		 + "," + "" + "," + "" + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + "" 
+		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + separation + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
+		 + "," + mediumSeparation + "," + deepSeparation + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + mudCake
 		 + row.substring(ordinalIndexOf(row, ",", 37));
 		//System.out.println(temp);
 		
 		return temp;
 	}
 	public String addCalcHeaders(String header) {
-		String sep = header.substring(0, ordinalIndexOf(header, "," , 27)) + "," + header.substring(ordinalIndexOf(header, "," , 27), ordinalIndexOf(header, "," , 30))
-		 + ",," + header.substring(ordinalIndexOf(header, "," , 30), ordinalIndexOf(header, "," , 37)) + ","
+		String sep = header.substring(0, ordinalIndexOf(header, "," , 27)) + ",Separation" + header.substring(ordinalIndexOf(header, "," , 27), ordinalIndexOf(header, "," , 30))
+		 + ",Medium-Shallow Separation,Deep-Medium Separation" + header.substring(ordinalIndexOf(header, "," , 30), ordinalIndexOf(header, "," , 37)) + ",MudCake"
 		 + header.substring(ordinalIndexOf(header, ",", 37));
 		return sep;
 	}
@@ -302,110 +338,8 @@ public class DataWriter {
 			}
 		}
 		
-//		for(int i = 24 ; i < headerArray.length ; i++) {
-//			for (int j = 0 ; j < mnemonics.getGammaSize() ; j++) {
-//				if (headerArray[i].equals(mnemonics.getGamma(j))) {
-//					position[0] = i;
-//					break;
-//				}
-//			}
-//			for (int j = 0 ; j < mnemonics.getDensitySize() ; j++) {
-//				if (headerArray[i].equals(mnemonics.getDensity(j))) {
-//					position[1] = i;
-//					break;
-//				}
-//			}
-//			for (int j = 0 ; j < mnemonics.getNeutronSize() ; j++) {
-//				if (headerArray[i].equals(mnemonics.getNeutron(j))) {
-//					position[2] = i;
-//					break;
-//				}
-//			}
-//			if (position[3] == 0) {
-//				for (int j = 0 ; j < mnemonics.getShallowSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getShallow(j))) {
-//						position[3] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[4] == 0) { 
-//				for (int j = 0 ; j < mnemonics.getMediumSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getMedium(j))) {
-//						position[4] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[5] == 0) { 
-//				for (int j = 0 ; j < mnemonics.getDeepSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getDeep(j))) {
-//						position[5] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[6] == 0) { 
-//				for (int j = 0 ; j < mnemonics.getSpSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getSp(j))) {
-//						position[6] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[7] == 0) {
-//				for (int j = 0 ; j < mnemonics.getSonicSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getSonic(j))) {
-//						position[7] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[8] == 0) {
-//				for (int j = 0 ; j < mnemonics.getBulkDensitySize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getBulkDensity(j))) {
-//						position[8] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[9] == 0) {
-//				for (int j = 0 ; j < mnemonics.getPeSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getPe(j))) {
-//						position[9] = i;
-//						break;
-//					}
-//				}
-//			}
-//			if (position[10] == 0) {
-//				for (int j = 0 ; j < mnemonics.getCaliperSize() ; j++) {
-//					if (headerArray[i].equals(mnemonics.getCaliper(j))) {
-//						previousCal = mnemonics.getCaliper(j);
-//						position[10] = i;
-//						break;
-//					}
-//				}
-//			}
-//			for (int k = 0 ; k < mnemonics.getCaliperSize() ; k++) {
-//				if (headerArray[i].equals(mnemonics.getCaliper(k)) && i!=position[10]) {
-//					position[11] = i;
-//					break;
-//				}
-//			}
-//			for (int j = 0 ; j < mnemonics.getTensionSize() ; j++) {
-//				if (headerArray[i].equals(mnemonics.getTension(j))) {
-//					position[13] = i;
-//					break;
-//				}
-//			}
-//		}
 		position[12] = headerArray.length-2; 
 		position[14] = headerArray.length-1;
-		
-//		for (int i = 0; i < position.length ; i++) {
-//			System.out.print(position[i] + "|");
-//		}
-//		System.out.println();
 	}
 
 	public String getCol(String row, int index) {

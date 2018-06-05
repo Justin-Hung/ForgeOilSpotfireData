@@ -5,15 +5,18 @@ public class Main {
 	public static void main(String[] args) { 
 		
 		UserInput userInput = new UserInput();
+		userInput.readInput();
+		userInput.display();
 		
-		WorkingFileReader workingFileReader = new WorkingFileReader(); 
-		TopFileReader topFileReader = new TopFileReader(); 
+		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi()); 
+		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getUpperBuffer(), userInput.getLowerBuffer(), userInput.getFormations().get(0)); 
 		LasFileReader lasFileReader = new LasFileReader(); 
 		Mnemonics mnemonics = new Mnemonics();
 		mnemonics.readFile();
 		DataWriter dataWriter = new DataWriter(mnemonics);
 		ArrayList<FormattedData> formattedDataList = new ArrayList<FormattedData>();
-
+		
+		int wellsCompleted = 0; 
 		int workingWellRow = 0; 
 		int topRow = 0; 
 		
@@ -24,9 +27,6 @@ public class Main {
 			WorkingFileData workingData = workingFileReader.readFile();
 			
 			while (workingWellRow < workingData.getSize()) {
-//				System.out.println("---------");
-//				System.out.println(topDataList.get(topRow).getUwi());
-//				System.out.println(workingData.getRow(workingWellRow).substring(17, 37));
 				
 				String topUwi = topDataList.get(topRow).getUwi(); 
 				if (topUwi.startsWith("1")) {
@@ -46,6 +46,7 @@ public class Main {
 						FormattedData formattedData = dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
 						System.out.println(topDataList.get(topRow).getUwi());
 						formattedDataList.add(formattedData);
+						wellsCompleted++;
 					}
 					else { 
 						System.err.println(topDataList.get(topRow).getUwi() + " Error in lasFile");
@@ -65,6 +66,7 @@ public class Main {
 		WriteToCSV writer = new WriteToCSV(formattedDataList);
 		writer.write();
 		System.out.println("DONE");
+		System.out.println("wells completed: " + wellsCompleted);
 		
 	}
 }

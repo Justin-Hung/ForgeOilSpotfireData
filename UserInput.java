@@ -1,41 +1,78 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class UserInput {
 
-	private String topForm;
-	private String bottomForm; 
-	private String township;
-	private double formBuffer; 
+	private ArrayList<String> formations;
+	private String townshipNW;
+	private int nwSortUwi; 
+	private int seSortUwi; 
+	private String townshipSE;
+	private double upperBuffer; 
+	private double lowerBuffer; 
 	
-	public String getTopForm() {
-		return topForm;
+	public int getNwSortUwi() { 
+		return nwSortUwi; 
 	}
 	
-	public String getBottomForm() {
-		return bottomForm; 
+	public int getSeSortUwi() { 
+		return seSortUwi;
 	}
 	
-	public String getTownship() { 
-		return township;
+	public ArrayList<String> getFormations() {
+		return formations;
+	}
+
+	public String getTownshipNW() { 
+		return townshipNW;
 	}
 	
-	public double getFormBuffer() {
-		return formBuffer;
+	public String getTownshipSE() {
+		return townshipSE;
 	}
+	
+	public double getUpperBuffer() {
+		return upperBuffer; 
+	}
+	
+	public double getLowerBuffer() { 
+		return lowerBuffer;
+	}
+	
+	public int sortTownship(String town) {
+		String uwi = town.substring(10,11) + town.substring(3,6) + town.substring(7,9) + town.substring(0,2); 
+		if (uwi.endsWith("31") || uwi.endsWith("19") || uwi.endsWith("07")) {
+			return Integer.parseInt(uwi) + 5;
+		}
+		return Integer.parseInt(uwi);
+	}
+	
 	public void readInput() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter Township in format TTT-RR : " );
-		township = scanner.next();
-		System.out.println("Enter bottom formation: " );
-		bottomForm = scanner.next().toUpperCase();
-		System.out.println("Enter top formation: " );
-		topForm = scanner.next().toUpperCase(); 
-		System.out.println("Enter buffer region (number) : " );
-		formBuffer = scanner.nextDouble();	
+		System.out.println("Enter NW Township in format SS-TTT-RRW? : " );
+		townshipNW = scanner.next();
+		System.out.println("Enter SE township in format SS-TTT-RRW? : " );
+		townshipSE = scanner.next(); 
+		System.out.println("Enter upper buffer region in meters: " );
+		upperBuffer = scanner.nextDouble();	
+		System.out.println("Enter lower buffer region in meters: ");
+		lowerBuffer = scanner.nextDouble();
+		System.out.println("Enter formations separated by commas: "); 
+		formations = new ArrayList<String>(Arrays.asList(scanner.next().toUpperCase().split(","))); 
+		scanner.close();
+		nwSortUwi = sortTownship(townshipNW); 
+		seSortUwi = sortTownship(townshipSE);
 	}
 	
 	public void display() {
-		System.out.println("top:" + topForm + " bottom:" + bottomForm + " township:" + township + " formbuffer:" + formBuffer);
+		System.out.println("NW township: " + townshipNW + " SE township: " + townshipSE + " Upperbuffer: " + upperBuffer + " Lowerbuffer: " + lowerBuffer);
+		System.out.println("Formations: ");
+		for (int i = 0; i < formations.size() ; i++) {
+			System.out.println(formations.get(i));
+		}
+		
+		System.out.println("Sorted nw township: " + nwSortUwi + " Sorted se township: " + seSortUwi); 
 	}
 	
 	public static void main (String [] args) {

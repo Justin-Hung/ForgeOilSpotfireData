@@ -12,33 +12,42 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\kc_bellatrixVKNGTopsFilteredAgain.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
-	private String township;
-	private String topForm;
-	private String bottomForm;
-	private double formBuffer;
+	private int upperbound;
+	private int lowerbound; 
+	private double upperbuffer;
+	private double lowerbuffer; 
+	private String upperFormation; 
 	
-	//String top, String bottom, String town, double buffer
-	public TopFileReader() {
-//		topForm = top;
-//		bottomForm = bottom; 
-//		township = town; 
-//		formBuffer = buffer;
+	private final int uwiCol = 1;
+	private final int formationCol = 3; 
+	private final int tvdCol = 5;
+	
+	private ArrayList<String> formations;
+	
+	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff, String upperForm) {
+		upperbuffer = upperbuff; 
+		lowerbuffer = lowerbuff;
+		formations = forms;
+		upperbound = nw; 
+		lowerbound = se;
+		upperFormation = upperForm;
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
 	}
 	
 	public ArrayList<TopData> readFile() throws IOException { 
+		UserInput sort = new UserInput(); 
 		FileInputStream inputStream = new FileInputStream(new File(topFilePath)); 
-		
 		Workbook workbook = new XSSFWorkbook(inputStream); 
 		Sheet firstSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = firstSheet.iterator(); 
 		iterator.next(); 
-		
+		boolean topCheck = false;
+		int row = 0;
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
 			Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -46,46 +55,73 @@ public class TopFileReader {
 			int index = 0; 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				switch(cell.getCellType()) {
-					case Cell.CELL_TYPE_STRING:
-						if (index == 0 && !currentUwi.equals(cell.getStringCellValue())) {
-							if (!data.isEmpty()) {
-								topDataList.add(new TopData(data));
-							}
-							data = new ArrayList<String>(); 
-							currentUwi = cell.getStringCellValue();
-							data.add(currentUwi);
+				if (index == uwiCol)	{
+					int sortUwi = 0;
+					if (cell.getStringCellValue().startsWith("1") ) {
+						sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
+					}
+					else {
+						sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
+					}
+					if (sortUwi < lowerbound || sortUwi > upperbound) {
+						break;
+					}
+				}
+				
+				if (index == uwiCol && !currentUwi.equals(cell.getStringCellValue())) {
+					if (!data.isEmpty()) {
+						if (formations.get(formations.size()-1).equals("BOTTOM")) {
+							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
 						}
-						if (index == 2) {
-							data.add(cell.getStringCellValue());
+						else {
+							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
 						}
-						break; 
-					case Cell.CELL_TYPE_NUMERIC: 
-						if (index == 3) {
-							data.add(String.valueOf(cell.getNumericCellValue()));
+						topCheck = false;
+					}
+					data = new ArrayList<String>(); 
+					currentUwi = cell.getStringCellValue();
+					data.add(currentUwi);
+				}
+				
+				if (index == formationCol) {
+					if (cell.getStringCellValue().substring(1).equals(formations.get(formations.size()-1)) || cell.getStringCellValue().equals(formations.get(formations.size()-1))) {
+						data.add(cell.getStringCellValue());
+						while (index < tvdCol) { 
+							cell = cellIterator.next(); 
+							index++; 
 						}
-						break; 
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						topCheck = false; 
+						break;
+					}
+					if (cell.getStringCellValue().substring(1).equals(formations.get(0)) || cell.getStringCellValue().equals(formations.get(0))) {
+						topCheck = true; 
+						index++;
+						break;
+					}
+					if (topCheck) {
+						data.add(cell.getStringCellValue());
+					}
+				}
+				
+				if (index == tvdCol) {
+					if (topCheck) {
+						data.add(String.valueOf(cell.getNumericCellValue()));
+						break;
+					}
 				}
 				index++; 
 			}
+			row++;
 		}
-		topDataList.add(new TopData(data));
+		if (formations.get(formations.size()-1).equals("BOTTOM")) {
+			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+		}
+		else {
+			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+		}
 		workbook.close(); 
 		inputStream.close();
 		return topDataList;
-	}
-	
-	public static void main(String[] args) { 
-		TopFileReader topFileReader = new TopFileReader(); 
-		ArrayList<TopData> topDataList;
-		try {
-			topDataList = topFileReader.readFile();
-			for (int i = 0; i < topDataList.size() ; i++) {
-				topDataList.get(i).displayTop();
-			}
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
