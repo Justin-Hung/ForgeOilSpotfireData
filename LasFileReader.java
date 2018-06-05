@@ -6,9 +6,10 @@ import java.io.IOException;
  
 public class LasFileReader {
 
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\Bellatrix\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
+		//topData.displayTop();
 		try {
 			String bit = null;
 			String serviceCo = null;
