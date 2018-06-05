@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\bellatrix\\kc_bellatrixVKNGTops.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
@@ -70,7 +70,12 @@ public class TopFileReader {
 				
 				if (index == uwiCol && !currentUwi.equals(cell.getStringCellValue())) {
 					if (!data.isEmpty()) {
-						topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation));
+						if (formations.get(formations.size()-1).equals("BOTTOM")) {
+							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+						}
+						else {
+							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+						}
 						topCheck = false;
 					}
 					data = new ArrayList<String>(); 
@@ -109,7 +114,12 @@ public class TopFileReader {
 			}
 			row++;
 		}
-		topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation));
+		if (formations.get(formations.size()-1).equals("BOTTOM")) {
+			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+		}
+		else {
+			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+		}
 		workbook.close(); 
 		inputStream.close();
 		return topDataList;

@@ -8,6 +8,7 @@ public class TopData {
 	private double upperbuffer; 
 	private double lowerbuffer;
 	private String upperFormation; 
+	private boolean bottomCheck;
 	
 	public String getFormation(Double depth) {
 		if (depth >= tvDepth.get(tvDepth.size()-1) && depth < getUpperBound()) {
@@ -35,10 +36,14 @@ public class TopData {
 	}
 	
 	public double getUpperBound() { 
+		if (bottomCheck) {
+			return 9999;
+		}
 		return tvDepth.get(tvDepth.size()-1) + lowerbuffer + 0.1; 
 	}
 	
-	public TopData(ArrayList<String> data, double upper, double lower, String upperForm) { 
+	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check) { 
+		bottomCheck = check;
 		upperFormation = upperForm;
 		upperbuffer = upper; 
 		lowerbuffer = lower;
