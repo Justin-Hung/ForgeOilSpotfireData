@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
 	
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\All_VKNG_Well_Data.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\bellatrix\\kc_bellatrixWellData.xlsx";
 	private int upperbound;
 	private int lowerbound; 
 	
@@ -41,7 +41,13 @@ public class WorkingFileReader {
 					Cell cell = cellIterator.next();
 					
 					if (col == 0 && rowNum > 0) {
-						int sortUwi = Integer.parseInt(cell.getStringCellValue().substring(2, 10)); 
+						int sortUwi = 0;
+						try {
+							sortUwi = Integer.parseInt(cell.getStringCellValue().substring(2, 10)); 
+						}
+						catch (StringIndexOutOfBoundsException e) { 
+							break; 
+						}
 						if ( sortUwi < lowerbound || sortUwi > upperbound) {
 							break;
 						}

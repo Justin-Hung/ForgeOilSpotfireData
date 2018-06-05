@@ -15,7 +15,7 @@ public class WriteToCSV {
 		
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
-			fileWriter = new FileWriter(new File( township + "MASTERFILE" + ".csv"));
+			fileWriter = new FileWriter(new File( "testBellatrix" + "MASTERFILE" + ".csv"));
 			
 			for (int i = 0 ; i < data.size() ; i++) {
 				String uniqueWell = data.get(i).getRow(0).substring(18, 20);
