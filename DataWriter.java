@@ -6,15 +6,13 @@ public class DataWriter {
 
 	private final String header = "Sort UWI,UWI,Current License,Bottom Hole Latitude,Bottom Hole Longitude,KB Elevation (m),Ground Elevation (m),Max True Vertical Depth (m),Total True Vertical Depth (m),Total Depth (m),Fluid,Mode,Lahee,Type,License Date,Spud Date,Rig Release Date,Producing Zone,Field,DEPT,Subsea,Formation,VKNS Isopach,Interval (step),";
 	private int row;
-	private Mnemonics mnemonics;
+	private ArrayList<MnemonicData> mnemonics;
 	
-	// 0   1    2    3   4   5  6  7   8   9   10   11  12   13    14
-	// GR|DPHI|NPHI|SFL|ILM|ILD|SP|DT|RHOB|PE|CAL1|CAL2|BIT|TENS|SERVICE
-	private int[] position; 
+	private int[] position;
 	
-	public DataWriter(Mnemonics m) { 
+	public DataWriter(ArrayList<MnemonicData> m) { 
 		mnemonics = m;
-		position = new int[15];
+		position = new int[60];
 	}
 
 	public FormattedData formatData(String uwiInfo, LasData lasData, TopData topData) {
@@ -100,7 +98,7 @@ public class DataWriter {
 	}
 	
 	public void resetPosition() {
-		position = new int[15];
+		position = new int[60];
 	}
 	
 	public String addCalcValues(String row) {
@@ -124,35 +122,11 @@ public class DataWriter {
 		String mudCake = "";
 		if (!rowArray[34].equals("") && !rowArray[36].equals("")) {
 			mudCake = String.valueOf(Double.parseDouble(rowArray[34]) - Double.parseDouble(rowArray[36]));
-		}
-		
-//		if (!getCol(row, 26).equals(",") && !getCol(row, 25).equals("")) {
-//			separation = String.valueOf(Double.parseDouble(getCol(row, 26)) - Double.parseDouble(getCol(row, 25)));
-//		}
-//		System.out.println(separation);
-//		
-//		String mediumSeparation = "";
-//		if (!getCol(row, 28).equals(",") && !getCol(row, 27).equals(",")) {
-//			mediumSeparation = String.valueOf(Double.parseDouble(getCol(row, 28)) - Double.parseDouble(getCol(row, 27)));		
-//		}
-//		System.out.println(mediumSeparation);
-//		
-//		String deepSeparation = "";
-//		if (!getCol(row, 29).equals(",") && !getCol(row, 28).equals(",")) {
-//			deepSeparation = String.valueOf(Double.parseDouble(getCol(row, 29)) - Double.parseDouble(getCol(row, 28)));
-//		}
-//		System.out.println(deepSeparation);
-//		
-//		String mudCake = "";
-//		if (!getCol(row, 34).equals(",") && !getCol(row, 36).equals(",")) {
-//			mudCake = String.valueOf(Double.parseDouble(getCol(row, 34)) - Double.parseDouble(getCol(row, 36)));
-//		}
-//		System.out.println(mudCake);		
+		}	
 	
 		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + separation + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
 		 + "," + mediumSeparation + "," + deepSeparation + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + mudCake
 		 + row.substring(ordinalIndexOf(row, ",", 37));
-		//System.out.println(temp);
 		
 		return temp;
 	}
@@ -167,179 +141,20 @@ public class DataWriter {
 		String previousCal = null;
 		String[] headerArray = header.split(",");
 		
-		for (int i = 0 ; i < mnemonics.getGammaSize() ; i++) {
-			if (position[0] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getGamma(i))) {
-						position[0] = j; 
+		for (int i = 0 ; i < mnemonics.size() ; i++) {
+			for (int j = 0 ; j < mnemonics.get(i).getMnemonics().size() ; j++) {
+				if (position[i] == 0) {
+					for (int k = 0 ; k < headerArray.length ; k++) {
+						if (headerArray[k].equals(mnemonics.get(i).getMnemonics().get(j))) { 
+							position[i] = k; 
+						}
 					}
 				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getDensitySize() ; i++) {
-			if (position[1] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getDensity(i))) {
-						position[1] = j; 
-					}
+				else {
+					break;
 				}
 			}
-			else {
-				break; 
-			}
 		}
-		
-		for (int i = 0 ; i < mnemonics.getNeutronSize() ; i++) {
-			if (position[2] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getNeutron(i))) {
-						position[2] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getShallowSize() ; i++) {
-			if (position[3] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getShallow(i))) {
-						position[3] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getMediumSize() ; i++) {
-			if (position[4] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getMedium(i))) {
-						position[4] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getDeepSize() ; i++) {
-			if (position[5] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getDeep(i))) {
-						position[5] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getSpSize() ; i++) {
-			if (position[6] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getSp(i))) {
-						position[6] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getSonicSize() ; i++) {
-			if (position[7] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getSonic(i))) {
-						position[7] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getBulkDensitySize() ; i++) {
-			if (position[8] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getBulkDensity(i))) {
-						position[8] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		for (int i = 0 ; i < mnemonics.getPeSize() ; i++) {
-			if (position[9] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getPe(i))) {
-						position[9] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		int caliperIndex = 0;
-		while (caliperIndex < mnemonics.getCaliperSize()) {
-			if (position[10] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getCaliper(caliperIndex))) {
-						position[10] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-			caliperIndex++;
-		}
-		while (caliperIndex < mnemonics.getCaliperSize()) {
-			if (position[11] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getCaliper(caliperIndex))) {
-						position[11] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-			caliperIndex++;
-		}
-		
-		for (int i = 0 ; i < mnemonics.getTensionSize() ; i++) {
-			if (position[13] == 0) {
-				for (int j = 0 ; j < headerArray.length ; j++) {
-					if (headerArray[j].equals(mnemonics.getTension(i))) {
-						position[13] = j; 
-					}
-				}
-			}
-			else {
-				break; 
-			}
-		}
-		
-		position[12] = headerArray.length-2; 
-		position[14] = headerArray.length-1;
 	}
 
 	public String getCol(String row, int index) {
