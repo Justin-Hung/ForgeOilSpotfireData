@@ -21,6 +21,8 @@ public class TopFileReader {
 	private double upperbuffer;
 	private double lowerbuffer; 
 	private String upperFormation; 
+	private String previousFormation; 
+	private boolean checkBottom; 
 	
 	private final int uwiCol = 1;
 	private final int formationCol = 3; 
@@ -28,15 +30,16 @@ public class TopFileReader {
 	
 	private ArrayList<String> formations;
 	
-	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff, String upperForm) {
+	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff) {
 		upperbuffer = upperbuff; 
 		lowerbuffer = lowerbuff;
 		formations = forms;
 		upperbound = nw; 
 		lowerbound = se;
-		upperFormation = upperForm;
+		upperFormation = "UNKNOWN";
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
+		checkBottom = false;
 	}
 	
 	public ArrayList<TopData> readFile() throws IOException { 
@@ -55,7 +58,7 @@ public class TopFileReader {
 			int index = 0; 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				if (index == uwiCol)	{
+				if (index == uwiCol) {
 					int sortUwi = 0;
 					if (cell.getStringCellValue().startsWith("1") ) {
 						sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
@@ -70,8 +73,9 @@ public class TopFileReader {
 				
 				if (index == uwiCol && !currentUwi.equals(cell.getStringCellValue())) {
 					if (!data.isEmpty()) {
-						if (formations.get(formations.size()-1).equals("BOTTOM")) {
+						if (formations.get(formations.size()-1).equals("BOTTOM") || checkBottom) {
 							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+							checkBottom = false;
 						}
 						else {
 							topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
@@ -81,6 +85,7 @@ public class TopFileReader {
 					data = new ArrayList<String>(); 
 					currentUwi = cell.getStringCellValue();
 					data.add(currentUwi);
+					previousFormation = "UNKNOWN";
 				}
 				
 				if (index == formationCol) {
@@ -91,17 +96,40 @@ public class TopFileReader {
 							index++; 
 						}
 						data.add(String.valueOf(cell.getNumericCellValue()));
+						if (formations.get(formations.size()-1).equals(formations.get(0))) {
+							upperFormation = previousFormation;
+						}
+						//check next row for bottom
+						Iterator<Row> checkNextRow = iterator;
+						Row checkRow = checkNextRow.next();
+						Iterator<Cell> checkCellIterator = checkRow.cellIterator();
+						int checkIndex = 0;
+						while (checkCellIterator.hasNext()) {
+							Cell checkCell = checkCellIterator.next();
+							if (checkIndex == uwiCol && !currentUwi.equals(checkCell.getStringCellValue())) {
+								checkBottom = true;
+								break;
+							}
+							if (checkIndex == formationCol) {
+								data.add(checkCell.getStringCellValue());
+							}
+							if (checkIndex == tvdCol) {
+								data.add(String.valueOf(checkCell.getNumericCellValue()));
+								break;
+							}
+							checkIndex++;
+						}
 						topCheck = false; 
 						break;
 					}
 					if (cell.getStringCellValue().substring(1).equals(formations.get(0)) || cell.getStringCellValue().equals(formations.get(0))) {
+						upperFormation = previousFormation;
 						topCheck = true; 
-						index++;
-						break;
 					}
 					if (topCheck) {
 						data.add(cell.getStringCellValue());
 					}
+					previousFormation = cell.getStringCellValue();
 				}
 				
 				if (index == tvdCol) {
@@ -114,8 +142,9 @@ public class TopFileReader {
 			}
 			row++;
 		}
-		if (formations.get(formations.size()-1).equals("BOTTOM")) {
+		if (formations.get(formations.size()-1).equals("BOTTOM") || checkBottom) {
 			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+			checkBottom = false;
 		}
 		else {
 			topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 

@@ -9,7 +9,7 @@ public class LasFileReader {
 	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T34R2W5toT35R3W5\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
-		//topData.displayTop();
+		topData.displayTop();
 		try {
 			String bit = null;
 			String serviceCo = null;
