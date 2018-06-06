@@ -1,5 +1,5 @@
 
 public class MoreMnemonics {
-	private String fileLocation = "lasMnemonics.csv";
+	private String fileLocation = "UpdatedLasMnemonics.csv";
 	
 }
