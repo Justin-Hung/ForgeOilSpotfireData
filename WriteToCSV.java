@@ -15,7 +15,7 @@ public class WriteToCSV {
 		
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
-			fileWriter = new FileWriter(new File( township + "MASTERFILE" + ".csv"));
+			fileWriter = new FileWriter(new File("Test" + township + "MASTERFILE" + ".csv"));
 			
 			fileWriter.write("Sort UWI,UWI,Current Licensee,Bottom Hole Latitude,Bottom Hole Longitude,KB Elevation (m),Ground Elevation (m),Max True Vertical Depth (m),Total True Vertical Depth (m),Total Depth (m),Fluid,Mode,Lahee,Type,License Date,Spud Date,Rig Release Date,Producing Zone,Field,DEPT,Subsea,Formation,VKNS Isopach,Interval (step),Gamma,Density,Neutron,Separation,Shallow Resis,Medium Resis,Deep Resis,Medium-Shallow Separation,Deep-Medium Separation,SP,Sonic,Bulk Density,PE ,Caliper 1,Caliper 2,Bit,MudCake,Tension,Logging Company");
 			fileWriter.write(System.lineSeparator());

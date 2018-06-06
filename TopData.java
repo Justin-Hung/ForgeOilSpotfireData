@@ -66,9 +66,11 @@ public class TopData {
 	}
 	
 	public void displayTop() {
-		System.out.println("UWI--------------------FORM-------------------TVDEPTH");
+		System.out.println("-------------------------------------------------");
+		System.out.println(uwi);
+		//System.out.println("UWI--------------------FORM-------------------TVDEPTH");
 		for(int i = 0; i < form.size(); i++) {
-			System.out.println(uwi + " " + form.get(i) + "           " + tvDepth.get(i));
+			System.out.println(form.get(i) + "           " + tvDepth.get(i));
 		}
 		
 	}

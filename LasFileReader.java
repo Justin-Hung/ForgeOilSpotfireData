@@ -9,7 +9,7 @@ public class LasFileReader {
 	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
-		//topData.displayTop();
+		topData.displayTop();
 		try {
 			String bit = null;
 			String serviceCo = null;
@@ -18,7 +18,13 @@ public class LasFileReader {
 			String line = null; 
 			File fileTest = new File(fileLocation);
 			if(!fileTest.exists()) { 
-				return null; 
+				lasFile = lasFile.substring(0, lasFile.indexOf("COMBINED")) + lasFile.substring(lasFile.indexOf("MERGED"));
+				//System.out.println(lasFile);
+				fileLocation = lasFilePath + lasFile; 
+				fileTest = new File(fileLocation);
+				if (!fileTest.exists()) {
+					return null;
+				}
 			}
 			FileReader fileReader = new FileReader(fileLocation); 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
