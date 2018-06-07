@@ -3,11 +3,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FormattedData {
+	private boolean isMdforDir;
 	private String header; 
 	private ArrayList<String> rows; 
 	
 	public FormattedData() {
 		rows = new ArrayList<String>();
+		isMdforDir = false;
+	}
+	
+	public boolean isMdforDir() { return isMdforDir; }
+	
+	public void setMdTrue() { 
+		isMdforDir = true;
 	}
 	
 	public void addRow(String row) {
@@ -37,11 +45,19 @@ public class FormattedData {
 		}
 	}
 	
-	public void write(FileWriter fw) { 
+	public void write(FileWriter fw, boolean isMD) { 
 		try {
-			for(int i = 0; i < rows.size(); i++) {
-				fw.write(rows.get(i)); 
-				fw.write(System.lineSeparator());
+			if (isMD) { 
+				for(int i = 0; i < rows.size(); i++) {
+					fw.write(rows.get(i) + "," + "Using MD for DIR"); 
+					fw.write(System.lineSeparator());
+				}
+			}
+			else {
+				for(int i = 0; i < rows.size(); i++) {
+					fw.write(rows.get(i)+ "," + "Using correct las file"); 
+					fw.write(System.lineSeparator());
+				}
 			}
 		}
 		catch (IOException e) {

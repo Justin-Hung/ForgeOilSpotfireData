@@ -23,9 +23,16 @@ public class WriteToCSV {
 			for (int i = 0 ; i < data.size() ; i++) {
 				String uniqueWell = data.get(i).getRow(0).substring(18, 20);
 				String uwi = data.get(i).getRow(0).substring(21, 34);
-				fileWriter.write(data.get(i).getHeader() + ",,,,,,,Break " + uniqueWell + "_" + uwi);
-				fileWriter.write(System.lineSeparator());
-				data.get(i).write(fileWriter);
+				if (data.get(i).isMdforDir()) {
+					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+					fileWriter.write(System.lineSeparator());
+					data.get(i).write(fileWriter, true);
+				}
+				else {
+					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+					fileWriter.write(System.lineSeparator());
+					data.get(i).write(fileWriter, false);
+				}
 			}
 			
 			fileWriter.close(); 

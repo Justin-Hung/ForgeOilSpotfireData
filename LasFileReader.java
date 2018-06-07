@@ -6,11 +6,15 @@ import java.io.IOException;
  
 public class LasFileReader {
 
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T34R2W5toT35R3W5\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
+		if (topData.getUwi().equals("100/06-06-035-02W5/2")) {
+			System.out.println("test");
+		}
 		//topData.displayTop();
 		try {
+			boolean usingMdforDir = false;
 			String bit = null;
 			String serviceCo = null;
 			String lasFile = convertUwi(topData.getUwi(), dir); 
@@ -23,12 +27,26 @@ public class LasFileReader {
 				fileLocation = lasFilePath + lasFile; 
 				fileTest = new File(fileLocation);
 				if (!fileTest.exists()) {
-					return null;
+					if (dir) {
+						String mdFile = convertUwi(topData.getUwi(), false); 
+						fileLocation= lasFilePath + mdFile; 
+						fileTest = new File(fileLocation);
+						usingMdforDir = true;
+						if (!fileTest.exists()) {
+							return null;
+						}
+					}
+					else {
+						return null;
+					}
 				}
 			}
 			FileReader fileReader = new FileReader(fileLocation); 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			LasData lasContainer = new LasData(topData.getUwi()); 
+			if (usingMdforDir) {
+				lasContainer.setMdTrue();
+			}
 
 			while((line = bufferedReader.readLine()) != null) {
 				if (line.startsWith(" BS  .MM")) {
@@ -65,22 +83,23 @@ public class LasFileReader {
 	}
 	
 	public String convertUwi(String uwi, boolean dir) {
-		String fileUwi = uwi.replaceAll("/", "");
+		String fileUwi = uwi.replaceFirst("/", "");
+		fileUwi = fileUwi.replaceAll("/", "0");
 		fileUwi = fileUwi.replaceAll("-", "");
 		if (dir) { 
 			if (uwi.startsWith("0")) {
-				fileUwi = "1" + fileUwi + "0_1000_TVD_COMBINED_MERGED.las"; 
+				fileUwi = "1" + fileUwi + "_1000_TVD_COMBINED_MERGED.las"; 
 			}
 			else {
-				fileUwi = fileUwi + "0_1000_TVD_COMBINED_MERGED.las";
+				fileUwi = fileUwi + "_1000_TVD_COMBINED_MERGED.las";
 			}
 		}
 		else { 
 			if (uwi.startsWith("0")) {
-				fileUwi = "1" + fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+				fileUwi = "1" + fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
 			}
 			else {
-				fileUwi = fileUwi + "0_1000_MD_COMBINED_MERGED.las"; 
+				fileUwi = fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
 			}
 		}
 		//System.out.println(fileUwi);

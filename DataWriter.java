@@ -84,6 +84,9 @@ public class DataWriter {
 			formattedData.addRow(finalRow);
 		}
 		resetPosition();
+		if (lasData.getMdForDir()) {
+			formattedData.setMdTrue(); 
+		}
 		return formattedData;
 	}
 	
