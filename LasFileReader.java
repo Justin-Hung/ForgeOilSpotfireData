@@ -6,14 +6,20 @@ import java.io.IOException;
  
 public class LasFileReader {
 
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T34R2W5toT35R3W5\\log_files\\";
+	private String lasFile;
 	
 	public LasData readFile(TopData topData, boolean dir) { 
+	
 		//topData.displayTop();
+		if (topData.getTvDepth().isEmpty()) {
+			return null;
+		}
 		try {
 			String bit = null;
 			String serviceCo = null;
-			String lasFile = convertUwi(topData.getUwi(), dir); 
+			lasFile = convertUwi(topData.getUwi(), dir); 
+			//System.out.println(lasFile);
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
 			File fileTest = new File(fileLocation);
@@ -41,15 +47,19 @@ public class LasFileReader {
 					serviceCo = line.substring(12,49);
 				}
 				if (line.startsWith("~A")) {
-					lasContainer.addHeader(line + "            Bit       Service_Co." );
+					lasContainer.addHeader(line);
 				}
 				if (line.startsWith("      ")) {
 					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
-						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
+						lasContainer.addRow(line + "          buffer              buffer" );
 					}
 				}
 			}   
+			
+			lasContainer.setServiceCo(serviceCo);
+			lasContainer.setBit(bit);
+			
 			bufferedReader.close(); 
 			
 			if (lasContainer.isEmpty()) {
@@ -60,6 +70,7 @@ public class LasFileReader {
 			return lasContainer;
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

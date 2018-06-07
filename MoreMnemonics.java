@@ -41,7 +41,7 @@ public class MoreMnemonics {
 	
 	public static void main (String[] args) {
 		MoreMnemonics test = new MoreMnemonics();
-		test.readFile();
+		System.out.println(test.readFile().size());
 		test.display();
 	}
 }

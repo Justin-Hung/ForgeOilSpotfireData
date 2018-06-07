@@ -34,7 +34,7 @@ public class Main {
 				}
 				if (topUwi.equals(workingData.getRow(workingWellRow).substring(18, 37))) {
 					LasData lasData = null;
-					if (!dataWriter.getCol(workingData.getRow(workingWellRow), 13).equals("Vertical"))
+					if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
 					{
 						lasData = lasFileReader.readFile(topDataList.get(topRow), true);
 					}
@@ -43,13 +43,13 @@ public class Main {
 					}
 					
 					if (lasData != null) { 
-						FormattedData formattedData = dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+						FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
 						System.out.println(topDataList.get(topRow).getUwi());
 						formattedDataList.add(formattedData);
 						wellsCompleted++;
 					}
 					else { 
-						System.err.println(topDataList.get(topRow).getUwi() + " Error in lasFile");
+						System.err.println(topDataList.get(topRow).getUwi() + " Error in top or lasfile");
 					}
 					workingWellRow++; 
 					topRow++; 
@@ -59,14 +59,14 @@ public class Main {
 					workingWellRow++; 
 				}
 			}
+			
+			WriteToCSV writer = new WriteToCSV(formattedDataList);
+			writer.write(workingData.getHeader(), mnemonicList);
+			System.out.println("DONE");
+			System.out.println("wells completed: " + wellsCompleted);
 		}
 		catch(Exception e) { 
 			e.printStackTrace();
 		}
-		WriteToCSV writer = new WriteToCSV(formattedDataList);
-		writer.write();
-		System.out.println("DONE");
-		System.out.println("wells completed: " + wellsCompleted);
-		
 	}
 }

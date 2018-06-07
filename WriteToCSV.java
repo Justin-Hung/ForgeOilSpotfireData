@@ -10,22 +10,40 @@ public class WriteToCSV {
 		data = d;
 	}
 	
-	public void write() { 
+	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
 		FileWriter fileWriter; 
 		
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			fileWriter = new FileWriter(new File("Test" + township + "MASTERFILE" + ".csv"));
 			
-			fileWriter.write("Sort UWI,UWI,Current Licensee,Bottom Hole Latitude,Bottom Hole Longitude,KB Elevation (m),Ground Elevation (m),Max True Vertical Depth (m),Total True Vertical Depth (m),Total Depth (m),Fluid,Mode,Lahee,Type,License Date,Spud Date,Rig Release Date,Producing Zone,Field,DEPT,Subsea,Formation,VKNS Isopach,Interval (step),Gamma,Density,Neutron,Separation,Shallow Resis,Medium Resis,Deep Resis,Medium-Shallow Separation,Deep-Medium Separation,SP,Sonic,Bulk Density,PE ,Caliper 1,Caliper 2,Bit,MudCake,Tension,Logging Company");
+			header += "DEPT,Subsea,Formation,VKNS Isopach,Interval (step)";
+			
+			for (int i = 0 ; i < mnemonicList.size() ; i++) {
+				header += "," + mnemonicList.get(i).getName();
+			}
+			
+			header += ",Caliper2,Bit,Service Co.";
+			
+			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
+			String uwi = data.get(0).getRow(0).substring(21, 34);
+			header += ",Break " + uniqueWell + "_" + uwi;
+			
+			fileWriter.write(header);
+			
 			fileWriter.write(System.lineSeparator());
-			fileWriter.write(System.lineSeparator());
+
+			boolean isFirst = true; 
+			
 			for (int i = 0 ; i < data.size() ; i++) {
-				String uniqueWell = data.get(i).getRow(0).substring(18, 20);
-				String uwi = data.get(i).getRow(0).substring(21, 34);
-				fileWriter.write(data.get(i).getHeader() + ",,,,,,,Break " + uniqueWell + "_" + uwi);
-				fileWriter.write(System.lineSeparator());
+				if (!isFirst) {
+					uniqueWell = data.get(i).getRow(0).substring(18, 20);
+					uwi = data.get(i).getRow(0).substring(21, 34);
+					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi);
+					fileWriter.write(System.lineSeparator());
+				}
 				data.get(i).write(fileWriter);
+				isFirst = false;
 			}
 			
 			fileWriter.close(); 

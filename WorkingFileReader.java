@@ -11,13 +11,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
 	
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Garrington\\GarringtonGWIunFiltered.xlsx";
 	private int upperbound;
 	private int lowerbound; 
+	private ArrayList<Integer> dateCol;
+
 	
 	public WorkingFileReader(int nw, int se) {
 		upperbound = nw; 
 		lowerbound = se;
+		dateCol = new ArrayList<Integer>();
 	}
 	
 	public WorkingFileData readFile() {
@@ -39,7 +42,11 @@ public class WorkingFileReader {
 				int col = 0; 
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
-					
+					if (col == 0 && rowNum == 0 && cell.getStringCellValue().equals("©2018 IHS Markit")) {
+						rowNum--;
+						break; 
+					}
+		
 					if (col == 0 && rowNum > 0) {
 						int sortUwi = 0;
 						try {
@@ -66,7 +73,7 @@ public class WorkingFileReader {
 								break;
 							}
 						case Cell.CELL_TYPE_NUMERIC: 
-							if (col > 13 && col < 17)
+							if (dateCheck(col))
 							{
 								row += cell.getDateCellValue().getMonth()+1 + "/" + cell.getDateCellValue().getDate() + "/" + cell.getDateCellValue().toString().substring(24);
 								col++;
@@ -77,10 +84,14 @@ public class WorkingFileReader {
 								col++;
 								break; 
 							}
+						case Cell.CELL_TYPE_BLANK:
+							col++;
+							break;
 					}
 					row += ",";
 				}
 				if (row.startsWith("Sort")) {
+					getDateCols(row);
 					data.addHeader(row);
 				}
 				else if (!row.equals("")) {
@@ -99,6 +110,30 @@ public class WorkingFileReader {
 			return null;
 		}
 	}
+	
+	public boolean dateCheck(int col) {
+		Integer column = col;
+		for (int i = 0 ; i < dateCol.size() ; i++) {
+			if (column.equals(dateCol.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void getDateCols(String row) {
+		String[] rowArray = row.split(",");
+		Integer index = 0; 
+		while (index < rowArray.length) {
+			if (rowArray[index].contains("Date")) {
+				System.out.println(rowArray[index]);
+				dateCol.add(index);
+				System.out.println(index);
+			}
+			index++;
+		}
+	}
+	
 	
 	public static void main(String[] args) { 
 		UserInput user = new UserInput(); 
