@@ -8,7 +8,7 @@ public class DataWriter {
 	private int row;
 	private ArrayList<MnemonicData> mnemonics;
 	private int[] position;
-	private ArrayList<Integer> columnArray; 
+	private int[] columnArray;
 	private int headerOffset; 
 	
 	public DataWriter(ArrayList<MnemonicData> m) { 
@@ -17,37 +17,41 @@ public class DataWriter {
 	}
 	
 	public void setColumnArray(String head) {
+		columnArray = new int[11];
 		String [] headArray = head.split(",");
 		for (int i = 0 ; i < headArray.length ; i++) {
 			if (headArray[i].startsWith("KB")) {
-				columnArray.add(i);
+				columnArray[0] = i;
 			}
 			if (headArray[i].equals("DEPT")) {
-				columnArray.add(i);
+				columnArray[1] = i;
 			}
 			if (headArray[i].startsWith("SP")) {
-				columnArray.add(i);
+				columnArray[2] = i;
 			}
 			if (headArray[i].startsWith("SRES:")) {
-				columnArray.add(i);
+				columnArray[3] = i;
 			}
 			if (headArray[i].startsWith("MRES")) { 
-				columnArray.add(i);
+				columnArray[4] = i;
 			}
 			if (headArray[i].startsWith("DRES")) { 
-				columnArray.add(i);
+				columnArray[5] = i;
 			}
 			if (headArray[i].startsWith("NPHI-SS")) {
-				columnArray.add(i);
+				columnArray[6] = i;
 			}
 			if (headArray[i].startsWith("DPHI-SS")) {
-				columnArray.add(i);
+				columnArray[7] = i;
 			}
 			if (headArray[i].equals("Caliper")) {
-				columnArray.add(i);
+				columnArray[8] = i;
 			}
 			if (headArray[i].equals("Bit")) {
-				columnArray.add(i);
+				columnArray[9] = i;
+			}
+			if (headArray[i].equals("Subsea")) {
+				columnArray[10] = i;
 			}
 		}
 	}
@@ -80,9 +84,9 @@ public class DataWriter {
 		}
 		finalHeader += "Bit,Service Co.";
 		
-		//setColumnArray(finalHeader);
+		setColumnArray(finalHeader);
 		
-		// finalHeader = addCalcHeaders(finalHeader);
+		finalHeader = addCalcHeaders(finalHeader);
 		
 		
 		formattedData.addHeader(finalHeader);
@@ -128,7 +132,7 @@ public class DataWriter {
 			
 			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
 			
-			//finalRow = addCalcValues(finalRow);
+			finalRow = addCalcValues(finalRow);
 			formattedData.addRow(finalRow);
 		}
 		resetPosition();
@@ -158,34 +162,34 @@ public class DataWriter {
 		String[] rowArray = row.split(",");
 	
 		String separation = "";
-		if (!rowArray[columnArray.get(5)].equals("") && !rowArray[columnArray.get(4)].equals("")) {
-			separation = String.valueOf(Double.parseDouble(rowArray[columnArray.get(5)]) - Double.parseDouble(rowArray[columnArray.get(4)]));
+		if (columnArray[7] != 0 && columnArray[6] != 0) {
+			separation = String.valueOf(Double.parseDouble(rowArray[columnArray[7]]) - Double.parseDouble(rowArray[columnArray[6]]));
 		}
 		
 		String mediumSeparation = "";
-		if (!rowArray[columnArray.get(3)].equals("") && !rowArray[columnArray.get(2)].equals("")) {
-			mediumSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray.get(3)]) - Double.parseDouble(rowArray[columnArray.get(2)]));
+		if (columnArray[4] != 0 && columnArray[3] != 0) {
+			mediumSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[4]]) - Double.parseDouble(rowArray[columnArray[3]]));
 		}
 		
 		String deepSeparation = "";
-		if (!rowArray[columnArray.get(5)].equals("") && !rowArray[columnArray.get(5)].equals("")) {
-			deepSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray.get(5)]) - Double.parseDouble(rowArray[columnArray.get(5)]));
+		if (columnArray[5] != 0 && columnArray[4] != 0) {
+			deepSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[5]]) - Double.parseDouble(rowArray[columnArray[4]]));
 		}
 		
 		String mudCake = "";
-		if (!rowArray[columnArray.get(5)].equals("") && !rowArray[columnArray.get(5)].equals("")) {
-			mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray.get(5)]) - Double.parseDouble(rowArray[columnArray.get(5)]));
+		if (columnArray[5] != 0 && columnArray[4] != 0) {
+			mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
 		}	
+		
+	//	String subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
 	
-		String temp = row.substring(0, ordinalIndexOf(row, "," , 27)) + "," + separation + row.substring(ordinalIndexOf(row, "," , 27), ordinalIndexOf(row, "," , 30))
-		 + "," + mediumSeparation + "," + deepSeparation + row.substring(ordinalIndexOf(row, "," , 30), ordinalIndexOf(row, "," , 37)) + "," + mudCake
-		 + row.substring(ordinalIndexOf(row, ",", 37));
+		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake;
 		
 		return temp;
 	}
 	
 	public String addCalcHeaders(String header) {
-		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea";
+		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes";
 		return sep;
 	}
 	
