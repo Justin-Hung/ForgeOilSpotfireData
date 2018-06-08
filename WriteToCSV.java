@@ -16,34 +16,41 @@ public class WriteToCSV {
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			fileWriter = new FileWriter(new File("Test" + township + "MASTERFILE" + ".csv"));
-			
+
 			header += "DEPT,Subsea,Formation,VKNS Isopach,Interval (step)";
-			
+
 			for (int i = 0 ; i < mnemonicList.size() ; i++) {
 				header += "," + mnemonicList.get(i).getName();
 			}
-			
+
 			header += ",Caliper2,Bit,Service Co.";
 			
 			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
 			String uwi = data.get(0).getRow(0).substring(21, 34);
-			header += ",Break " + uniqueWell + "_" + uwi;
 			
-			fileWriter.write(header);
-			
+			fileWriter.write(header + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
 			fileWriter.write(System.lineSeparator());
-
-			boolean isFirst = true; 
+		
+			if (data.get(0).isMdforDir()) {
+				data.get(0).write(fileWriter, true);
+			}
+			else {
+				data.get(0).write(fileWriter, false);
+			}
 			
-			for (int i = 0 ; i < data.size() ; i++) {
-				if (!isFirst) {
-					uniqueWell = data.get(i).getRow(0).substring(18, 20);
-					uwi = data.get(i).getRow(0).substring(21, 34);
-					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi);
+			for (int i = 1 ; i < data.size() ; i++) {
+				uniqueWell = data.get(i).getRow(0).substring(18, 20);
+				uwi = data.get(i).getRow(0).substring(21, 34);
+				if (data.get(i).isMdforDir()) {
+					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
 					fileWriter.write(System.lineSeparator());
+					data.get(i).write(fileWriter, true);
 				}
-				data.get(i).write(fileWriter);
-				isFirst = false;
+				else {
+					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+					fileWriter.write(System.lineSeparator());
+					data.get(i).write(fileWriter, false);
+				}
 			}
 			
 			fileWriter.close(); 

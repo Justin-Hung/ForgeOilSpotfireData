@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class LasData {
+	private boolean mdForDir;
 	private String uwi; 
 	private String header; 
 	private ArrayList<String> rows; 
@@ -33,8 +34,14 @@ public class LasData {
 	public LasData(String u) {
 		uwi = u;
 		rows = new ArrayList<String>(); 
+		mdForDir = false;
 	}
 	
+	public boolean getMdForDir() { return mdForDir; } 
+	
+	public void setMdTrue() {
+		mdForDir = true; 
+	}
 	public void addHeader(String head) {
 		header = head; 
 	}
