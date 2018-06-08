@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
 	
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Garrington\\GarringtonGWI.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx";
 	private int upperbound;
 	private int lowerbound; 
 	

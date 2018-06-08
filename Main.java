@@ -29,10 +29,11 @@ public class Main {
 			while (workingWellRow < workingData.getSize()) {
 				
 				String topUwi = topDataList.get(topRow).getUwi(); 
-				if (topUwi.startsWith("1")) {
-					topUwi = topUwi.substring(1);
+				String workingUwi = workingData.getRow(workingWellRow).substring(17, 37);
+				if (topUwi.startsWith("0")) {
+					topUwi = "1" + topUwi;
 				}
-				if (topUwi.equals(workingData.getRow(workingWellRow).substring(18, 37))) {
+				if (topUwi.equals(workingUwi)) {
 					LasData lasData = null;
 					if (!dataWriter.getCol(workingData.getRow(workingWellRow), 13).equals("Vertical"))
 					{
@@ -55,8 +56,14 @@ public class Main {
 					topRow++; 
 				}
 				else {
-					System.err.println(workingData.getRow(workingWellRow).substring(18, 37) + " Does not have a Top");
-					workingWellRow++; 
+					if (userInput.fullSortTownship(topUwi) < userInput.fullSortTownship(workingUwi)) {
+						System.err.println(topUwi + " Does not have a matching GWI");
+						topRow++;
+					}
+					else {
+						System.err.println(workingUwi + " Does not have a Top");
+						workingWellRow++; 
+					}
 				}
 			}
 		}

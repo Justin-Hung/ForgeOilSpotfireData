@@ -6,7 +6,7 @@ import java.io.IOException;
  
 public class LasFileReader {
 
-	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T34R2W5toT35R3W5\\log_files\\";
+	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
 		if (topData.getUwi().equals("100/06-06-035-02W5/2")) {

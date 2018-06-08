@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Garrington\\GarringtonSystemTops.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\MannvilleUserTops.xlsx";
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
@@ -24,9 +24,9 @@ public class TopFileReader {
 	private String previousFormation; 
 	private boolean checkBottom; 
 	
-	private final int uwiCol = 1;
-	private final int formationCol = 3; 
-	private final int tvdCol = 5;
+	private final int uwiCol = 0;
+	private final int formationCol = 1; 
+	private final int tvdCol = 2;
 	
 	private ArrayList<String> formations;
 	
