@@ -48,6 +48,21 @@ public class UserInput {
 		return Integer.parseInt(uwi);
 	}
 	
+	public long fullSortTownship(String town) {
+		//System.out.println(town);
+		String wackZone = town.substring(1,3);
+		if (Character.isLetter(wackZone.charAt(0))) {
+			wackZone = String.valueOf(wackZone.charAt(0) - 'A' + 1);
+			if (wackZone.length() == 1) {
+				wackZone = "0" + wackZone;
+			}
+		}
+		String uwi = town.substring(17,18) + town.substring(10,13) + town.substring(14,16) + town.substring(7,9) 
+				   + town.substring(4,6) + wackZone + "0" + town.substring(19);
+		//System.out.println(uwi);
+		return Long.parseLong(uwi);
+	}
+	
 	public void readInput() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter NW Township in format SS-TTT-RRW? : " );
