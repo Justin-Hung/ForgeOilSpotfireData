@@ -21,7 +21,7 @@ public class DataWriter {
 		FormattedData formattedData = new FormattedData();
 
 		String formattedHeader = lasData.getHeader().trim().replaceAll(" +", ",");
-
+		
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
