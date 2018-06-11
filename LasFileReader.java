@@ -81,18 +81,10 @@ public class LasFileReader {
 			}
 			lasContainer.formatHeader();
 			
-//			if (topData.getUwi().equals("100/08-08-051-08W4/0")) {
-//				lasContainer.display();
-//			}
-//			
-//			if (topData.getUwi().equals("100/10-08-051-08W4/0")) {
-//				lasContainer.display();
-//			}
-			
 			return lasContainer;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			return null;
 		}
 	}
