@@ -11,9 +11,9 @@ public class Main {
 		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi()); 
 		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getUpperBuffer(), userInput.getLowerBuffer()); 
 		LasFileReader lasFileReader = new LasFileReader(); 
-		Mnemonics mnemonics = new Mnemonics();
-		mnemonics.readFile();
-		DataWriter dataWriter = new DataWriter(mnemonics);
+		MoreMnemonics mnemonics = new MoreMnemonics();
+		ArrayList<MnemonicData> mnemonicList = mnemonics.readFile();
+		DataWriter dataWriter = new DataWriter(mnemonicList);
 		ArrayList<FormattedData> formattedDataList = new ArrayList<FormattedData>();
 		
 		int wellsCompleted = 0; 
@@ -35,7 +35,7 @@ public class Main {
 				}
 				if (topUwi.equals(workingUwi)) {
 					LasData lasData = null;
-					if (!dataWriter.getCol(workingData.getRow(workingWellRow), 13).equals("Vertical"))
+					if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
 					{
 						lasData = lasFileReader.readFile(topDataList.get(topRow), true);
 					}
@@ -44,13 +44,13 @@ public class Main {
 					}
 					
 					if (lasData != null) { 
-						FormattedData formattedData = dataWriter.formatData(workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+						FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
 						System.out.println(topDataList.get(topRow).getUwi());
 						formattedDataList.add(formattedData);
 						wellsCompleted++;
 					}
 					else { 
-						System.err.println(topDataList.get(topRow).getUwi() + " Error in lasFile");
+						System.err.println(topDataList.get(topRow).getUwi() + " Error in top or lasfile");
 					}
 					workingWellRow++; 
 					topRow++; 
@@ -66,14 +66,14 @@ public class Main {
 					}
 				}
 			}
+			
+			WriteToCSV writer = new WriteToCSV(formattedDataList);
+			writer.write(workingData.getHeader(), mnemonicList);
+			System.out.println("DONE");
+			System.out.println("wells completed: " + wellsCompleted);
 		}
 		catch(Exception e) { 
 			e.printStackTrace();
 		}
-		WriteToCSV writer = new WriteToCSV(formattedDataList);
-		writer.write();
-		System.out.println("DONE");
-		System.out.println("wells completed: " + wellsCompleted);
-		
 	}
 }

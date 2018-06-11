@@ -5,6 +5,8 @@ public class LasData {
 	private String uwi; 
 	private String header; 
 	private ArrayList<String> rows; 
+	private String serviceCo; 
+	private String bit; 
 	
 	public void formatHeader() {
 		for (int i = 0 ; i < header.length()-1 ; i++) {
@@ -14,6 +16,19 @@ public class LasData {
 				header = build.toString();
 			}
 		}
+	}
+	
+	public String getUwi() { return uwi; }
+	public String getBit() { return bit; }
+	
+	public String getServiceCo() { return serviceCo; }
+	
+	public void setServiceCo(String s) {
+		serviceCo = s;
+	}
+	
+	public void setBit(String b) {
+		bit = b; 
 	}
 	
 	public LasData(String u) {

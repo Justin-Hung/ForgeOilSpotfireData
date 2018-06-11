@@ -10,6 +10,8 @@ public class TopData {
 	private String upperFormation; 
 	private boolean bottomCheck;
 	
+	public ArrayList<Double> getTvDepth() { return tvDepth; }
+	
 	public String getFormation(Double depth) {
 		if (depth >= tvDepth.get(tvDepth.size()-1) && depth < getUpperBound()) {
 			return form.get(tvDepth.size()-1);
@@ -72,6 +74,8 @@ public class TopData {
 		for(int i = 0; i < form.size(); i++) {
 			System.out.println(form.get(i) + "           " + tvDepth.get(i));
 		}
-		
+		if (bottomCheck) {
+			System.out.println("BOTTOM");
+		}
 	}
 }
