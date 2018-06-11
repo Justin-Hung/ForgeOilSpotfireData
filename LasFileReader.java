@@ -57,8 +57,11 @@ public class LasFileReader {
 				if (line.startsWith(" BS  .IN")) {
 					bit = String.valueOf(Double.parseDouble(line.substring(12,18)) * 25.4);
 				}
+				if (line.startsWith(" BS.MM")) {
+					bit = line.substring(12,18);
+				}
 				if (line.startsWith(" SRVC.")) {
-					serviceCo = line.substring(12,49);
+					serviceCo = line.substring(12,48);
 				}
 				if (line.startsWith("~A")) {
 					lasContainer.addHeader(line);
@@ -67,6 +70,12 @@ public class LasFileReader {
 					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
 						lasContainer.addRow(line + "          buffer              buffer" );
+					}
+				}
+				else if (line.startsWith("   ")) {
+					if (Double.parseDouble(line.substring(0, 11)) > topData.getLowerBound() 
+							&& Double.parseDouble(line.substring(0, 11)) < topData.getUpperBound()) {
+						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
 					}
 				}
 			}   
@@ -80,11 +89,11 @@ public class LasFileReader {
 				return null;
 			}
 			lasContainer.formatHeader();
-			//lasContainer.display();
+			
 			return lasContainer;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			return null;
 		}
 	}
