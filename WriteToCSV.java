@@ -17,13 +17,13 @@ public class WriteToCSV {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			fileWriter = new FileWriter(new File("Test" + township + "MASTERFILE" + ".csv"));
 
-			header += "DEPT,Subsea,Formation,VKNS Isopach,Interval (step)";
+			header += "DEPT,Formation,VKNS Isopach,Interval (step)";
 
 			for (int i = 0 ; i < mnemonicList.size() ; i++) {
 				header += "," + mnemonicList.get(i).getName();
 			}
 
-			header += ",Caliper2,Bit,Service Co.";
+			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea";
 			
 			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
 			String uwi = data.get(0).getRow(0).substring(21, 34);

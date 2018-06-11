@@ -62,7 +62,7 @@ public class DataWriter {
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
 		columnArray = new int[11];
 		header = h; 
-		header += "DEPT,Subsea,Formation,VKNS Isopach,Interval (step),";
+		header += "DEPT,Formation,VKNS Isopach,Interval (step),";
 		headerOffset = header.split(",").length;
 		
 		FormattedData formattedData = new FormattedData();
@@ -100,12 +100,9 @@ public class DataWriter {
 
 			Double depth = Double.parseDouble(formatRow.substring(0, formatRow.indexOf(",")));
 
-			Double subsea = 0.0;
-					//Double.parseDouble(getCol(uwiInfo, 5)) - depth;
-
 			String data = formatRow.substring(ordinalIndexOf(formatRow, ",", 1));
 	
-			String generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," + subsea.toString() + "," + topData.getFormation(depth) + ", ,0.1";
+			String generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," + topData.getFormation(depth) + ", ,0.1";
 			 
 			String formattedRow = generalWellInfo + data; 
 			
@@ -185,15 +182,20 @@ public class DataWriter {
 			mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
 		}	
 		
+		String subsea = "";
+		if (!rowArray[columnArray[0]].equals("") && !rowArray[columnArray[1]].equals("")) {
+			subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[0]]) - Double.parseDouble(rowArray[columnArray[1]]));
+		}	
+		
 	//	String subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
 	
-		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake;
+		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake + "," + subsea;
 		
 		return temp;
 	}
 	
 	public String addCalcHeaders(String header) {
-		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes";
+		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea";
 		return sep;
 	}
 	
