@@ -9,9 +9,6 @@ public class LasFileReader {
 	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files\\";
 	
 	public LasData readFile(TopData topData, boolean dir) { 
-		if (topData.getUwi().equals("100/06-06-035-02W5/2")) {
-			System.out.println("test");
-		}
 		//topData.displayTop();
 		try {
 			boolean usingMdforDir = false;
@@ -55,8 +52,11 @@ public class LasFileReader {
 				if (line.startsWith(" BS  .IN")) {
 					bit = String.valueOf(Double.parseDouble(line.substring(12,18)) * 25.4);
 				}
+				if (line.startsWith(" BS.MM")) {
+					bit = line.substring(12,18);
+				}
 				if (line.startsWith(" SRVC.")) {
-					serviceCo = line.substring(12,49);
+					serviceCo = line.substring(12,48);
 				}
 				if (line.startsWith("~A")) {
 					lasContainer.addHeader(line + "            Bit       Service_Co." );
@@ -67,6 +67,12 @@ public class LasFileReader {
 						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
 					}
 				}
+				else if (line.startsWith("   ")) {
+					if (Double.parseDouble(line.substring(0, 11)) > topData.getLowerBound() 
+							&& Double.parseDouble(line.substring(0, 11)) < topData.getUpperBound()) {
+						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
+					}
+				}
 			}   
 			bufferedReader.close(); 
 			
@@ -74,10 +80,19 @@ public class LasFileReader {
 				return null;
 			}
 			lasContainer.formatHeader();
-			//lasContainer.display();
+			
+//			if (topData.getUwi().equals("100/08-08-051-08W4/0")) {
+//				lasContainer.display();
+//			}
+//			
+//			if (topData.getUwi().equals("100/10-08-051-08W4/0")) {
+//				lasContainer.display();
+//			}
+			
 			return lasContainer;
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
