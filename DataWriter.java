@@ -17,7 +17,6 @@ public class DataWriter {
 	}
 	
 	public void setColumnArray(String head) {
-		columnArray = new int[11];
 		String [] headArray = head.split(",");
 		for (int i = 0 ; i < headArray.length ; i++) {
 			if (headArray[i].startsWith("KB")) {
@@ -26,37 +25,42 @@ public class DataWriter {
 			if (headArray[i].equals("DEPT")) {
 				columnArray[1] = i;
 			}
-			if (headArray[i].startsWith("SP")) {
-				columnArray[2] = i;
-			}
-			if (headArray[i].startsWith("SRES:")) {
-				columnArray[3] = i;
-			}
-			if (headArray[i].startsWith("MRES")) { 
-				columnArray[4] = i;
-			}
-			if (headArray[i].startsWith("DRES")) { 
-				columnArray[5] = i;
-			}
-			if (headArray[i].startsWith("NPHI-SS")) {
-				columnArray[6] = i;
-			}
-			if (headArray[i].startsWith("DPHI-SS")) {
-				columnArray[7] = i;
-			}
-			if (headArray[i].equals("Caliper")) {
-				columnArray[8] = i;
-			}
-			if (headArray[i].equals("Bit")) {
-				columnArray[9] = i;
-			}
 			if (headArray[i].equals("Subsea")) {
 				columnArray[10] = i;
 			}
 		}
+		for (int i = 0 ; i < mnemonics.size() ; i++) {
+			if (mnemonics.get(i).getName().startsWith("SP")) {
+				columnArray[2] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().startsWith("SRES")) {
+				columnArray[3] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().startsWith("MRES")) { 
+				columnArray[4] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().startsWith("DRES")) { 
+				columnArray[5] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().startsWith("NPHI-SS")) {
+				columnArray[6] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().startsWith("DPHI-SS")) {
+				columnArray[7] = i + headerOffset;
+			}
+			if (mnemonics.get(i).getName().equals("Caliper")) {
+				columnArray[8] = i + headerOffset;
+				columnArray[9] = i + headerOffset + 2; 
+			}
+		}
+		for (int i = 0 ; i < columnArray.length ; i++) {
+			System.out.print( "|" + columnArray[i] );
+		}
+		System.out.println("");
 	}
 
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
+		columnArray = new int[11];
 		header = h; 
 		header += "DEPT,Subsea,Formation,VKNS Isopach,Interval (step),";
 		headerOffset = header.split(",").length;
@@ -162,22 +166,22 @@ public class DataWriter {
 		String[] rowArray = row.split(",");
 	
 		String separation = "";
-		if (columnArray[7] != 0 && columnArray[6] != 0) {
+		if (!rowArray[columnArray[7]].equals("") && !rowArray[columnArray[6]].equals("")) {
 			separation = String.valueOf(Double.parseDouble(rowArray[columnArray[7]]) - Double.parseDouble(rowArray[columnArray[6]]));
 		}
 		
 		String mediumSeparation = "";
-		if (columnArray[4] != 0 && columnArray[3] != 0) {
+		if (!rowArray[columnArray[4]].equals("") && !rowArray[columnArray[3]].equals("")) {
 			mediumSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[4]]) - Double.parseDouble(rowArray[columnArray[3]]));
 		}
 		
 		String deepSeparation = "";
-		if (columnArray[5] != 0 && columnArray[4] != 0) {
+		if (!rowArray[columnArray[5]].equals("") && !rowArray[columnArray[4]].equals("")) {
 			deepSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[5]]) - Double.parseDouble(rowArray[columnArray[4]]));
 		}
 		
 		String mudCake = "";
-		if (columnArray[5] != 0 && columnArray[4] != 0) {
+		if (!rowArray[columnArray[8]].equals("") && !rowArray[columnArray[9]].equals("")) {
 			mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
 		}	
 		
