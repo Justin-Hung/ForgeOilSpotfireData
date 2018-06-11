@@ -23,7 +23,7 @@ public class WriteToCSV {
 				header += "," + mnemonicList.get(i).getName();
 			}
 
-			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea";
+			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
 			
 			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
 			String uwi = data.get(0).getRow(0).substring(21, 34);

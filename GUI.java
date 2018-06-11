@@ -14,6 +14,8 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import java.awt.Component;
 import javax.swing.Box;
+import java.awt.FlowLayout;
+import javax.swing.SwingConstants;
 
 public class GUI extends JFrame {
 
@@ -42,10 +44,20 @@ public class GUI extends JFrame {
 	private JLabel lblTownshipSe;
 	private JButton btnRun;
 	private JLabel lblCreatedByJustin;
-	private JTextField textField_8;
-	private JTextField textField_9;
 	private Component verticalStrut_1;
 	private JLabel lblForgeOil;
+	private JPanel panel;
+	private JTextField textField_8;
+	private JTextField textField_10;
+	private JTextField textField_11;
+	private JTextField textField_14;
+	private JPanel panel_1;
+	private JTextField textField_9;
+	private JTextField textField_12;
+	private JTextField textField_13;
+	private JTextField textField_15;
+	private JLabel lblW;
+	private JLabel label;
 
 	/**
 	 * Launch the application.
@@ -69,14 +81,14 @@ public class GUI extends JFrame {
 	public GUI() {
 		setTitle("Spotfire Data Generator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 450);
+		setBounds(100, 100, 975, 497);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{30, 30, 30, 30, 30, 30, 30, 30, 30};
+		gbl_contentPane.columnWidths = new int[]{30, 70, 30, 30, 30, 30, 30, 200, 30};
 		gbl_contentPane.rowHeights = new int[]{30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30};
-		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
@@ -135,14 +147,35 @@ public class GUI extends JFrame {
 		contentPane.add(textField_4, gbc_textField_4);
 		textField_4.setColumns(10);
 		
+		panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.anchor = GridBagConstraints.WEST;
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.VERTICAL;
+		gbc_panel.gridx = 7;
+		gbc_panel.gridy = 2;
+		contentPane.add(panel, gbc_panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		textField_8 = new JTextField();
-		GridBagConstraints gbc_textField_8 = new GridBagConstraints();
-		gbc_textField_8.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_8.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_8.gridx = 7;
-		gbc_textField_8.gridy = 2;
-		contentPane.add(textField_8, gbc_textField_8);
+		panel.add(textField_8);
 		textField_8.setColumns(10);
+		
+		textField_10 = new JTextField();
+		textField_10.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(textField_10);
+		textField_10.setColumns(10);
+		
+		textField_14 = new JTextField();
+		panel.add(textField_14);
+		textField_14.setColumns(10);
+		
+		lblW = new JLabel("W");
+		panel.add(lblW);
+		
+		textField_11 = new JTextField();
+		panel.add(textField_11);
+		textField_11.setColumns(10);
 		
 		lblGwiFileLocation = new JLabel("GWI File Location");
 		GridBagConstraints gbc_lblGwiFileLocation = new GridBagConstraints();
@@ -192,14 +225,33 @@ public class GUI extends JFrame {
 		gbc_textField_5.gridy = 5;
 		contentPane.add(textField_5, gbc_textField_5);
 		
+		panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 7;
+		gbc_panel_1.gridy = 5;
+		contentPane.add(panel_1, gbc_panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		textField_9 = new JTextField();
+		panel_1.add(textField_9);
 		textField_9.setColumns(10);
-		GridBagConstraints gbc_textField_9 = new GridBagConstraints();
-		gbc_textField_9.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_9.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_9.gridx = 7;
-		gbc_textField_9.gridy = 5;
-		contentPane.add(textField_9, gbc_textField_9);
+		
+		textField_12 = new JTextField();
+		panel_1.add(textField_12);
+		textField_12.setColumns(10);
+		
+		textField_15 = new JTextField();
+		panel_1.add(textField_15);
+		textField_15.setColumns(10);
+		
+		label = new JLabel("W");
+		panel_1.add(label);
+		
+		textField_13 = new JTextField();
+		panel_1.add(textField_13);
+		textField_13.setColumns(10);
 		
 		lblLasDataFile = new JLabel("Las Data File Location");
 		GridBagConstraints gbc_lblLasDataFile = new GridBagConstraints();

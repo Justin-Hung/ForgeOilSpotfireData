@@ -25,9 +25,6 @@ public class DataWriter {
 			if (headArray[i].equals("DEPT")) {
 				columnArray[1] = i;
 			}
-			if (headArray[i].equals("Subsea")) {
-				columnArray[10] = i;
-			}
 		}
 		for (int i = 0 ; i < mnemonics.size() ; i++) {
 			if (mnemonics.get(i).getName().startsWith("SP")) {
@@ -52,11 +49,10 @@ public class DataWriter {
 				columnArray[8] = i + headerOffset;
 				columnArray[9] = i + headerOffset + 2; 
 			}
+			if (mnemonics.get(i).getName().startsWith("DENS")) {
+				columnArray[10] = i + headerOffset;
+			}
 		}
-		for (int i = 0 ; i < columnArray.length ; i++) {
-			System.out.print( "|" + columnArray[i] );
-		}
-		System.out.println("");
 	}
 
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
@@ -187,15 +183,28 @@ public class DataWriter {
 			subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[0]]) - Double.parseDouble(rowArray[columnArray[1]]));
 		}	
 		
-	//	String subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
-	
-		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake + "," + subsea;
+		String sandstonePoro = "";
+		if (!rowArray[columnArray[10]].equals("")) {
+			sandstonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2650) / -16.50);
+		}
+		
+		String limestonePoro = "";
+		if (!rowArray[columnArray[10]].equals("")) {
+			limestonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2710) / -17.10);
+		}
+		
+		String dolomitePoro = ""; 
+		if (!rowArray[columnArray[10]].equals("")) {
+			dolomitePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2870) / -18.70);
+		}
+		
+		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake + "," + subsea + "," + sandstonePoro + "," + limestonePoro + "," + dolomitePoro;
 		
 		return temp;
 	}
 	
 	public String addCalcHeaders(String header) {
-		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea";
+		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
 		return sep;
 	}
 	
