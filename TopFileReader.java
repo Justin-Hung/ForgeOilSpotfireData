@@ -25,9 +25,9 @@ public class TopFileReader {
 	private String previousFormation; 
 	private boolean checkBottom; 
 	
-	private final int uwiCol = 1;
-	private final int formationCol = 3; 
-	private final int tvdCol = 5;
+	private final int uwiCol = 0;
+	private final int formationCol = 2; 
+	private final int tvdCol = 3;
 	
 	private ArrayList<String> formations;
 	

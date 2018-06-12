@@ -453,7 +453,7 @@ public class GUI extends JFrame {
 		gbc_upperFormationField.gridy = 10;
 		contentPane.add(upperFormationField, gbc_upperFormationField);
 		
-		btnRun = new JButton("RU N");
+		btnRun = new JButton("RUN");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(topFile.getText() + ", " + gwiFile.getText() + ", " + lasFile.getText()
