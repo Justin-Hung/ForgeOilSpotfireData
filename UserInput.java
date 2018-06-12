@@ -11,6 +11,64 @@ public class UserInput {
 	private String townshipSE;
 	private double upperBuffer; 
 	private double lowerBuffer; 
+	private String topfilePath; 
+	private String lasfilePath; 
+	private String workingfilePath; 
+	private String outputfilePath; 
+	
+	public String getTopfilePath() { return topfilePath; } 
+	
+	public String getLasfilePath() { return lasfilePath; } 
+	
+	public String getWorkingfilePath() { return workingfilePath; } 
+	
+	public String getOutputfilePath() { return outputfilePath; } 
+	
+	public void setTopfilePath(String topfile) {
+		topfilePath = topfile; 
+	}
+	
+	public void setLasfilePath(String lasfile) {
+		lasfilePath = lasfile; 
+	}
+	
+	public void setWorkingfilePath(String workingfile) {
+		workingfilePath = workingfile; 
+	}
+	
+	public void setOutputfilePath(String outputfile) {
+		outputfilePath = outputfile; 
+	}
+	
+	public void setFormations(ArrayList<String> forms) { 
+		formations = forms;
+	}
+	
+	public void setTownshipNw(String townshipNw) {
+		townshipNW = townshipNw;
+		nwSortUwi = sortTownship(townshipNW); 
+	}
+	
+	public void setNwSortUwi(int nwSort) {
+		nwSortUwi = nwSort;
+	}
+	
+	public void setSeSortUwi(int seSort) { 
+		seSortUwi = seSort; 
+	}
+	
+	public void setTownshipSe(String townshipSe) {
+		townshipSE = townshipSe; 
+		seSortUwi = sortTownship(townshipSE);
+	}
+	
+	public void setUpperBuffer(double upperBuff) {
+		upperBuffer = upperBuff; 
+	}
+	
+	public void setLowerBuffer(double lowerBuff) { 
+		lowerBuffer = lowerBuff;
+	}
 	
 	public int getNwSortUwi() { 
 		return nwSortUwi; 

@@ -43,6 +43,19 @@ public class TopFileReader {
 		checkBottom = false;
 	}
 	
+	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff, String filePath) {
+		topFilePath = filePath;
+		upperbuffer = upperbuff; 
+		lowerbuffer = lowerbuff;
+		formations = forms;
+		upperbound = nw; 
+		lowerbound = se;
+		upperFormation = "UNKNOWN";
+		topDataList = new ArrayList<TopData>(); 
+		data = new ArrayList<String>();
+		checkBottom = false;
+	}
+	
 	public ArrayList<TopData> readFile() throws IOException { 
 		UserInput sort = new UserInput(); 
 		FileInputStream inputStream = new FileInputStream(new File(topFilePath)); 

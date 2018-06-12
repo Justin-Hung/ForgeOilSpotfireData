@@ -23,6 +23,13 @@ public class WorkingFileReader {
 		dateCol = new ArrayList<Integer>();
 	}
 	
+	public WorkingFileReader(int nw, int se, String filePath) {
+		workingFilePath = filePath;
+		upperbound = nw; 
+		lowerbound = se;
+		dateCol = new ArrayList<Integer>();
+	}
+	
 	public WorkingFileData readFile() {
 		try { 
 			WorkingFileData data = new WorkingFileData(); 
@@ -101,8 +108,6 @@ public class WorkingFileReader {
 			}
 			workbook.close(); 
 			inputStream.close();
-			System.out.println("upper" + upperbound); 
-			System.out.println("Lower" + lowerbound);
 			return data;
 		}
 		catch (Exception e) {
@@ -126,9 +131,7 @@ public class WorkingFileReader {
 		Integer index = 0; 
 		while (index < rowArray.length) {
 			if (rowArray[index].contains("Date")) {
-				System.out.println(rowArray[index]);
 				dateCol.add(index);
-				System.out.println(index);
 			}
 			index++;
 		}

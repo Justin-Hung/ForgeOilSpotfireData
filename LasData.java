@@ -19,6 +19,7 @@ public class LasData {
 	}
 	
 	public String getUwi() { return uwi; }
+	
 	public String getBit() { return bit; }
 	
 	public String getServiceCo() { return serviceCo; }

@@ -9,6 +9,14 @@ public class LasFileReader {
 	private String lasFilePath = "C:\\Users\\jhung\\LasFiles\\T34R2W5toT35R3W5\\log_files\\";
 	private String lasFile;
 	
+	public LasFileReader() { 
+		
+	}
+	
+	public LasFileReader(String filePath) { 
+		lasFilePath = filePath + "\\"; 
+	}
+	
 	public LasData readFile(TopData topData, boolean dir) { 
 		//topData.displayTop();
 		if (topData.getTvDepth().isEmpty()) {

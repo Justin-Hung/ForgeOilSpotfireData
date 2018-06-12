@@ -4,9 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class WriteToCSV {
+	private String outputFilePath;
 	private ArrayList<FormattedData> data;
 	
 	public WriteToCSV(ArrayList<FormattedData> d) { 
+		data = d;
+	}
+	
+	public WriteToCSV(ArrayList<FormattedData> d, String filePath) {
+		outputFilePath = filePath;
 		data = d;
 	}
 	
@@ -15,7 +21,7 @@ public class WriteToCSV {
 		
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
-			fileWriter = new FileWriter(new File("Test" + township + "MASTERFILE" + ".csv"));
+			fileWriter = new FileWriter(new File(outputFilePath + "\\" + township + "MASTERFILE" + ".csv"));
 
 			header += "DEPT,Formation,VKNS Isopach,Interval (step)";
 
