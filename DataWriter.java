@@ -88,6 +88,7 @@ public class DataWriter {
 		
 		finalHeader = addCalcHeaders(finalHeader);
 		
+		finalHeader = removeNewLine(finalHeader);
 		
 		formattedData.addHeader(finalHeader);
 
@@ -130,6 +131,9 @@ public class DataWriter {
 			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
 			
 			finalRow = addCalcValues(finalRow);
+			
+			finalRow = removeNewLine(finalRow);
+			
 			formattedData.addRow(finalRow);
 		}
 		resetPosition();
@@ -149,6 +153,13 @@ public class DataWriter {
 		    return false;  
 		  }  
 		  return true;  
+	}
+	
+	public String removeNewLine(String head) { 
+		if (head.contains("\n")) { 
+			head = head.replace("\n", "").replace("\r", "");
+		}
+		return head;
 	}
 	
 	public void resetPosition() {

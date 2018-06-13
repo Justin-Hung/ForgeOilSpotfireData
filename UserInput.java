@@ -107,7 +107,7 @@ public class UserInput {
 	}
 	
 	public long fullSortTownship(String town) {
-		//System.out.println(town);
+	//	System.out.println(town);
 		String wackZone = town.substring(1,3);
 		if (Character.isLetter(wackZone.charAt(0))) {
 			wackZone = String.valueOf(wackZone.charAt(0) - 'A' + 1);
@@ -117,7 +117,7 @@ public class UserInput {
 		}
 		String uwi = town.substring(17,18) + town.substring(10,13) + town.substring(14,16) + town.substring(7,9) 
 				   + town.substring(4,6) + wackZone + "0" + town.substring(19);
-		//System.out.println(uwi);
+	//	System.out.println(uwi);
 		return Long.parseLong(uwi);
 	}
 	

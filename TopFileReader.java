@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TopFileReader {
 
-	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Garrington\\GarringtonSystemTops.xlsx";
+	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx";
 
 	private ArrayList<TopData> topDataList; 
 	private String currentUwi = ""; 
@@ -25,9 +25,9 @@ public class TopFileReader {
 	private String previousFormation; 
 	private boolean checkBottom; 
 	
-	private final int uwiCol = 0;
-	private final int formationCol = 2; 
-	private final int tvdCol = 3;
+	private final int uwiCol = 1;
+	private final int formationCol = 3; 
+	private final int tvdCol = 5;
 	
 	private ArrayList<String> formations;
 	
@@ -62,7 +62,14 @@ public class TopFileReader {
 		Workbook workbook = new XSSFWorkbook(inputStream); 
 		Sheet firstSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = firstSheet.iterator(); 
-		iterator.next(); 
+		
+		Row checkFirstRow = iterator.next(); 
+		Iterator<Cell> checkFirstRowIterator = checkFirstRow.cellIterator(); 
+		Cell checkFirstRowCell = checkFirstRowIterator.next();
+		if (checkFirstRowCell.getStringCellValue().equals("©2018 IHS Markit")) {
+			iterator.next();
+		}
+			
 		boolean topCheck = false;
 		int row = 0;
 		while (iterator.hasNext()) {
@@ -114,25 +121,33 @@ public class TopFileReader {
 							upperFormation = previousFormation;
 						}
 						//check next row for bottom
+						System.out.println(currentUwi); 
 						Iterator<Row> checkNextRow = iterator;
-						Row checkRow = checkNextRow.next();
-						Iterator<Cell> checkCellIterator = checkRow.cellIterator();
-						int checkIndex = 0;
-						while (checkCellIterator.hasNext()) {
-							Cell checkCell = checkCellIterator.next();
-							if (checkIndex == uwiCol && !currentUwi.equals(checkCell.getStringCellValue())) {
-								checkBottom = true;
-								break;
+						
+						if (checkNextRow.hasNext()) {
+							Row checkRow = checkNextRow.next();
+							Iterator<Cell> checkCellIterator = checkRow.cellIterator();
+							int checkIndex = 0;
+							while (checkCellIterator.hasNext()) {
+								Cell checkCell = checkCellIterator.next();
+								if (checkIndex == uwiCol && !currentUwi.equals(checkCell.getStringCellValue())) {
+									checkBottom = true;
+									break;
+								}
+								if (checkIndex == formationCol) {
+									data.add(checkCell.getStringCellValue());
+								}
+								if (checkIndex == tvdCol) {
+									data.add(String.valueOf(checkCell.getNumericCellValue()));
+									break;
+								}
+								checkIndex++;
 							}
-							if (checkIndex == formationCol) {
-								data.add(checkCell.getStringCellValue());
-							}
-							if (checkIndex == tvdCol) {
-								data.add(String.valueOf(checkCell.getNumericCellValue()));
-								break;
-							}
-							checkIndex++;
 						}
+						else {
+							checkBottom = true; 
+						}
+						
 						topCheck = false; 
 						break;
 					}

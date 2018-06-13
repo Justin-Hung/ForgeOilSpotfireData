@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkingFileReader {
 	
-	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\Garrington\\GarringtonGWIunFiltered.xlsx";
+	private String workingFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\GWINorthernViking.xlsx";
 	private int upperbound;
 	private int lowerbound; 
 	private ArrayList<Integer> dateCol;
@@ -97,7 +97,7 @@ public class WorkingFileReader {
 					}
 					row += ",";
 				}
-				if (row.startsWith("Sort")) {
+				if (row.contains("Sort")) {
 					getDateCols(row);
 					data.addHeader(row);
 				}

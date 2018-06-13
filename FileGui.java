@@ -11,16 +11,20 @@ import javax.swing.JPanel;
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 
 public class FileGui {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField topTextField;
+	private JTextField gwiTextField;
+	private JTextField lasTextField;
+	private JTextField outputTextField;
+	private UserInput user;
 
 	/**
 	 * Launch the application.
@@ -30,7 +34,6 @@ public class FileGui {
 			public void run() {
 				try {
 					FileGui window = new FileGui();
-					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -42,7 +45,23 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
+		topTextField = new JTextField();
+		gwiTextField = new JTextField();
+		lasTextField = new JTextField();
+		outputTextField = new JTextField();
+		user = new UserInput();
 		initialize();
+		frame.setVisible(true);
+	}
+	
+	public FileGui(UserInput u) { 
+		user = u;
+		topTextField = new JTextField(user.getLasfilePath());
+		gwiTextField = new JTextField(user.getWorkingfilePath());
+		lasTextField = new JTextField(user.getLasfilePath());
+		outputTextField = new JTextField(user.getOutputfilePath());
+		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -97,13 +116,20 @@ public class FileGui {
 		frame.getContentPane().add(panel, gbc_panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textField = new JTextField();
-		panel.add(textField);
-		textField.setColumns(42);
+		panel.add(topTextField);
+		topTextField.setColumns(42);
 		
 		JButton btnNewButton = new JButton("Browse");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileBrowser = new JFileChooser(); 
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileBrowser.getCurrentDirectory();
+					File currentDir = fileBrowser.getSelectedFile(); 
+					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
+					topTextField.setText(filePath);
+				}
 			}
 		});
 		panel.add(btnNewButton);
@@ -149,11 +175,22 @@ public class FileGui {
 		frame.getContentPane().add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(42);
-		panel_1.add(textField_1);
+		gwiTextField.setColumns(42);
+		panel_1.add(gwiTextField);
 		
 		JButton button = new JButton("Browse");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileBrowser = new JFileChooser(); 
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileBrowser.getCurrentDirectory();
+					File currentDir = fileBrowser.getSelectedFile(); 
+					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
+					gwiTextField.setText(filePath);
+				}
+			}
+		});
 		panel_1.add(button);
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(30);
@@ -197,11 +234,22 @@ public class FileGui {
 		frame.getContentPane().add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(42);
-		panel_2.add(textField_2);
+		lasTextField.setColumns(42);
+		panel_2.add(lasTextField);
 		
 		JButton button_1 = new JButton("Browse");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileBrowser = new JFileChooser(); 
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileBrowser.getCurrentDirectory();
+					File currentDir = fileBrowser.getSelectedFile(); 
+					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
+					lasTextField.setText(filePath);
+				}
+			}
+		});
 		panel_2.add(button_1);
 		
 		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
@@ -245,11 +293,22 @@ public class FileGui {
 		frame.getContentPane().add(panel_3, gbc_panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(42);
-		panel_3.add(textField_3);
+		outputTextField.setColumns(42);
+		panel_3.add(outputTextField);
 		
 		JButton button_2 = new JButton("Browse");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileBrowser = new JFileChooser(); 
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileBrowser.getCurrentDirectory();
+					File currentDir = fileBrowser.getSelectedFile(); 
+					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
+					outputTextField.setText(filePath);
+				}
+			}
+		});
 		panel_3.add(button_2);
 		
 		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
@@ -272,23 +331,29 @@ public class FileGui {
 		frame.getContentPane().add(panel_4, gbc_panel_4);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnPrevious = new JButton("Previous");
-		panel_4.add(btnPrevious);
-		
 		JButton btnNext = new JButton("Next");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				user.setLasfilePath(lasTextField.getText());
+				user.setOutputfilePath(outputTextField.getText());
+				user.setTopfilePath(topTextField.getText());
+				user.setWorkingfilePath(gwiTextField.getText());
+				UserInputGui inputGui = new UserInputGui(user);
+				frame.dispose();
+			}
+		});
 		panel_4.add(btnNext);
 		
 		JButton btnNewButton_1 = new JButton("Cancel");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose(); 
+			}
+		});
 		panel_4.add(btnNewButton_1);
 		
 		Component horizontalStrut_13 = Box.createHorizontalStrut(30);
 		panel_4.add(horizontalStrut_13);
-		
-		Component verticalStrut_5 = Box.createVerticalStrut(20);
-		GridBagConstraints gbc_verticalStrut_5 = new GridBagConstraints();
-		gbc_verticalStrut_5.gridx = 1;
-		gbc_verticalStrut_5.gridy = 14;
-		frame.getContentPane().add(verticalStrut_5, gbc_verticalStrut_5);
 	}
 
 }

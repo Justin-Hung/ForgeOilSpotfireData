@@ -16,13 +16,28 @@ public class WriteToCSV {
 		data = d;
 	}
 	
+	public String formatHeader(String head) { 
+		if (head.contains("\n")) { 
+			head = head.replace("\n", "").replace("\r", "");
+		}
+		return head;
+	}
+	
 	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
+		
+		header = formatHeader(header);
 		FileWriter fileWriter; 
 		
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
-			fileWriter = new FileWriter(new File(outputFilePath + "\\" + township + "MASTERFILE" + ".csv"));
-
+			
+			if (outputFilePath != null) {
+				fileWriter = new FileWriter(new File(outputFilePath + "\\" + township + "MASTERFILE" + ".csv"));
+			}
+			else { 
+				fileWriter = new FileWriter(new File( township + "MASTERFILE" + ".csv"));
+			}
+			
 			header += "DEPT,Formation,VKNS Isopach,Interval (step)";
 
 			for (int i = 0 ; i < mnemonicList.size() ; i++) {
