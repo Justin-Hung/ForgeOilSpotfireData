@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
+
 import java.awt.Insets;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
@@ -45,10 +47,10 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		topTextField = new JTextField();
-		gwiTextField = new JTextField();
-		lasTextField = new JTextField();
-		outputTextField = new JTextField();
+		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx");
+		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\GWINorthernViking.xlsx");
+		lasTextField = new JTextField("E:\\ForgeOil\\LasFiles\\Bellatrix");
+		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles");
 		user = new UserInput();
 		initialize();
 		frame.setVisible(true);
@@ -56,7 +58,7 @@ public class FileGui {
 	
 	public FileGui(UserInput u) { 
 		user = u;
-		topTextField = new JTextField(user.getLasfilePath());
+		topTextField = new JTextField(user.getTopfilePath());
 		gwiTextField = new JTextField(user.getWorkingfilePath());
 		lasTextField = new JTextField(user.getLasfilePath());
 		outputTextField = new JTextField(user.getOutputfilePath());
@@ -68,9 +70,14 @@ public class FileGui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Spotfire Data Generator");
 		frame.setBounds(100, 100, 645, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		
+		ImageIcon forgeIcon = new ImageIcon("forgeIcon.png");
+		frame.setIconImage(forgeIcon.getImage());
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 33, 0, 0, 26, 0, 0, 0, 0, 0, 36, 0, 11, 0};

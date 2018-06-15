@@ -19,10 +19,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JProgressBar;
 
 public class UserInputGui {
 
 	private JFrame frame;
+	private UserInput user;
 	private JTextField seSecTextField;
 	private JTextField seTwpTextField;
 	private JTextField seRgeTextField;
@@ -33,7 +35,6 @@ public class UserInputGui {
 	private JTextField nwTwpTextField;
 	private JTextField nwRgeTextField;
 	private JTextField nwMerTextField;
-	private UserInput user;
 	private JTextField lowerFormationTextField;
 	private JTextField upperFormationTextField;
 	/**
@@ -55,23 +56,107 @@ public class UserInputGui {
 	 * Create the application.
 	 */
 	public UserInputGui() {
+		initializeTextFields();
 		initialize();
 		frame.setVisible(true);
 	}
 	
 	public UserInputGui(UserInput u) {
 		user = u;
+		initializeTextFields();
+		setTextFields(u);
 		initialize(); 
 		frame.setVisible(true);
+	}
+	
+	private void initializeTextFields() { 
+		seSecTextField = new JTextField(); 
+		seTwpTextField = new JTextField(); 
+		seRgeTextField = new JTextField(); 
+		seMerTextField = new JTextField(); 
+		upperBufferTextField = new JTextField(); 
+		lowerBufferTextField = new JTextField(); 
+		nwSecTextField = new JTextField(); 
+		nwTwpTextField = new JTextField(); 
+		nwRgeTextField = new JTextField(); 
+		nwMerTextField = new JTextField(); 
+		lowerFormationTextField = new JTextField(); 
+		upperFormationTextField = new JTextField(); 
+	}
+	private void setTextFields(UserInput u) { 
+		if (u.getUpperBuffer() != 0.0001) {
+			if (String.valueOf(u.getUpperBuffer()).endsWith(".0")) {
+				upperBufferTextField.setText(String.valueOf(u.getUpperBuffer()).replace(".0", ""));
+			}
+			else {
+				upperBufferTextField.setText(String.valueOf(u.getUpperBuffer()));
+			}
+		}
+		if (u.getLowerBuffer() != 0.0001) {
+			if (String.valueOf(u.getLowerBuffer()).endsWith(".0")) {
+				lowerBufferTextField.setText(String.valueOf(u.getLowerBuffer()).replace(".0", ""));
+			}
+			else {
+				lowerBufferTextField.setText(String.valueOf(u.getLowerBuffer()));
+			}
+		}
+		if (!u.getFormations().get(0).equals("")) {
+			upperFormationTextField.setText(u.getFormations().get(0));
+		}
+		if (!u.getFormations().get(1).equals("")) {
+			lowerFormationTextField.setText(u.getFormations().get(1));
+		}
+	
+		if (!u.getTownshipNW().split("-")[0].equals("")) { 
+			nwSecTextField.setText(u.getTownshipNW().split("-")[0]);
+		}
+		if (!u.getTownshipNW().split("-")[1].equals("")) { 
+			nwTwpTextField.setText(u.getTownshipNW().split("-")[1]);
+		}
+		if (u.getTownshipNW().split("-")[2].split("W").length == 1) { 
+			nwRgeTextField.setText(u.getTownshipNW().split("-")[2].split("W")[0]);
+		}
+		if (u.getTownshipNW().split("-")[2].split("W").length == 2) { 
+			if (!u.getTownshipNW().split("-")[2].split("W")[0].equals("")) {
+				nwRgeTextField.setText(u.getTownshipNW().split("-")[2].split("W")[0]);
+			}
+			if (!u.getTownshipNW().split("-")[2].split("W")[1].equals("")) {
+				nwMerTextField.setText(u.getTownshipNW().split("-")[2].split("W")[1]);
+			}
+		}
+		
+		if (!u.getTownshipSE().split("-")[0].equals("")) { 
+			seSecTextField.setText(u.getTownshipSE().split("-")[0]);
+		}
+		if (!u.getTownshipSE().split("-")[1].equals("")) { 
+			seTwpTextField.setText(u.getTownshipSE().split("-")[1]);
+		}
+		if (u.getTownshipSE().split("-")[2].split("W").length == 1) { 
+			seRgeTextField.setText(u.getTownshipSE().split("-")[2].split("W")[0]);
+		}
+		if (u.getTownshipSE().split("-")[2].split("W").length == 2) { 
+			if (!u.getTownshipSE().split("-")[2].split("W")[0].equals("")) {
+				seRgeTextField.setText(u.getTownshipSE().split("-")[2].split("W")[0]);
+			}
+			if (!u.getTownshipSE().split("-")[2].split("W")[1].equals("")) {
+				seMerTextField.setText(u.getTownshipSE().split("-")[2].split("W")[1]);
+			}
+		}	
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Spotfire Data Generator");
 		frame.setBounds(100, 100, 645, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		
+		ImageIcon forgeIcon = new ImageIcon("forgeIcon.png");
+		frame.setIconImage(forgeIcon.getImage());
+		
+	
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -118,7 +203,6 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		upperBufferTextField = new JTextField();
 		upperBufferTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(upperBufferTextField);
 		upperBufferTextField.setColumns(5);
@@ -170,7 +254,6 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_3, gbc_panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		lowerBufferTextField = new JTextField();
 		lowerBufferTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		lowerBufferTextField.setColumns(5);
 		panel_3.add(lowerBufferTextField);
@@ -239,8 +322,7 @@ public class UserInputGui {
 		JPanel panel_7 = new JPanel();
 		panel_6.add(panel_7);
 		panel_7.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
-		
-		nwSecTextField = new JTextField();
+
 		nwSecTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		nwSecTextField.setColumns(3);
 		panel_7.add(nwSecTextField);
@@ -248,7 +330,6 @@ public class UserInputGui {
 		JLabel label_3 = new JLabel("-");
 		panel_7.add(label_3);
 		
-		nwTwpTextField = new JTextField();
 		nwTwpTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		nwTwpTextField.setColumns(3);
 		panel_7.add(nwTwpTextField);
@@ -256,7 +337,6 @@ public class UserInputGui {
 		JLabel label_4 = new JLabel("-");
 		panel_7.add(label_4);
 		
-		nwRgeTextField = new JTextField();
 		nwRgeTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		nwRgeTextField.setColumns(3);
 		panel_7.add(nwRgeTextField);
@@ -264,7 +344,6 @@ public class UserInputGui {
 		JLabel label_5 = new JLabel("W");
 		panel_7.add(label_5);
 		
-		nwMerTextField = new JTextField();
 		nwMerTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		nwMerTextField.setColumns(3);
 		panel_7.add(nwMerTextField);
@@ -304,7 +383,6 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_10, gbc_panel_10);
 		panel_10.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		upperFormationTextField = new JTextField();
 		upperFormationTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		upperFormationTextField.setColumns(20);
 		panel_10.add(upperFormationTextField);
@@ -358,7 +436,6 @@ public class UserInputGui {
 		panel_12.add(panel_13);
 		panel_13.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
 		
-		seSecTextField = new JTextField();
 		seSecTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		seSecTextField.setColumns(3);
 		panel_13.add(seSecTextField);
@@ -366,7 +443,6 @@ public class UserInputGui {
 		JLabel label_24 = new JLabel("-");
 		panel_13.add(label_24);
 		
-		seTwpTextField = new JTextField();
 		seTwpTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		seTwpTextField.setColumns(3);
 		panel_13.add(seTwpTextField);
@@ -374,7 +450,6 @@ public class UserInputGui {
 		JLabel label_25 = new JLabel("-");
 		panel_13.add(label_25);
 		
-		seRgeTextField = new JTextField();
 		seRgeTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		seRgeTextField.setColumns(3);
 		panel_13.add(seRgeTextField);
@@ -382,7 +457,6 @@ public class UserInputGui {
 		JLabel label_26 = new JLabel("W");
 		panel_13.add(label_26);
 		
-		seMerTextField = new JTextField();
 		seMerTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		seMerTextField.setColumns(3);
 		panel_13.add(seMerTextField);
@@ -422,7 +496,6 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_17, gbc_panel_17);
 		panel_17.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		lowerFormationTextField = new JTextField();
 		lowerFormationTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		lowerFormationTextField.setColumns(20);
 		panel_17.add(lowerFormationTextField);
@@ -447,7 +520,29 @@ public class UserInputGui {
 		JButton button = new JButton("Previous");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (!upperBufferTextField.getText().equals("")) {
+					user.setUpperBuffer(Double.parseDouble(upperBufferTextField.getText())); 
+				}
+				if (!lowerBufferTextField.getText().equals("")) {
+					user.setLowerBuffer(Double.parseDouble(lowerBufferTextField.getText()));
+				}
+				ArrayList<String> forms = new ArrayList<String>();
+				forms.add("");
+				forms.add("");
+				if (!upperFormationTextField.getText().equals("")) {
+					forms.set(0, upperFormationTextField.getText().toUpperCase());
+				}
+				if (!lowerFormationTextField.getText().equals("")) { 
+					forms.set(1, lowerFormationTextField.getText().toUpperCase());
+				}
+				user.setFormations(forms);
+				
+				user.setTownshipNw(nwSecTextField.getText() + "-" + nwTwpTextField.getText() + "-" + nwRgeTextField.getText()
+								   + "W" + nwMerTextField.getText());
+				user.setTownshipSe(seSecTextField.getText() + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
+								   + "W" + seMerTextField.getText()); 
 				frame.dispose();
+				
 				new FileGui(user);
 			}
 		});
@@ -465,9 +560,10 @@ public class UserInputGui {
 				user.setTownshipNw(nwSecTextField.getText() + "-" + nwTwpTextField.getText() + "-" + nwRgeTextField.getText()
 								   + "W" + nwMerTextField.getText());
 				user.setTownshipSe(seSecTextField.getText() + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
-								   + "W" + seMerTextField.getText()); 
-				Controller controller = new Controller(); 
-				controller.run(user);
+								   + "W" + seMerTextField.getText());
+				frame.dispose();
+				TestSwingWorker swingWorker = new TestSwingWorker();
+				swingWorker.go(user);
 			}
 		});
 		panel_18.add(button_1);
