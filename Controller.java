@@ -12,14 +12,19 @@ public class Controller {
 	private ArrayList<TopData> topDataList;
 	private WorkingFileData workingData;
 	private UserInput userInput; 
+	private OutputData outputData; 
 	
 	private int wellsCompleted = 0; 
 	private int workingWellRow = 0; 
 	private int topRow = 0; 
 	
+	public UserInput getUserInput() { return userInput; }
+	
 	public int getWorkingWellRow() { return workingWellRow; }
 	
 	public int getSize() { return workingData.getSize(); }
+	
+	public OutputData getOutputData() { return outputData; }
 	
 	public String getCurrentUwi() {
 		if (workingWellRow < workingData.getSize()) {
@@ -45,6 +50,7 @@ public class Controller {
 		
 		topDataList = topFileReader.readFile();
 		workingData = workingFileReader.readFile();
+		outputData = new OutputData();
 	}
 	
 	public void formatWellData() { 
@@ -65,23 +71,27 @@ public class Controller {
 			
 			if (lasData != null) { 
 				FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
-				//System.out.println(topDataList.get(topRow).getUwi());
+				System.out.println(topDataList.get(topRow).getUwi());
+				outputData.addSuccess(topDataList.get(topRow).getUwi());
 				formattedDataList.add(formattedData);
 				wellsCompleted++;
 			}
 			else { 
-				//System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
+				System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
+				outputData.addLasError(topDataList.get(topRow).getUwi());
 			}
 			workingWellRow++; 
 			topRow++; 
 		}
 		else {
 			if (userInput.fullSortTownship(topUwi) < userInput.fullSortTownship(workingUwi)) {
-				//System.err.println(topUwi + " Does not have a matching GWI");
+				System.err.println(topUwi + " Does not have a matching GWI");
+				outputData.addGwiError(topUwi);
 				topRow++;
 			}
 			else {
-				//System.err.println(workingUwi + " Does not have a Top");
+				System.err.println(workingUwi + " Does not have a Top");
+				outputData.addTopError(workingUwi);
 				workingWellRow++; 
 			}
 		}

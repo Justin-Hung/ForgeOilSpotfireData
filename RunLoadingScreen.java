@@ -70,7 +70,9 @@ public class RunLoadingScreen {
                 get();
                 controller.writeToFile();
                 JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } catch (ExecutionException | InterruptedException e) {
+                OutputGui outputGui = new OutputGui(controller.getOutputData(), controller.getUserInput().getOutputfilePath());
+            } 
+            catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }

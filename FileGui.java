@@ -52,9 +52,9 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx");
-		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\GWINorthernViking.xlsx");
-		lasTextField = new JTextField("E:\\ForgeOil\\LasFiles\\Bellatrix");
+		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx");
+		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx");
+		lasTextField = new JTextField("C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files");
 		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles");
 		user = new UserInput();
 		initialize();
