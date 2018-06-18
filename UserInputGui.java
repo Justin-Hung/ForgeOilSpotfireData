@@ -16,9 +16,13 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.Icon;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+
+import org.apache.log4j.chainsaw.Main;
+
 import javax.swing.JProgressBar;
 
 public class UserInputGui {
@@ -153,7 +157,8 @@ public class UserInputGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		
-		ImageIcon forgeIcon = new ImageIcon("forgeIcon.png");
+		URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
 		frame.setIconImage(forgeIcon.getImage());
 		
 	
@@ -213,7 +218,8 @@ public class UserInputGui {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(90);
 		panel_1.add(horizontalStrut_2);
 		
-		ImageIcon forgeLogo = new ImageIcon("transparentFinal.png");
+		URL url2 = Main.class.getResource("/resources/transparentFinal.png");
+		ImageIcon forgeLogo = new ImageIcon(url2);
 		JLabel label_10 = new JLabel(forgeLogo);
 		GridBagConstraints gbc_label_10 = new GridBagConstraints();
 		gbc_label_10.gridheight = 5;
@@ -562,7 +568,7 @@ public class UserInputGui {
 				user.setTownshipSe(seSecTextField.getText() + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
 								   + "W" + seMerTextField.getText());
 				frame.dispose();
-				TestSwingWorker swingWorker = new TestSwingWorker();
+				RunLoadingScreen swingWorker = new RunLoadingScreen();
 				swingWorker.go(user);
 			}
 		});

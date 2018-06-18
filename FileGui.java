@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Component;
+
+import java.net.URL;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 
@@ -12,6 +14,9 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
+
+import org.apache.log4j.chainsaw.Main;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
@@ -75,7 +80,8 @@ public class FileGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		
-		ImageIcon forgeIcon = new ImageIcon("forgeIcon.png");
+		URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
 		frame.setIconImage(forgeIcon.getImage());
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();

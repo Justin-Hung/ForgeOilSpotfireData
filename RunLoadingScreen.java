@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-public class TestSwingWorker {
+public class RunLoadingScreen {
 
     public void go(UserInput user) {
     	Controller controller = new Controller(user);

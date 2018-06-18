@@ -1,10 +1,16 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import org.apache.log4j.chainsaw.Main;
+
 public class MoreMnemonics {
-	private String fileLocation = "UpdatedLasMnemonics.csv";
 	private ArrayList<MnemonicData> mnemonicList; 
 	
 	public MoreMnemonics() {
@@ -12,9 +18,11 @@ public class MoreMnemonics {
 	}
 	
 	public ArrayList<MnemonicData> readFile() { 
-		try { 
-			FileReader fileReader = new FileReader(fileLocation);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
+		try { 			
+			
+			ClassLoader classloader = getClass().getClassLoader();
+			URL url = Main.class.getResource("/resources/UpdatedLasMnemonics.csv");
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {
 				String formatLine = line.replaceAll(",+$", "");
