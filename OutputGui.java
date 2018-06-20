@@ -37,12 +37,15 @@ public class OutputGui {
 	
 	private JList<String> topErrorList = new JList<String>(); 
 	private DefaultListModel<String> topErrorModel = new DefaultListModel<>(); 
+	private JLabel topErrorLabel;
 	
 	private JList<String> gwiErrorList = new JList<String>();
 	private DefaultListModel<String> gwiErrorModel = new DefaultListModel<>(); 
+	private JLabel gwiErrorLabel;
 	
 	private JList<String> lasErrorList = new JList<String>(); 
 	private DefaultListModel<String> lasErrorModel = new DefaultListModel<>(); 
+	private	JLabel lasErrorLabel;
 	
 	private OutputData outputData;
 	private JFrame frame;
@@ -124,6 +127,9 @@ public class OutputGui {
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
+		if (outputFilePath.endsWith("csv")) { 
+			outputFilePath = outputFilePath.substring(0,outputFilePath.lastIndexOf("\\")); 
+		}
 		File outputFile = new File(outputFilePath);	
 		JPanel hyperLinkPanel = new JPanel();
 		LinkLabel hyperLinkText = new LinkLabel(outputFile.toURI());
@@ -243,6 +249,8 @@ public class OutputGui {
 		JPanel panel_2 = new JPanel();
 		panel_2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
+		JLabel topErrorLabel = new JLabel(String.valueOf(outputData.getTopErrorUwis().size()));
+		
 		JButton topErrorSearchButton = new JButton("Search");
 		topErrorSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -252,6 +260,7 @@ public class OutputGui {
 						topErrorSearchModel.addElement(topErrorModel.getElementAt(i));
 					}
 				}
+				topErrorLabel.setText(String.valueOf(topErrorSearchModel.size()));
 				topErrorList.setModel(topErrorSearchModel);
 				frame.setVisible(true);
 			}
@@ -262,6 +271,7 @@ public class OutputGui {
 			public void actionPerformed(ActionEvent e) {
 				topErrorList.setModel(topErrorModel);
 				topErrorTextField.setText("");
+				topErrorLabel.setText(String.valueOf(topErrorModel.size()));
 				frame.setVisible(true);
 			}
 		});
@@ -281,7 +291,7 @@ public class OutputGui {
 		JLabel label_1 = new JLabel("Total Wells: ");
 		panel_2.add(label_1);
 		
-		JLabel topErrorLabel = new JLabel(String.valueOf(outputData.getTopErrorUwis().size()));
+
 		panel_2.add(topErrorLabel);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -325,6 +335,7 @@ public class OutputGui {
 			public void actionPerformed(ActionEvent arg0) {
 				gwiErrorList.setModel(gwiErrorModel);
 				gwiErrorTextField.setText("");
+				gwiErrorLabel.setText(String.valueOf(outputData.getGwiErrorUwis().size()));
 				frame.setVisible(true);
 			}
 		});
@@ -342,6 +353,7 @@ public class OutputGui {
 						gwiErrorSearchModel.addElement(gwiErrorModel.getElementAt(i));
 					}
 				}
+				gwiErrorLabel.setText(String.valueOf(gwiErrorSearchModel.size()));
 				gwiErrorList.setModel(gwiErrorSearchModel);
 				frame.setVisible(true);
 			}
@@ -358,7 +370,7 @@ public class OutputGui {
 		JLabel label_4 = new JLabel("Total Wells: ");
 		panel_4.add(label_4);
 		
-		JLabel gwiErrorLabel = new JLabel(String.valueOf(outputData.getGwiErrorUwis().size()));
+		gwiErrorLabel = new JLabel(String.valueOf(outputData.getGwiErrorUwis().size()));
 		panel_4.add(gwiErrorLabel);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -402,6 +414,7 @@ public class OutputGui {
 			public void actionPerformed(ActionEvent e) {
 				lasErrorList.setModel(lasErrorModel);
 				lasErrorTextField.setText("");
+				lasErrorLabel.setText(String.valueOf(outputData.getLasErrorUwis().size()));
 				frame.setVisible(true);
 			}
 		});
@@ -419,6 +432,7 @@ public class OutputGui {
 						lasErrorSearchModel.addElement(lasErrorModel.getElementAt(i));
 					}
 				}
+				lasErrorLabel.setText(String.valueOf(lasErrorSearchModel.size()));
 				lasErrorList.setModel(lasErrorSearchModel);
 				frame.setVisible(true);
 			}
@@ -435,7 +449,7 @@ public class OutputGui {
 		JLabel label_7 = new JLabel("Total Wells: ");
 		panel_6.add(label_7);
 		
-		JLabel lasErrorLabel = new JLabel(String.valueOf(outputData.getLasErrorUwis().size()));
+		lasErrorLabel = new JLabel(String.valueOf(outputData.getLasErrorUwis().size()));
 		panel_6.add(lasErrorLabel);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();

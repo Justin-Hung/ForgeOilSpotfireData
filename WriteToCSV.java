@@ -31,7 +31,10 @@ public class WriteToCSV {
 		try {
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			
-			if (outputFilePath != null) {
+			if (outputFilePath.endsWith("csv")) {
+				fileWriter = new FileWriter(new File(outputFilePath), true);
+			}
+			else if (outputFilePath != null) {
 				fileWriter = new FileWriter(new File(outputFilePath + "\\" + township + "MASTERFILE" + ".csv"));
 			}
 			else { 
