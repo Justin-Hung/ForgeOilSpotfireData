@@ -7,6 +7,8 @@ public class FormattedData {
 	private String header; 
 	private ArrayList<String> rows; 
 	
+	public String getUwi() { return rows.get(0).substring(17, 37); }
+	
 	public FormattedData() {
 		rows = new ArrayList<String>();
 		isMdforDir = false;

@@ -10,10 +10,9 @@ import javax.swing.SwingWorker;
 public class RunLoadingScreen {
 
     public void go(UserInput user) {
-    	Controller controller = new Controller(user);
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-        JLabel label = new JLabel("Loading...");
+        JLabel label = new JLabel("Reading Files...");
         JProgressBar jpb = new JProgressBar();
         jpb.setIndeterminate(false);
         int max = 100;
@@ -27,22 +26,23 @@ public class RunLoadingScreen {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        new Task_IntegerUpdate(jpb, label, controller, frame).execute();
+        new Task_IntegerUpdate(jpb, label, user, frame).execute();
     }
 
     static class Task_IntegerUpdate extends SwingWorker<Void, Integer> {
-
+    	
+    	UserInput user;
         JProgressBar jpb;
         int max;
         JLabel label;
         Controller controller;
         JFrame frame;
         
-        public Task_IntegerUpdate(JProgressBar jpb, JLabel label, Controller controller, JFrame frame) {
+        public Task_IntegerUpdate(JProgressBar jpb, JLabel label, UserInput user, JFrame frame) {
             this.jpb = jpb;
             this.max = 100;
             this.label = label;
-            this.controller = controller;
+            this.user = user;
             this.frame = frame;
         }
 
@@ -55,6 +55,7 @@ public class RunLoadingScreen {
 
         @Override
         protected Void doInBackground() throws Exception {
+        	controller = new Controller(user);
             while (controller.getWorkingWellRow() < controller.getSize()) {
             	controller.formatWellData();
             	int percent = (int) Math.round( (((double) controller.getWorkingWellRow()) / ((double) controller.getSize())) * 100.0 );
@@ -66,11 +67,11 @@ public class RunLoadingScreen {
         @Override
         protected void done() {
             try {
-            	//frame.dispose();
                 get();
                 controller.writeToFile();
                 JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
-                OutputGui outputGui = new OutputGui(controller.getOutputData(), controller.getUserInput().getOutputfilePath());
+                frame.dispose();
+                new OutputGui(controller);
             } 
             catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();

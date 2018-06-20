@@ -4,11 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.File;
+import java.net.URL;
 import java.awt.FlowLayout;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
@@ -18,6 +20,9 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import org.apache.log4j.chainsaw.Main;
+
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -28,6 +33,7 @@ public class OutputGui {
 
 	private JList<String> successList = new JList<String>(); 
 	private DefaultListModel<String> successModel = new DefaultListModel<>(); 
+	private JLabel successLabel;
 	
 	private JList<String> topErrorList = new JList<String>(); 
 	private DefaultListModel<String> topErrorModel = new DefaultListModel<>(); 
@@ -44,6 +50,7 @@ public class OutputGui {
 	private JTextField topErrorTextField;
 	private JTextField gwiErrorTextField;
 	private JTextField lasErrorTextField;
+	private Controller controller;
 	
 	private String outputFilePath; 
 	/**
@@ -64,9 +71,10 @@ public class OutputGui {
 	/**
 	 * Create the application.
 	 */
-	public OutputGui(OutputData outputData, String outputFile) {
-		outputFilePath = outputFile;
-		this.outputData = outputData;
+	public OutputGui(Controller controller) {
+		this.controller = controller;
+		outputFilePath =  controller.getUserInput().getOutputfilePath();
+		this.outputData = controller.getOutputData();
 		initializeJList(); 
 		initialize();
 		frame.setVisible(true);
@@ -106,6 +114,10 @@ public class OutputGui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+//		URL url = Main.class.getResource("/resources/forgeIcon.png");
+//		ImageIcon forgeIcon = new ImageIcon(url);
+//		frame.setIconImage(forgeIcon.getImage());
+	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 645, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,56 +149,63 @@ public class OutputGui {
 		successPanel.setLayout(gbl_successPanel);
 		
 		JPanel panel = new JPanel();
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{184, 33, 86, 50, 59, 6, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
+		
+		successLabel = new JLabel(String.valueOf(outputData.getSuccessUwis().size()));
 		
 		JButton successSearchButton = new JButton("Search");
 		successSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				DefaultListModel<String> successSearchModel = new DefaultListModel<>(); 
+				for (int i = 0 ; i < successModel.size() ; i++) {
+					if (successModel.getElementAt(i).contains(successTextField.getText())) {
+						successSearchModel.addElement(successModel.getElementAt(i));
+					}
+				}
+				successLabel.setText(String.valueOf(successSearchModel.size()));
+				successList.setModel(successSearchModel); 
+				frame.setVisible(true);
 			}
 		});
-		GridBagConstraints gbc_successSearchButton = new GridBagConstraints();
-		gbc_successSearchButton.insets = new Insets(0, 0, 0, 5);
-		gbc_successSearchButton.gridx = 1;
-		gbc_successSearchButton.gridy = 1;
-		panel.add(successSearchButton, gbc_successSearchButton);
+		FlowLayout fl_panel = new FlowLayout(FlowLayout.LEFT, 5, 5);
+		panel.setLayout(fl_panel);
+		
+		JButton btnClearSearch = new JButton("Clear Search");
+		btnClearSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				successList.setModel(successModel);
+				successTextField.setText("");
+				successLabel.setText(String.valueOf(successModel.size()));
+				frame.setVisible(true);
+			}
+		});
+		
+		JButton btnExamine = new JButton("Examine");
+		btnExamine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ExamineWellGui(controller, successList.getSelectedValue());
+			}
+		});
+		panel.add(btnExamine);
+		
+		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
+		panel.add(horizontalStrut_7);
+		panel.add(btnClearSearch);
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		panel.add(horizontalStrut_4);
+		panel.add(successSearchButton);
 		
 		successTextField = new JTextField();
-		GridBagConstraints gbc_successTextField = new GridBagConstraints();
-		gbc_successTextField.anchor = GridBagConstraints.WEST;
-		gbc_successTextField.insets = new Insets(0, 0, 0, 5);
-		gbc_successTextField.gridx = 2;
-		gbc_successTextField.gridy = 1;
-		panel.add(successTextField, gbc_successTextField);
-		successTextField.setColumns(10);
+		panel.add(successTextField);
+		successTextField.setColumns(13);
 		
-		Component horizontalStrut = Box.createHorizontalStrut(50);
-		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
-		gbc_horizontalStrut.anchor = GridBagConstraints.SOUTHWEST;
-		gbc_horizontalStrut.insets = new Insets(0, 0, 0, 5);
-		gbc_horizontalStrut.gridx = 3;
-		gbc_horizontalStrut.gridy = 1;
-		panel.add(horizontalStrut, gbc_horizontalStrut);
+		Component horizontalStrut = Box.createHorizontalStrut(10);
+		panel.add(horizontalStrut);
 		
 		JLabel lblTotalWells = new JLabel("Total Wells: ");
-		GridBagConstraints gbc_lblTotalWells = new GridBagConstraints();
-		gbc_lblTotalWells.anchor = GridBagConstraints.WEST;
-		gbc_lblTotalWells.insets = new Insets(0, 0, 0, 5);
-		gbc_lblTotalWells.gridx = 4;
-		gbc_lblTotalWells.gridy = 1;
-		panel.add(lblTotalWells, gbc_lblTotalWells);
+		panel.add(lblTotalWells);
 		
-		JLabel successLabel = new JLabel(String.valueOf(outputData.getSuccessUwis().size()));
-		GridBagConstraints gbc_successLabel = new GridBagConstraints();
-		gbc_successLabel.anchor = GridBagConstraints.WEST;
-		gbc_successLabel.gridx = 5;
-		gbc_successLabel.gridy = 1;
-		panel.add(successLabel, gbc_successLabel);
+		panel.add(successLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -222,16 +241,41 @@ public class OutputGui {
 		panel_1.setLayout(gbl_panel_1);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel label = new JLabel("Search");
-		panel_2.add(label);
+		JButton topErrorSearchButton = new JButton("Search");
+		topErrorSearchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DefaultListModel<String> topErrorSearchModel = new DefaultListModel<>(); 
+				for (int i = 0 ; i < topErrorModel.size() ; i++) {
+					if (topErrorModel.getElementAt(i).contains(topErrorTextField.getText())) {
+						topErrorSearchModel.addElement(topErrorModel.getElementAt(i));
+					}
+				}
+				topErrorList.setModel(topErrorSearchModel);
+				frame.setVisible(true);
+			}
+		});
+		
+		JButton button = new JButton("Clear Search");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				topErrorList.setModel(topErrorModel);
+				topErrorTextField.setText("");
+				frame.setVisible(true);
+			}
+		});
+		panel_2.add(button);
+		
+		Component horizontalStrut_5 = Box.createHorizontalStrut(75);
+		panel_2.add(horizontalStrut_5);
+		panel_2.add(topErrorSearchButton);
 		
 		topErrorTextField = new JTextField();
-		topErrorTextField.setColumns(10);
+		topErrorTextField.setColumns(13);
 		panel_2.add(topErrorTextField);
 		
-		Component horizontalStrut_1 = Box.createHorizontalStrut(50);
+		Component horizontalStrut_1 = Box.createHorizontalStrut(70);
 		panel_2.add(horizontalStrut_1);
 		
 		JLabel label_1 = new JLabel("Total Wells: ");
@@ -274,16 +318,41 @@ public class OutputGui {
 		panel_3.setLayout(gbl_panel_3);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_4.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel label_3 = new JLabel("Search");
-		panel_4.add(label_3);
+		JButton button_1 = new JButton("Clear Search");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				gwiErrorList.setModel(gwiErrorModel);
+				gwiErrorTextField.setText("");
+				frame.setVisible(true);
+			}
+		});
+		panel_4.add(button_1);
+		
+		Component horizontalStrut_6 = Box.createHorizontalStrut(75);
+		panel_4.add(horizontalStrut_6);
+		
+		JButton gwiErrorSearchButton = new JButton("Search");
+		gwiErrorSearchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel<String> gwiErrorSearchModel = new DefaultListModel<>(); 
+				for (int i = 0 ; i < gwiErrorModel.size() ; i++) {
+					if (gwiErrorModel.getElementAt(i).contains(gwiErrorTextField.getText())) {
+						gwiErrorSearchModel.addElement(gwiErrorModel.getElementAt(i));
+					}
+				}
+				gwiErrorList.setModel(gwiErrorSearchModel);
+				frame.setVisible(true);
+			}
+		});
+		panel_4.add(gwiErrorSearchButton);
 		
 		gwiErrorTextField = new JTextField();
-		gwiErrorTextField.setColumns(10);
+		gwiErrorTextField.setColumns(13);
 		panel_4.add(gwiErrorTextField);
 		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(50);
+		Component horizontalStrut_2 = Box.createHorizontalStrut(70);
 		panel_4.add(horizontalStrut_2);
 		
 		JLabel label_4 = new JLabel("Total Wells: ");
@@ -326,16 +395,41 @@ public class OutputGui {
 		panel_5.setLayout(gbl_panel_5);
 		
 		JPanel panel_6 = new JPanel();
-		panel_6.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_6.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel label_6 = new JLabel("Search");
-		panel_6.add(label_6);
+		JButton button_2 = new JButton("Clear Search");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lasErrorList.setModel(lasErrorModel);
+				lasErrorTextField.setText("");
+				frame.setVisible(true);
+			}
+		});
+		panel_6.add(button_2);
+		
+		Component horizontalStrut_8 = Box.createHorizontalStrut(75);
+		panel_6.add(horizontalStrut_8);
+		
+		JButton lasErrorSearchError = new JButton("Search");
+		lasErrorSearchError.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel<String> lasErrorSearchModel = new DefaultListModel<>(); 
+				for (int i = 0 ; i < lasErrorModel.size() ; i++) {
+					if (lasErrorModel.getElementAt(i).contains(lasErrorTextField.getText())) {
+						lasErrorSearchModel.addElement(lasErrorModel.getElementAt(i));
+					}
+				}
+				lasErrorList.setModel(lasErrorSearchModel);
+				frame.setVisible(true);
+			}
+		});
+		panel_6.add(lasErrorSearchError);
 		
 		lasErrorTextField = new JTextField();
-		lasErrorTextField.setColumns(10);
+		lasErrorTextField.setColumns(13);
 		panel_6.add(lasErrorTextField);
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(50);
+		Component horizontalStrut_3 = Box.createHorizontalStrut(70);
 		panel_6.add(horizontalStrut_3);
 		
 		JLabel label_7 = new JLabel("Total Wells: ");

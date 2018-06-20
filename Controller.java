@@ -12,11 +12,17 @@ public class Controller {
 	private ArrayList<TopData> topDataList;
 	private WorkingFileData workingData;
 	private UserInput userInput; 
-	private OutputData outputData; 
+	private OutputData outputData;
 	
 	private int wellsCompleted = 0; 
 	private int workingWellRow = 0; 
 	private int topRow = 0; 
+	
+	public ArrayList<MnemonicData> getMnemonicList() { return mnemonicList; }
+	
+	public DataWriter getDataWriter() { return dataWriter; }
+	
+	public ArrayList<FormattedData> getFormattedDataList() { return formattedDataList; }
 	
 	public UserInput getUserInput() { return userInput; }
 	

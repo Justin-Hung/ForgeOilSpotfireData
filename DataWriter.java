@@ -11,6 +11,8 @@ public class DataWriter {
 	private int[] columnArray;
 	private int headerOffset; 
 	
+	public int getHeaderOffset() { return headerOffset; }
+	
 	public DataWriter(ArrayList<MnemonicData> m) { 
 		mnemonics = m;
 		position = new int[m.size()+1];
