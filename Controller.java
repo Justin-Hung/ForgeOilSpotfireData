@@ -104,7 +104,7 @@ public class Controller {
 	}
 	
 	public void writeToFile() {
-		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput.getOutputfilePath());
+		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput.getOutputfilePath(), userInput.getOutputfileName());
 		writer.write(workingData.getHeader(), mnemonicList);
 		System.out.println("DONE");
 		System.out.println("wells completed: " + wellsCompleted);

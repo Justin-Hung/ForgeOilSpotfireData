@@ -15,6 +15,7 @@ public class UserInput {
 	private String lasfilePath; 
 	private String workingfilePath; 
 	private String outputfilePath; 
+	private String outputfileName; 
 	
 	public UserInput() {
 		formations = new ArrayList<String>();
@@ -33,6 +34,12 @@ public class UserInput {
 	public String getWorkingfilePath() { return workingfilePath; } 
 	
 	public String getOutputfilePath() { return outputfilePath; } 
+	
+	public String getOutputfileName() { return outputfileName; }
+	
+	public void setOutputfileName(String name) { 
+		outputfileName = name;
+	}
 	
 	public void setTopfilePath(String topfile) {
 		topfilePath = topfile; 

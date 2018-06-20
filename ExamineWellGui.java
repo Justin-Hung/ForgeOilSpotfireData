@@ -71,7 +71,7 @@ public class ExamineWellGui {
 			return null; 
 		}
 		
-		System.out.println(header);
+		//System.out.println(header);
 		
 		int headerOffset =  controller.getDataWriter().getHeaderOffset();
 		String[] headerArray = header.split(",");
@@ -82,7 +82,7 @@ public class ExamineWellGui {
 			if (!headerArray[i].equals("")) {
 				mnemonicNameArray.add(controller.getMnemonicList().get(i - headerOffset).getName());
 				lasMnemonicArray.add(headerArray[i]);
-				System.out.println(controller.getMnemonicList().get(i - headerOffset).getName() + "   " + headerArray[i]);
+			//	System.out.println(controller.getMnemonicList().get(i - headerOffset).getName() + "   " + headerArray[i]);
 			}
 		}
 		if (!headerArray[headerArray.length - 11].equals("")) {

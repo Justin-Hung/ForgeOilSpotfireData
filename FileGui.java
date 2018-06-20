@@ -32,6 +32,7 @@ public class FileGui {
 	private JTextField lasTextField;
 	private JTextField outputTextField;
 	private UserInput user;
+	private JTextField outputNameTextField;
 
 	/**
 	 * Launch the application.
@@ -56,6 +57,7 @@ public class FileGui {
 		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx");
 		lasTextField = new JTextField("C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files");
 		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles");
+		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
 		frame.setVisible(true);
@@ -67,6 +69,10 @@ public class FileGui {
 		gwiTextField = new JTextField(user.getWorkingfilePath());
 		lasTextField = new JTextField(user.getLasfilePath());
 		outputTextField = new JTextField(user.getOutputfilePath());
+		outputNameTextField = new JTextField(user.getOutputfileName());
+		if (outputTextField.getText().endsWith("csv")) {
+			outputNameTextField.setEnabled(false);
+		}
 		initialize();
 		frame.setVisible(true);
 	}
@@ -86,9 +92,9 @@ public class FileGui {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 33, 0, 0, 26, 0, 0, 0, 0, 0, 36, 0, 11, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
@@ -150,7 +156,7 @@ public class FileGui {
 		Component horizontalStrut = Box.createHorizontalStrut(30);
 		panel.add(horizontalStrut);
 		
-		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		Component verticalStrut_3 = Box.createVerticalStrut(21);
 		GridBagConstraints gbc_verticalStrut_3 = new GridBagConstraints();
 		gbc_verticalStrut_3.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_3.gridx = 1;
@@ -209,7 +215,7 @@ public class FileGui {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(30);
 		panel_1.add(horizontalStrut_1);
 		
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		Component verticalStrut_2 = Box.createVerticalStrut(21);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
 		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_2.gridx = 1;
@@ -268,7 +274,7 @@ public class FileGui {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
 		panel_2.add(horizontalStrut_2);
 		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		Component verticalStrut_1 = Box.createVerticalStrut(21);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_1.gridx = 1;
@@ -319,6 +325,14 @@ public class FileGui {
 					File currentDir = fileBrowser.getSelectedFile(); 
 					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
 					outputTextField.setText(filePath);
+					if (!outputNameTextField.isEnabled() && !filePath.endsWith("csv")) {
+						outputNameTextField.setText("");
+						outputNameTextField.setEnabled(true);
+					}
+					if (filePath.endsWith("csv")) {
+						outputNameTextField.setText(filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.indexOf(".csv")));
+						outputNameTextField.setEnabled(false);
+					}
 				}
 			}
 		});
@@ -327,20 +341,29 @@ public class FileGui {
 		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
 		panel_3.add(horizontalStrut_3);
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
+		Component verticalStrut = Box.createVerticalStrut(21);
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut.gridx = 1;
 		gbc_verticalStrut.gridy = 12;
 		frame.getContentPane().add(verticalStrut, gbc_verticalStrut);
 		
+		JLabel lblOutputFileName = new JLabel("Output File Name");
+		GridBagConstraints gbc_lblOutputFileName = new GridBagConstraints();
+		gbc_lblOutputFileName.fill = GridBagConstraints.VERTICAL;
+		gbc_lblOutputFileName.anchor = GridBagConstraints.WEST;
+		gbc_lblOutputFileName.insets = new Insets(0, 0, 5, 0);
+		gbc_lblOutputFileName.gridx = 1;
+		gbc_lblOutputFileName.gridy = 13;
+		frame.getContentPane().add(lblOutputFileName, gbc_lblOutputFileName);
+		
 		JPanel panel_4 = new JPanel();
 		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
-		gbc_panel_4.anchor = GridBagConstraints.EAST;
-		gbc_panel_4.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_4.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_4.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_4.anchor = GridBagConstraints.EAST;
 		gbc_panel_4.gridx = 1;
-		gbc_panel_4.gridy = 13;
+		gbc_panel_4.gridy = 14;
 		frame.getContentPane().add(panel_4, gbc_panel_4);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -351,10 +374,17 @@ public class FileGui {
 				user.setOutputfilePath(outputTextField.getText());
 				user.setTopfilePath(topTextField.getText());
 				user.setWorkingfilePath(gwiTextField.getText());
+				user.setOutputfileName(outputNameTextField.getText());
 				UserInputGui inputGui = new UserInputGui(user);
 				frame.dispose();
 			}
 		});
+		
+		panel_4.add(outputNameTextField);
+		outputNameTextField.setColumns(23);
+		
+		Component horizontalStrut_6 = Box.createHorizontalStrut(143);
+		panel_4.add(horizontalStrut_6);
 		panel_4.add(btnNext);
 		
 		JButton btnNewButton_1 = new JButton("Cancel");
@@ -367,6 +397,12 @@ public class FileGui {
 		
 		Component horizontalStrut_13 = Box.createHorizontalStrut(30);
 		panel_4.add(horizontalStrut_13);
+		
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_verticalStrut_5 = new GridBagConstraints();
+		gbc_verticalStrut_5.gridx = 1;
+		gbc_verticalStrut_5.gridy = 15;
+		frame.getContentPane().add(verticalStrut_5, gbc_verticalStrut_5);
 	}
 
 }

@@ -87,6 +87,7 @@ public class UserInputGui {
 		lowerFormationTextField = new JTextField(); 
 		upperFormationTextField = new JTextField(); 
 	}
+	
 	private void setTextFields(UserInput u) { 
 		if (u.getUpperBuffer() != 0.0001) {
 			if (String.valueOf(u.getUpperBuffer()).endsWith(".0")) {
