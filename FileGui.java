@@ -7,6 +7,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Component;
 
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 
@@ -259,8 +263,13 @@ public class FileGui {
 		JButton button_1 = new JButton("Browse");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				JFileChooser fileBrowser = new JFileChooser(); 
-				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (Files.isDirectory(Paths.get(lasTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(lasTextField.getText())); 
+				}
+
+				fileBrowser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
 					File currentDir = fileBrowser.getSelectedFile(); 

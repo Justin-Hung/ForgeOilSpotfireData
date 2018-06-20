@@ -62,6 +62,7 @@ public class UserInputGui {
 	public UserInputGui() {
 		initializeTextFields();
 		initialize();
+		setTextFieldLimits();
 		frame.setVisible(true);
 	}
 	
@@ -70,7 +71,20 @@ public class UserInputGui {
 		initializeTextFields();
 		setTextFields(u);
 		initialize(); 
+		setTextFieldLimits();
 		frame.setVisible(true);
+	}
+	
+	private void setTextFieldLimits() { 
+		seSecTextField.setDocument(new JTextFieldLimit(2));
+		seTwpTextField.setDocument(new JTextFieldLimit(3));
+		seRgeTextField.setDocument(new JTextFieldLimit(2));
+		seMerTextField.setDocument(new JTextFieldLimit(1));
+		
+		nwSecTextField.setDocument(new JTextFieldLimit(2));
+		nwTwpTextField.setDocument(new JTextFieldLimit(3));
+		nwRgeTextField.setDocument(new JTextFieldLimit(2));
+		nwMerTextField.setDocument(new JTextFieldLimit(1));
 	}
 	
 	private void initializeTextFields() { 
