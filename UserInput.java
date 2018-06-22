@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -167,6 +169,25 @@ public class UserInput {
 		}
 		
 		System.out.println("Sorted nw township: " + nwSortUwi + " Sorted se township: " + seSortUwi); 
+	}
+	
+	public void write(FileWriter writer) { 
+		try {
+			writer.write(formations.get(0) + System.lineSeparator()); 
+			writer.write(formations.get(1) + System.lineSeparator());
+			writer.write(townshipNW + System.lineSeparator());
+			writer.write(townshipSE + System.lineSeparator());
+			writer.write(String.valueOf(upperBuffer) + System.lineSeparator());
+			writer.write(String.valueOf(lowerBuffer) + System.lineSeparator());
+			writer.write(topfilePath + System.lineSeparator());
+			writer.write(lasfilePath + System.lineSeparator());
+			writer.write(workingfilePath + System.lineSeparator());
+			writer.write(outputfilePath + System.lineSeparator());
+			writer.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main (String [] args) {

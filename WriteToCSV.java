@@ -1,20 +1,22 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.log4j.chainsaw.Main;
+
 public class WriteToCSV {
-	private String outputFileName;
-	private String outputFilePath;
+	private File saveFile = null; 
+	private UserInput userInput;
 	private ArrayList<FormattedData> data;
 	
 	public WriteToCSV(ArrayList<FormattedData> d) { 
 		data = d;
 	}
 	
-	public WriteToCSV(ArrayList<FormattedData> d, String filePath, String fileName) {
-		outputFileName = fileName;
-		outputFilePath = filePath;
+	public WriteToCSV(ArrayList<FormattedData> d, UserInput user) {
+		userInput = user;
 		data = d;
 	}
 	
@@ -25,16 +27,77 @@ public class WriteToCSV {
 		return head;
 	}
 	
+	public void saveParameters() throws IOException { 
+		String filePath = userInput.getOutputfilePath(); 
+		String fileName = userInput.getOutputfileName();
+		
+		String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
+		
+		if (userInput.getOutputfileName().equals("")) {
+			fileName = township + "masterfile";
+		}
+		if (userInput.getOutputfilePath().endsWith("csv")) { 
+			filePath = userInput.getOutputfilePath().substring(0, filePath.lastIndexOf("\\"));
+			saveFile = new File(filePath + "\\" + fileName + "parametersV2.txt");
+			int i = 3; 
+			while (!saveFile.createNewFile()) {
+				saveFile = new File(filePath + "\\" + fileName + "parametersV" + String.valueOf(i) + ".txt"); 
+				i++;
+			}
+			
+			FileWriter saveLocationWrite = new FileWriter(saveFile);
+			userInput.write(saveLocationWrite);
+			
+			URL url = Main.class.getResource("/resources"); 
+			File previousSaveFile = new File(url.getPath() + "\\previousParameters.txt"); 
+			FileWriter previousParameterWrite = new FileWriter(previousSaveFile);
+			userInput.write(previousParameterWrite); 
+			
+			return;
+		}
+		
+		int i = 2;
+		while (!new File(filePath + "\\" + fileName).mkdir()) {
+			fileName = fileName + "V" + String.valueOf(i);
+			i++;
+		}
+		
+		saveFile = new File(filePath + "\\" + fileName + "\\" + fileName + "parameters.txt");
+		if (saveFile.createNewFile()) {
+			FileWriter saveLocationWrite = new FileWriter(saveFile);
+			userInput.write(saveLocationWrite);
+		}
+		
+		URL url = Main.class.getResource("/resources"); 
+		File previousSaveFile = new File(url.getPath() + "\\previousParameters.txt"); 
+		FileWriter previousParameterWrite = new FileWriter(previousSaveFile);
+		userInput.write(previousParameterWrite); 
+	}
+	
 	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
-		
-		header = formatHeader(header);
-		FileWriter fileWriter; 
-		
 		try {
+			
+			saveParameters(); 
+			if (userInput.getOutputfilePath().equals("")) {
+				return;
+			}
+			String fileName = userInput.getOutputfileName();
+			if (userInput.getOutputfileName().equals("")) {
+				fileName = "masterfile";
+			}
+			
+			String outputFilePath = saveFile.getPath().substring(0, saveFile.getPath().lastIndexOf("\\"));
+
+			String outputFileName = userInput.getOutputfileName();
+			
+			header = formatHeader(header);
+			FileWriter fileWriter; 
+
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			
-			if (outputFilePath.endsWith("csv")) {
-				fileWriter = new FileWriter(new File(outputFilePath), true);
+			System.out.println(userInput.getOutputfilePath());
+			if (userInput.getOutputfilePath().endsWith("csv")) {
+				fileWriter = new FileWriter(new File(userInput.getOutputfilePath()), true);
 			}
 			else if (!outputFilePath.equals("") && !outputFileName.equals("")) {
 				fileWriter = new FileWriter(new File(outputFilePath + "\\" + outputFileName + ".csv"));

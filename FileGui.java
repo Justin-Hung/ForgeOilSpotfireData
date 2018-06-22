@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -25,8 +26,14 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 public class FileGui {
 
@@ -38,6 +45,8 @@ public class FileGui {
 	private UserInput user;
 	private JTextField outputNameTextField;
 
+	private String rememberOutputField; 
+	private String rememberOutputName; 
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +54,35 @@ public class FileGui {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FileGui window = new FileGui();
+					URL url = Main.class.getResource("/resources/previousParameters.txt"); 
+					File parameterFile = new File(url.getFile());
+					UserInput user = new UserInput();
+					if (parameterFile.exists()) {
+						BufferedReader br = new BufferedReader(new FileReader(parameterFile));
+						try { 
+							ArrayList<String> forms = new ArrayList<String>(); 
+							forms.add(br.readLine());
+							forms.add(br.readLine());
+							user.setFormations(forms);
+							user.setTownshipNw(br.readLine()); 
+							user.setTownshipSe(br.readLine()); 
+							user.setUpperBuffer(Double.parseDouble(br.readLine()));
+							user.setLowerBuffer(Double.parseDouble(br.readLine()));
+							user.setTopfilePath(br.readLine());
+							user.setLasfilePath(br.readLine());
+							user.setWorkingfilePath(br.readLine());
+							user.setOutputfilePath(br.readLine());
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					if (user.getUpperBuffer() == 0.0001) { 
+						FileGui window = new FileGui();
+					}
+					else {
+						FileGui window = new FileGui(user);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -57,10 +94,10 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx");
-		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx");
-		lasTextField = new JTextField("C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files");
-		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles");
+		topTextField = new JTextField();
+		gwiTextField = new JTextField();
+		lasTextField = new JTextField();
+		outputTextField = new JTextField();
 		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
@@ -75,12 +112,12 @@ public class FileGui {
 		outputTextField = new JTextField(user.getOutputfilePath());
 		outputNameTextField = new JTextField(user.getOutputfileName());
 		if (outputTextField.getText().endsWith("csv")) {
-			outputNameTextField.setEnabled(false);
+			outputNameTextField.setText(outputTextField.getText().substring(outputTextField.getText().lastIndexOf("\\") + 1, outputTextField.getText().indexOf(".csv")));
 		}
 		initialize();
 		frame.setVisible(true);
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -146,7 +183,10 @@ public class FileGui {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileBrowser = new JFileChooser(); 
-				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				if (Files.exists(Paths.get(topTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(topTextField.getText())); 
+				}
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
 					File currentDir = fileBrowser.getSelectedFile(); 
@@ -205,6 +245,9 @@ public class FileGui {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileBrowser = new JFileChooser(); 
+				if (Files.exists(Paths.get(gwiTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(gwiTextField.getText())); 
+				}
 				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
@@ -263,7 +306,6 @@ public class FileGui {
 		JButton button_1 = new JButton("Browse");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				JFileChooser fileBrowser = new JFileChooser(); 
 				if (Files.isDirectory(Paths.get(lasTextField.getText()))) {
 					fileBrowser = new JFileChooser(new File(lasTextField.getText())); 
@@ -328,6 +370,9 @@ public class FileGui {
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileBrowser = new JFileChooser(); 
+				if (Files.isDirectory(Paths.get(outputTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(outputTextField.getText())); 
+				}
 				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
@@ -336,11 +381,9 @@ public class FileGui {
 					outputTextField.setText(filePath);
 					if (!outputNameTextField.isEnabled() && !filePath.endsWith("csv")) {
 						outputNameTextField.setText("");
-						outputNameTextField.setEnabled(true);
 					}
 					if (filePath.endsWith("csv")) {
 						outputNameTextField.setText(filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.indexOf(".csv")));
-						outputNameTextField.setEnabled(false);
 					}
 				}
 			}
@@ -390,10 +433,44 @@ public class FileGui {
 		});
 		
 		panel_4.add(outputNameTextField);
-		outputNameTextField.setColumns(23);
+		outputNameTextField.setColumns(15);
 		
-		Component horizontalStrut_6 = Box.createHorizontalStrut(143);
+		Component horizontalStrut_6 = Box.createHorizontalStrut(11);
 		panel_4.add(horizontalStrut_6);
+		
+		JCheckBox chckbxDontCreateOutput = new JCheckBox("No Output Files");
+		chckbxDontCreateOutput.addItemListener(new ItemListener() { 
+			public void itemStateChanged(ItemEvent e) { 
+				if (chckbxDontCreateOutput.isSelected()) { 
+					rememberOutputName = outputNameTextField.getText();
+					outputNameTextField.setText("");
+					outputNameTextField.setEnabled(false);
+		
+					rememberOutputField = outputTextField.getText();
+					outputTextField.setText("");
+					outputTextField.setEnabled(false);
+				}
+				else { 
+					outputNameTextField.setText(rememberOutputName);
+					outputNameTextField.setEnabled(true);
+					outputTextField.setText(rememberOutputField);
+					outputTextField.setEnabled(true);
+				}
+			}
+		});
+		panel_4.add(chckbxDontCreateOutput);
+		
+		JButton btnPrevious = new JButton("Previous");
+		btnPrevious.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new ParameterGui(); 
+			}
+		});
+		
+		Component horizontalStrut_14 = Box.createHorizontalStrut(11);
+		panel_4.add(horizontalStrut_14);
+		panel_4.add(btnPrevious);
 		panel_4.add(btnNext);
 		
 		JButton btnNewButton_1 = new JButton("Cancel");

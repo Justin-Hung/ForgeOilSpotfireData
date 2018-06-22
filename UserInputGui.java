@@ -61,17 +61,17 @@ public class UserInputGui {
 	 */
 	public UserInputGui() {
 		initializeTextFields();
-		initialize();
 		setTextFieldLimits();
+		initialize();
 		frame.setVisible(true);
 	}
 	
 	public UserInputGui(UserInput u) {
 		user = u;
 		initializeTextFields();
+		setTextFieldLimits();
 		setTextFields(u);
 		initialize(); 
-		setTextFieldLimits();
 		frame.setVisible(true);
 	}
 	
@@ -125,7 +125,7 @@ public class UserInputGui {
 		if (!u.getFormations().get(1).equals("")) {
 			lowerFormationTextField.setText(u.getFormations().get(1));
 		}
-	
+
 		if (!u.getTownshipNW().split("-")[0].equals("")) { 
 			nwSecTextField.setText(u.getTownshipNW().split("-")[0]);
 		}

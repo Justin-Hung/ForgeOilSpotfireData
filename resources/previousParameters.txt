@@ -1,0 +1,10 @@
+VKNG
+JLFU
+31-051-09W4
+01-051-09W4
+5.0
+5.0
+C:\Users\jhung\SpotfireDataFiles\Mannville\PerpetualMannvilleSystemTops.xlsx
+C:\Users\jhung\LasFiles\T51R10W4toT49R8W4\log_files
+C:\Users\jhung\SpotfireDataFiles\Mannville\PerpetualMannvilleGWI.xlsx
+

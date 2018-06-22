@@ -130,14 +130,21 @@ public class OutputGui {
 		if (outputFilePath.endsWith("csv")) { 
 			outputFilePath = outputFilePath.substring(0,outputFilePath.lastIndexOf("\\")); 
 		}
-		File outputFile = new File(outputFilePath);	
+		LinkLabel hyperLinkText = null;
+		if (!outputFilePath.equals("")) {
+			File outputFile = new File(outputFilePath);	
+			hyperLinkText = new LinkLabel(outputFile.toURI());
+			hyperLinkText.init();
+		}
 		JPanel hyperLinkPanel = new JPanel();
-		LinkLabel hyperLinkText = new LinkLabel(outputFile.toURI());
-		hyperLinkText.init();
-		
 		JLabel lblOutputDirectory = new JLabel("Output Directory: ");
 		hyperLinkPanel.add(lblOutputDirectory);
-		hyperLinkPanel.add(hyperLinkText);
+		if (hyperLinkText != null) {
+			hyperLinkPanel.add(hyperLinkText);
+		}
+		else {
+			hyperLinkPanel.add(new JLabel("Not Available"));
+		}
 		frame.getContentPane().add(hyperLinkPanel, BorderLayout.SOUTH);
 		
 		
