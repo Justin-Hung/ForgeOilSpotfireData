@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 
@@ -53,40 +54,35 @@ public class FileGui {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					URL url = Main.class.getResource("/resources/previousParameters.txt"); 
-					File parameterFile = new File(url.getFile());
-					UserInput user = new UserInput();
-					if (parameterFile.exists()) {
-						BufferedReader br = new BufferedReader(new FileReader(parameterFile));
-						try { 
-							ArrayList<String> forms = new ArrayList<String>(); 
-							forms.add(br.readLine());
-							forms.add(br.readLine());
-							user.setFormations(forms);
-							user.setTownshipNw(br.readLine()); 
-							user.setTownshipSe(br.readLine()); 
-							user.setUpperBuffer(Double.parseDouble(br.readLine()));
-							user.setLowerBuffer(Double.parseDouble(br.readLine()));
-							user.setTopfilePath(br.readLine());
-							user.setLasfilePath(br.readLine());
-							user.setWorkingfilePath(br.readLine());
-							user.setOutputfilePath(br.readLine());
-						}
-						catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					if (user.getUpperBuffer() == 0.0001) { 
-						FileGui window = new FileGui();
-					}
-					else {
-						FileGui window = new FileGui(user);
-					}
-				} catch (Exception e) {
+		
+			URL url = Main.class.getResource("/resources/previousParameters.txt"); 
+			UserInput user = new UserInput();		
+				try { 
+					BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+					ArrayList<String> forms = new ArrayList<String>(); 
+					forms.add(br.readLine());
+					forms.add(br.readLine());
+					user.setFormations(forms);
+					user.setTownshipNw(br.readLine()); 
+					user.setTownshipSe(br.readLine()); 
+					user.setUpperBuffer(Double.parseDouble(br.readLine()));
+					user.setLowerBuffer(Double.parseDouble(br.readLine()));
+					user.setTopfilePath(br.readLine());
+					user.setLasfilePath(br.readLine());
+					user.setWorkingfilePath(br.readLine());
+					user.setOutputfilePath(br.readLine());
+				}
+				catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
+					
+				if (user.getUpperBuffer() == 0.0001) { 
+					FileGui window = new FileGui();
+				}
+				else {
+					FileGui window = new FileGui(user);
+				}
+			} 
 		});
 	}
 

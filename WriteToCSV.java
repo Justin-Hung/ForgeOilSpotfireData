@@ -47,12 +47,6 @@ public class WriteToCSV {
 			
 			FileWriter saveLocationWrite = new FileWriter(saveFile);
 			userInput.write(saveLocationWrite);
-			
-			URL url = Main.class.getResource("/resources"); 
-			File previousSaveFile = new File(url.getPath() + "\\previousParameters.txt"); 
-			FileWriter previousParameterWrite = new FileWriter(previousSaveFile);
-			userInput.write(previousParameterWrite); 
-			
 			return;
 		}
 		
@@ -67,9 +61,17 @@ public class WriteToCSV {
 			FileWriter saveLocationWrite = new FileWriter(saveFile);
 			userInput.write(saveLocationWrite);
 		}
-		
-		URL url = Main.class.getResource("/resources"); 
-		File previousSaveFile = new File(url.getPath() + "\\previousParameters.txt"); 
+	}
+	
+	public void saveToResourceFile() throws IOException{
+		URL url = Main.class.getResource("/resources/previousParameters.txt"); 
+		String saveFilePath = url.getPath();
+		if (saveFilePath.contains("!")) {
+			saveFilePath = saveFilePath.substring(0, saveFilePath.lastIndexOf("SpotfireDataProgram"));
+			saveFilePath = saveFilePath + "Resources/previousParameters.txt";
+			saveFilePath = saveFilePath.substring(5);
+		}
+		File previousSaveFile = new File(saveFilePath); 
 		FileWriter previousParameterWrite = new FileWriter(previousSaveFile);
 		userInput.write(previousParameterWrite); 
 	}
@@ -77,10 +79,12 @@ public class WriteToCSV {
 	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
 		try {
 			
-			saveParameters(); 
+			saveToResourceFile();
 			if (userInput.getOutputfilePath().equals("")) {
 				return;
 			}
+			saveParameters(); 
+			
 			String fileName = userInput.getOutputfileName();
 			if (userInput.getOutputfileName().equals("")) {
 				fileName = "masterfile";

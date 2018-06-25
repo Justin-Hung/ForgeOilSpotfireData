@@ -19,8 +19,6 @@ public class MoreMnemonics {
 	
 	public ArrayList<MnemonicData> readFile() { 
 		try { 			
-			
-			ClassLoader classloader = getClass().getClassLoader();
 			URL url = Main.class.getResource("/resources/UpdatedLasMnemonics.csv");
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String line = null;

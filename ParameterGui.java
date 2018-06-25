@@ -22,11 +22,16 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -63,19 +68,23 @@ public class ParameterGui {
 	}
 	
 	private void readPreviousPath() { 
-		URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 
-		File parameterFile = new File(url.getFile());
-		UserInput user = new UserInput();
-		if (parameterFile.exists()) {
-			try { 
-				BufferedReader br = new BufferedReader(new FileReader(parameterFile));
-				textField = new JTextField(br.readLine());
-				br.close();
+		try {
+			URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 
+			InputStreamReader inputStream = new InputStreamReader(url.openStream());
+			String filePath = url.getPath(); 
+			String alternateFilePath = filePath.substring(5, filePath.lastIndexOf("SpotfireDataProgram")) + "Resources/previousParameterPath.txt";;
+			File alternateFile = new File(alternateFilePath);
+			if (alternateFile.exists()) {
+				System.out.println(alternateFilePath);
+				InputStream is = new FileInputStream(alternateFilePath);
+				inputStream = new InputStreamReader(is);
 			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		
+			BufferedReader br = new BufferedReader(inputStream);
+			textField = new JTextField(br.readLine());
+			br.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -139,6 +148,9 @@ public class ParameterGui {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileBrowser = new JFileChooser(); 
+				if (!textField.getText().equals("")) {
+					fileBrowser = new JFileChooser(textField.getText()); 
+				}
 				fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
@@ -182,34 +194,41 @@ public class ParameterGui {
 		
 		JButton btnNewButton_1 = new JButton("Use Last Parameters");
 		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {		
+			try { 
 				URL url = Main.class.getResource("/resources/previousParameters.txt"); 
-				File parameterFile = new File(url.getFile());
-				UserInput user = new UserInput();
-				if (parameterFile.exists()) {
-					try { 
-						BufferedReader br = new BufferedReader(new FileReader(parameterFile));
-						ArrayList<String> forms = new ArrayList<String>(); 
-						forms.add(br.readLine());
-						forms.add(br.readLine());
-						user.setFormations(forms);
-						user.setTownshipNw(br.readLine()); 
-						user.setTownshipSe(br.readLine()); 
-						user.setUpperBuffer(Double.parseDouble(br.readLine()));
-						user.setLowerBuffer(Double.parseDouble(br.readLine()));
-						user.setTopfilePath(br.readLine());
-						user.setLasfilePath(br.readLine());
-						user.setWorkingfilePath(br.readLine());
-						user.setOutputfilePath(br.readLine());
-					}
-					catch (IOException ex) {
-						ex.printStackTrace();
-					}
+				InputStreamReader inputStream = new InputStreamReader(url.openStream());
+				String filePath = url.getPath(); 
+				String alternateFilePath = filePath.substring(5, filePath.lastIndexOf("SpotfireDataProgram")) + "Resources/previousParameters.txt";;
+				File alternateFile = new File(alternateFilePath);
+				if (alternateFile.exists()) {
+					System.out.println(alternateFilePath);
+					InputStream is = new FileInputStream(alternateFilePath);
+					inputStream = new InputStreamReader(is);
 				}
+	
+				UserInput user = new UserInput();		
+				BufferedReader br = new BufferedReader(inputStream);			
+				ArrayList<String> forms = new ArrayList<String>(); 
+				forms.add(br.readLine());
+				forms.add(br.readLine());
+				user.setFormations(forms);
+				user.setTownshipNw(br.readLine()); 
+				user.setTownshipSe(br.readLine()); 
+				user.setUpperBuffer(Double.parseDouble(br.readLine()));
+				user.setLowerBuffer(Double.parseDouble(br.readLine()));
+				user.setTopfilePath(br.readLine());
+				user.setLasfilePath(br.readLine());
+				user.setWorkingfilePath(br.readLine());
+				user.setOutputfilePath(br.readLine());
+					
 				frame.dispose();
 				new FileGui(user);
+				}
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
-		
 		});
 		panel_3.add(btnNewButton_1);
 		
@@ -240,7 +259,13 @@ public class ParameterGui {
 							frame.dispose();
 							new FileGui(user);
 							URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 
-							File previousSaveFile = new File(url.getPath()); 
+							String filePath = url.getPath();
+							if (filePath.contains("!")) {
+								filePath = filePath.substring(0, filePath.lastIndexOf("SpotfireDataProgram"));
+								filePath = filePath + "Resources/previousParameterPath.txt";
+								filePath = filePath.substring(5);
+							}
+							File previousSaveFile = new File(filePath); 
 							FileWriter saveParameterPath = new FileWriter(previousSaveFile);
 							saveParameterPath.write(textField.getText());
 							saveParameterPath.close();
