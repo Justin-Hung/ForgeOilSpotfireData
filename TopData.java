@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class TopData {
 
 	private String uwi; 
@@ -51,6 +54,11 @@ public class TopData {
 		lowerbuffer = lower;
 		form = new ArrayList<String>();
 		tvDepth = new ArrayList<Double>();
+		if (data.isEmpty()) {
+			JOptionPane.showMessageDialog(new JFrame(), "Specified Township can not be found in tops file",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 		uwi = data.get(0);
 		for (int i = 1; i < data.size(); i++) {
 			if (i % 2 == 1) {

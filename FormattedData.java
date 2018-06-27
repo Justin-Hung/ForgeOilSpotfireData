@@ -51,13 +51,13 @@ public class FormattedData {
 		try {
 			if (isMD) { 
 				for(int i = 0; i < rows.size(); i++) {
-					fw.write(rows.get(i) + ",," + "Using MD for DIR"); 
+					fw.write("," + "Using MD for DIR," + rows.get(i)); 
 					fw.write(System.lineSeparator());
 				}
 			}
 			else {
 				for(int i = 0; i < rows.size(); i++) {
-					fw.write(rows.get(i)+ ",," + "Using correct las file"); 
+					fw.write("," + "Using correct las file," + rows.get(i)); 
 					fw.write(System.lineSeparator());
 				}
 			}

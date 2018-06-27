@@ -72,7 +72,7 @@ public class ParameterGui {
 			URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 
 			InputStreamReader inputStream = new InputStreamReader(url.openStream());
 			String filePath = url.getPath(); 
-			String alternateFilePath = filePath.substring(5, filePath.lastIndexOf("SpotfireDataProgram")) + "Resources/previousParameterPath.txt";;
+			String alternateFilePath = filePath.substring(5, filePath.lastIndexOf("SpotfireDataProgram")) + "Resources/previousParameterPath.txt";
 			File alternateFile = new File(alternateFilePath);
 			if (alternateFile.exists()) {
 				System.out.println(alternateFilePath);

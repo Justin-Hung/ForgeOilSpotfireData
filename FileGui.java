@@ -3,6 +3,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagConstraints;
 import java.awt.Component;
 
@@ -114,6 +116,22 @@ public class FileGui {
 		frame.setVisible(true);
 	}
 	
+	
+	public boolean checkTextFields() { 
+		if (!new File(topTextField.getText()).exists()) {
+			JOptionPane.showMessageDialog(frame, "Top file can not be found");
+			return true;
+		}
+		if (!new File(gwiTextField.getText()).exists()) {
+			JOptionPane.showMessageDialog(frame, "GWI file can not be found");
+			return true; 
+		}
+		if (!new File(lasTextField.getText()).isDirectory()) {
+			JOptionPane.showMessageDialog(frame, "las directory can not be found");
+			return true; 
+		} 
+		return false; 
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -418,6 +436,9 @@ public class FileGui {
 		JButton btnNext = new JButton("Next");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (checkTextFields()) {
+					return; 
+				}
 				user.setLasfilePath(lasTextField.getText());
 				user.setOutputfilePath(outputTextField.getText());
 				user.setTopfilePath(topTextField.getText());
@@ -431,10 +452,10 @@ public class FileGui {
 		panel_4.add(outputNameTextField);
 		outputNameTextField.setColumns(15);
 		
-		Component horizontalStrut_6 = Box.createHorizontalStrut(11);
+		Component horizontalStrut_6 = Box.createHorizontalStrut(1);
 		panel_4.add(horizontalStrut_6);
 		
-		JCheckBox chckbxDontCreateOutput = new JCheckBox("No Output Files");
+		JCheckBox chckbxDontCreateOutput = new JCheckBox("Run with no output");
 		chckbxDontCreateOutput.addItemListener(new ItemListener() { 
 			public void itemStateChanged(ItemEvent e) { 
 				if (chckbxDontCreateOutput.isSelected()) { 
@@ -464,7 +485,7 @@ public class FileGui {
 			}
 		});
 		
-		Component horizontalStrut_14 = Box.createHorizontalStrut(11);
+		Component horizontalStrut_14 = Box.createHorizontalStrut(1);
 		panel_4.add(horizontalStrut_14);
 		panel_4.add(btnPrevious);
 		panel_4.add(btnNext);

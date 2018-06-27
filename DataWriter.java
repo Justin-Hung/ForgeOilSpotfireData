@@ -7,11 +7,14 @@ public class DataWriter {
 	private String header;
 	private int row;
 	private ArrayList<MnemonicData> mnemonics;
+	private ArrayList<Integer> unknownPositions; 
 	private int[] position;
 	private int[] columnArray;
 	private int headerOffset; 
 	
 	public int getHeaderOffset() { return headerOffset; }
+	
+	public DataWriter() {}
 	
 	public DataWriter(ArrayList<MnemonicData> m) { 
 		mnemonics = m;
@@ -58,6 +61,7 @@ public class DataWriter {
 	}
 
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
+		unknownPositions = new ArrayList<Integer>(); 
 		columnArray = new int[11];
 		header = h; 
 		header += "DEPT,Formation,VKNS Isopach,Interval (step),";
@@ -70,10 +74,8 @@ public class DataWriter {
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
+		getUnknownPositions(formattedHeader);
 		
-//		for (int i = 0; i < position.length ; i++ ) {
-//			System.out.print("|" + position[i]);
-//		}
 		String finalHeader = header; 
 		
 		for (int j = 0 ; j < position.length ; j++) {
@@ -89,6 +91,10 @@ public class DataWriter {
 		setColumnArray(finalHeader);
 		
 		finalHeader = addCalcHeaders(finalHeader);
+		
+		for (int i = 0 ; i < unknownPositions.size() ; i++) {
+			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
+		}
 		
 		finalHeader = removeNewLine(finalHeader);
 		
@@ -108,9 +114,6 @@ public class DataWriter {
 			String finalRow = generalWellInfo + ",";	
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
-//				if (j == 12 && Double.parseDouble(getCol(formattedRow, position[j])) == 0) {
-//					checkNum = false;
-//				}
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
 					if (j > 24 || j < 34) {
 						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
@@ -133,6 +136,10 @@ public class DataWriter {
 			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
 			
 			finalRow = addCalcValues(finalRow);
+			
+			for (int j = 0 ; j < unknownPositions.size() ; j++) {
+				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
+			}
 			
 			finalRow = removeNewLine(finalRow);
 			
@@ -219,6 +226,28 @@ public class DataWriter {
 	public String addCalcHeaders(String header) {
 		String sep = header + ",Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
 		return sep;
+	}
+	
+	public void getUnknownPositions(String header) { 
+		 String[] headerArray = header.split(",");
+		 boolean[] checkIsUnknown = new boolean[headerArray.length];
+		 for (int i = headerOffset ; i < checkIsUnknown.length ; i++) {
+			 checkIsUnknown[i] = true;
+		 }
+		 for (int i = headerOffset ; i < headerArray.length ; i++) {
+			 for (int j = 0 ; j < mnemonics.size() ; j++) {
+				 for (int k = 0 ; k < mnemonics.get(j).getMnemonics().size() ; k++) {
+					 if (headerArray[i].equals(mnemonics.get(j).getMnemonics().get(k))){ 
+						 checkIsUnknown[i] = false;
+					 }
+				 }
+			 }
+		 }
+		 for (int i = headerOffset ; i < checkIsUnknown.length; i++) {
+			 if (checkIsUnknown[i]) {
+				 unknownPositions.add(i);
+			 }
+		 }
 	}
 	
 	public void getPositions(String header) {

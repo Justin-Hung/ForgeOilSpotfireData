@@ -50,20 +50,23 @@ public class ExamineWellGui {
 		this.uwi = uwi;
 		this.controller = controller;
 		initialize();
-		frame.setVisible(true);
+		frame.setVisible(true); 
 	}
 	
 	public Object[][] getMnemonics() { 
 		String header = "";
 		String serviceCo = "";
+		int serviceCoIndex = 0;
 		for(int i = 0; i < controller.getFormattedDataList().size() ; i++) {
 			if (uwi.equals(controller.getFormattedDataList().get(i).getUwi())) { 
 				header = controller.getFormattedDataList().get(i).getHeader();
-				if (controller.getFormattedDataList().get(i).getRow(0).endsWith(",,")) {
-					serviceCo = controller.getFormattedDataList().get(i).getRow(0).split(",")[controller.getFormattedDataList().get(i).getRow(0).split(",").length-6];
-				}
-				else { 
-					serviceCo = controller.getFormattedDataList().get(i).getRow(0).split(",")[controller.getFormattedDataList().get(i).getRow(0).split(",").length-9];
+				String[] headerArray = header.split(",");
+				for (int j = 0 ; j < headerArray.length ; j++) {
+					if (headerArray[j].equals("Service Co.")) {
+						serviceCoIndex = j;
+						serviceCo = controller.getFormattedDataList().get(i).getRow(0).split(",")[j];
+						break;
+					}
 				}
 			}
 		}
@@ -78,20 +81,24 @@ public class ExamineWellGui {
 		ArrayList<String> lasMnemonicArray = new ArrayList<String>(); 
 		ArrayList<String> mnemonicNameArray = new ArrayList<String>(); 
 		
-		for (int i = headerOffset ; i < headerArray.length - 11 ; i++) {
+		for (int i = headerOffset ; i < serviceCoIndex - 2 ; i++) {
 			if (!headerArray[i].equals("")) {
 				mnemonicNameArray.add(controller.getMnemonicList().get(i - headerOffset).getName());
 				lasMnemonicArray.add(headerArray[i]);
 			//	System.out.println(controller.getMnemonicList().get(i - headerOffset).getName() + "   " + headerArray[i]);
 			}
 		}
-		if (!headerArray[headerArray.length - 11].equals("")) {
-			lasMnemonicArray.add(headerArray[headerArray.length - 11]); 
+		if (!headerArray[serviceCoIndex - 2].equals("")) {
+			lasMnemonicArray.add(headerArray[serviceCoIndex - 2]); 
 			mnemonicNameArray.add("Caliper 2");
 		}
 		lasMnemonicArray.add(serviceCo);
 		mnemonicNameArray.add("Service Co.");
 		
+		for (int i = serviceCoIndex + 9 ; i < headerArray.length ; i++) {
+			mnemonicNameArray.add("UNKNOWN");
+			lasMnemonicArray.add(headerArray[i]);
+		}
 		
 		Object[][] objArray = new Object[lasMnemonicArray.size()][2];
 		for (int i = 0; i < objArray.length; i++) { 

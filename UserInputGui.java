@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.text.PlainDocument;
 
 import org.apache.log4j.chainsaw.Main;
 
@@ -41,6 +42,7 @@ public class UserInputGui {
 	private JTextField nwMerTextField;
 	private JTextField lowerFormationTextField;
 	private JTextField upperFormationTextField;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -61,7 +63,6 @@ public class UserInputGui {
 	 */
 	public UserInputGui() {
 		initializeTextFields();
-		setTextFieldLimits();
 		initialize();
 		frame.setVisible(true);
 	}
@@ -69,35 +70,52 @@ public class UserInputGui {
 	public UserInputGui(UserInput u) {
 		user = u;
 		initializeTextFields();
-		setTextFieldLimits();
 		setTextFields(u);
 		initialize(); 
 		frame.setVisible(true);
 	}
 	
-	private void setTextFieldLimits() { 
-		seSecTextField.setDocument(new JTextFieldLimit(2));
-		seTwpTextField.setDocument(new JTextFieldLimit(3));
-		seRgeTextField.setDocument(new JTextFieldLimit(2));
-		seMerTextField.setDocument(new JTextFieldLimit(1));
-		
-		nwSecTextField.setDocument(new JTextFieldLimit(2));
-		nwTwpTextField.setDocument(new JTextFieldLimit(3));
-		nwRgeTextField.setDocument(new JTextFieldLimit(2));
-		nwMerTextField.setDocument(new JTextFieldLimit(1));
-	}
-	
 	private void initializeTextFields() { 
 		seSecTextField = new JTextField(); 
+		PlainDocument seSecDoc = (PlainDocument) seSecTextField.getDocument(); 
+		seSecDoc.setDocumentFilter(new MyIntFilter(2)); 
+		
 		seTwpTextField = new JTextField(); 
-		seRgeTextField = new JTextField(); 
+		PlainDocument seTwpDoc = (PlainDocument) seTwpTextField.getDocument(); 
+		seTwpDoc.setDocumentFilter(new MyIntFilter(3)); 
+		
+		seRgeTextField = new JTextField();
+		PlainDocument seRgeDoc = (PlainDocument) seRgeTextField.getDocument(); 
+		seRgeDoc.setDocumentFilter(new MyIntFilter(2)); 
+		
 		seMerTextField = new JTextField(); 
+		PlainDocument seMerDoc = (PlainDocument) seMerTextField.getDocument(); 
+		seMerDoc.setDocumentFilter(new MyIntFilter(1)); 
+		
 		upperBufferTextField = new JTextField(); 
+		PlainDocument upperBufferDoc = (PlainDocument) upperBufferTextField.getDocument(); 
+		upperBufferDoc.setDocumentFilter(new MyIntFilter(5)); 
+		
 		lowerBufferTextField = new JTextField(); 
+		PlainDocument lowerBufferDoc = (PlainDocument) lowerBufferTextField.getDocument(); 
+		lowerBufferDoc.setDocumentFilter(new MyIntFilter(5)); 
+		
 		nwSecTextField = new JTextField(); 
+		PlainDocument nwSecDoc = (PlainDocument) nwSecTextField.getDocument(); 
+		nwSecDoc.setDocumentFilter(new MyIntFilter(2)); 
+		
 		nwTwpTextField = new JTextField(); 
+		PlainDocument nwTwpDoc = (PlainDocument) nwTwpTextField.getDocument(); 
+		nwTwpDoc.setDocumentFilter(new MyIntFilter(3)); 
+		
 		nwRgeTextField = new JTextField(); 
+		PlainDocument nwRgeDoc = (PlainDocument) nwRgeTextField.getDocument(); 
+		nwRgeDoc.setDocumentFilter(new MyIntFilter(2)); 
+		
 		nwMerTextField = new JTextField(); 
+		PlainDocument nwMerDoc = (PlainDocument) nwMerTextField.getDocument(); 
+		nwMerDoc.setDocumentFilter(new MyIntFilter(1)); 
+		
 		lowerFormationTextField = new JTextField(); 
 		upperFormationTextField = new JTextField(); 
 	}
@@ -161,6 +179,16 @@ public class UserInputGui {
 				seMerTextField.setText(u.getTownshipSE().split("-")[2].split("W")[1]);
 			}
 		}	
+	}
+	
+	public String formatNumber(String number, int desiredSize) {
+		if (number.length() == desiredSize) {
+			return number;
+		}
+		while (number.length() < desiredSize) {
+			number = "0" + number;
+		}
+		return number; 
 	}
 
 	/**
@@ -572,15 +600,16 @@ public class UserInputGui {
 		JButton button_1 = new JButton("Run");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				user.setUpperBuffer(Double.parseDouble(upperBufferTextField.getText())); 
 				user.setLowerBuffer(Double.parseDouble(lowerBufferTextField.getText()));
 				ArrayList<String> forms = new ArrayList<String>();
 				forms.add(upperFormationTextField.getText().toUpperCase());
 				forms.add(lowerFormationTextField.getText().toUpperCase());
 				user.setFormations(forms);
-				user.setTownshipNw(nwSecTextField.getText() + "-" + nwTwpTextField.getText() + "-" + nwRgeTextField.getText()
+				user.setTownshipNw(formatNumber(nwSecTextField.getText(),2) + "-" + formatNumber(nwTwpTextField.getText(),3) + "-" + formatNumber(nwRgeTextField.getText(),2)
 								   + "W" + nwMerTextField.getText());
-				user.setTownshipSe(seSecTextField.getText() + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
+				user.setTownshipSe(formatNumber(seSecTextField.getText(),2) + "-" + formatNumber(seTwpTextField.getText(),3) + "-" + formatNumber(seRgeTextField.getText(),2)
 								   + "W" + seMerTextField.getText());
 				frame.dispose();
 				RunLoadingScreen swingWorker = new RunLoadingScreen();

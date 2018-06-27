@@ -12,12 +12,13 @@ public class WorkingFileData {
 	public int getTypeRow() { return typeRow; } 
 	
 	public void addHeader(String head) {
-		header = head; 
+		header = new DataWriter().removeNewLine(head); 
 		setTypeRow();
 	}
 	
 	public void setTypeRow() { 
 		String[] headerArray = header.split(",");
+		
 		for (int i = 0 ; i < headerArray.length ; i++) {
 			if ( headerArray[i].equals("Type")) {
 				typeRow = i;

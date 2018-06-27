@@ -177,7 +177,6 @@ public class TopFileReader {
 				checkBottom = false;
 			}
 			else {
-				System.out.println(currentUwi);
 				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
 			}
 			workbook.close(); 

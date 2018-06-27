@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.chainsaw.Main;
 
 public class WriteToCSV {
@@ -31,6 +34,11 @@ public class WriteToCSV {
 		String filePath = userInput.getOutputfilePath(); 
 		String fileName = userInput.getOutputfileName();
 		
+		if (data.isEmpty()) {
+			JOptionPane.showMessageDialog(new JFrame(), "Incorrect las file directory or incorrect formation input",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 		String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 		
 		if (userInput.getOutputfileName().equals("")) {
@@ -78,7 +86,6 @@ public class WriteToCSV {
 	
 	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
 		try {
-			
 			saveToResourceFile();
 			if (userInput.getOutputfilePath().equals("")) {
 				return;
@@ -122,14 +129,14 @@ public class WriteToCSV {
 				header += "," + mnemonicList.get(i).getName();
 			}
 
-			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
+			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite,Unknown Mnemonic?";
 			
 			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
-			String uwi = data.get(0).getRow(0).substring(21, 34);
+			String uwi = data.get(0).getRow(0).substring(21, 35);
 			
-			fileWriter.write(header + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+			fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + header);
 			fileWriter.write(System.lineSeparator());
-		
+			
 			if (data.get(0).isMdforDir()) {
 				data.get(0).write(fileWriter, true);
 			}
@@ -141,12 +148,12 @@ public class WriteToCSV {
 				uniqueWell = data.get(i).getRow(0).substring(18, 20);
 				uwi = data.get(i).getRow(0).substring(21, 34);
 				if (data.get(i).isMdforDir()) {
-					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+					fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + data.get(i).getHeader());
 					fileWriter.write(System.lineSeparator());
 					data.get(i).write(fileWriter, true);
 				}
 				else {
-					fileWriter.write(data.get(i).getHeader() + ",Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?");
+					fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + data.get(i).getHeader());
 					fileWriter.write(System.lineSeparator());
 					data.get(i).write(fileWriter, false);
 				}

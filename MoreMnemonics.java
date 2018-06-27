@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,15 @@ public class MoreMnemonics {
 	public ArrayList<MnemonicData> readFile() { 
 		try { 			
 			URL url = Main.class.getResource("/resources/UpdatedLasMnemonics.csv");
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+			InputStreamReader inputStream = new InputStreamReader(url.openStream());
+			String filePath = url.getPath();
+			String alternateFilePath = filePath.substring(5, filePath.lastIndexOf("SpotfireDataProgram")) + "Resources/UpdatedLasMnemonics.csv";
+			File alternateFile = new File(alternateFilePath);
+			if (alternateFile.exists()) {
+				InputStream is = new FileInputStream(alternateFilePath);
+				inputStream = new InputStreamReader(is);
+			}
+			BufferedReader bufferedReader = new BufferedReader(inputStream);
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {
 				String formatLine = line.replaceAll(",+$", "");
