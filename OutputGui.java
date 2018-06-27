@@ -117,15 +117,15 @@ public class OutputGui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-//		URL url = Main.class.getResource("/resources/forgeIcon.png");
-//		ImageIcon forgeIcon = new ImageIcon(url);
-//		frame.setIconImage(forgeIcon.getImage());
-	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 645, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
+		frame.setIconImage(forgeIcon.getImage());
 		
 		if (outputFilePath.endsWith("csv")) { 
 			outputFilePath = outputFilePath.substring(0,outputFilePath.lastIndexOf("\\")); 

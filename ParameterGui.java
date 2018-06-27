@@ -20,6 +20,8 @@ import javax.swing.JFileChooser;
 
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -96,6 +98,10 @@ public class ParameterGui {
 		frame.setBounds(100, 100, 645, 201);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+		
+		URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
+		frame.setIconImage(forgeIcon.getImage());
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);

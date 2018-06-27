@@ -7,10 +7,16 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import java.awt.GridBagLayout;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
+
 import java.awt.GridBagConstraints;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+
+import org.apache.log4j.chainsaw.Main;
+
 import java.awt.Panel;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
@@ -115,6 +121,10 @@ public class ExamineWellGui {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 558, 500);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		
+		URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
+		frame.setIconImage(forgeIcon.getImage());
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.SOUTH);

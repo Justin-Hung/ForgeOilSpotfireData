@@ -1,11 +1,16 @@
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+
+import org.apache.log4j.chainsaw.Main;
 
 public class RunLoadingScreen {
 
@@ -26,6 +31,10 @@ public class RunLoadingScreen {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	URL url = Main.class.getResource("/resources/forgeIcon.png");
+		ImageIcon forgeIcon = new ImageIcon(url);
+		frame.setIconImage(forgeIcon.getImage());
+		
         new Task_IntegerUpdate(jpb, label, user, frame).execute();
     }
 

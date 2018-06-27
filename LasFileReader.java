@@ -18,7 +18,7 @@ public class LasFileReader {
 	}
 	
 	public LasData readFile(TopData topData, boolean dir) { 
-		//topData.displayTop();
+		topData.displayTop();
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}

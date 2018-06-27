@@ -56,6 +56,20 @@ public class TopFileReader {
 		checkBottom = false;
 	}
 	
+	public boolean checkIsEmptyFormation(Iterator<Cell> iterator) { 
+		Iterator<Cell> cellIterator = iterator;
+		int index = uwiCol;
+		Cell cell = null; 
+		while (index < formationCol) {
+			cell = cellIterator.next(); 
+			index++; 
+		}
+		if (cell.getStringCellValue().equals("")) {
+			return true;
+		}
+		return false;
+	}
+	
 	public ArrayList<TopData> readFile() { 
 		try {
 			UserInput sort = new UserInput(); 
@@ -88,7 +102,7 @@ public class TopFileReader {
 						else {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
 						}
-						if (sortUwi < lowerbound || sortUwi > upperbound) {
+						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator())) {
 							break;
 						}
 					}
@@ -148,7 +162,6 @@ public class TopFileReader {
 							else {
 								checkBottom = true; 
 							}
-						
 							topCheck = false; 
 							break;
 						}
