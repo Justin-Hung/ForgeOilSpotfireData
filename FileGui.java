@@ -42,6 +42,8 @@ public class FileGui {
 
 	private JFrame frame;
 	private JTextField topTextField;
+	private JTextField userTopTextField;
+	private JTextField useropTextField;
 	private JTextField gwiTextField;
 	private JTextField lasTextField;
 	private JTextField outputTextField;
@@ -50,6 +52,7 @@ public class FileGui {
 
 	private String rememberOutputField; 
 	private String rememberOutputName; 
+	private JTextField systemTopTextField;
 	/**
 	 * Launch the application.
 	 */
@@ -92,10 +95,11 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestInputFiles\\Twp11W4tops.xlsx");
-		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestInputFiles\\Twp11W4Gwi.xlsx");
-		lasTextField = new JTextField("E:\\ForgeOil\\LasFiles\\Twp 11W4\\log_files");
-		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestOutputFiles");
+		userTopTextField = new JTextField();
+		systemTopTextField = new JTextField();
+		gwiTextField = new JTextField();
+		lasTextField = new JTextField();
+		outputTextField = new JTextField();
 		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
@@ -104,7 +108,8 @@ public class FileGui {
 	
 	public FileGui(UserInput u) { 
 		user = u;
-		topTextField = new JTextField(user.getTopfilePath());
+		userTopTextField = new JTextField(user.getUserTopfilePath());
+		systemTopTextField = new JTextField(user.getSystemTopFilePath());
 		gwiTextField = new JTextField(user.getWorkingfilePath());
 		lasTextField = new JTextField(user.getLasfilePath());
 		outputTextField = new JTextField(user.getOutputfilePath());
@@ -137,7 +142,7 @@ public class FileGui {
 	 */
 	private void initialize() {
 		frame = new JFrame("Spotfire Data Generator");
-		frame.setBounds(100, 100, 645, 500);
+		frame.setBounds(100, 100, 645, 606);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		
@@ -147,9 +152,9 @@ public class FileGui {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0};
+		gridBagLayout.rowHeights = new int[]{0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
@@ -166,13 +171,17 @@ public class FileGui {
 		gbc_horizontalStrut_8.gridy = 1;
 		frame.getContentPane().add(horizontalStrut_8, gbc_horizontalStrut_8);
 		
-		JLabel lblTopFileLocation = new JLabel("Top File Location");
-		GridBagConstraints gbc_lblTopFileLocation = new GridBagConstraints();
-		gbc_lblTopFileLocation.anchor = GridBagConstraints.WEST;
-		gbc_lblTopFileLocation.insets = new Insets(0, 0, 5, 0);
-		gbc_lblTopFileLocation.gridx = 1;
-		gbc_lblTopFileLocation.gridy = 1;
-		frame.getContentPane().add(lblTopFileLocation, gbc_lblTopFileLocation);
+		JPanel panel_7 = new JPanel();
+		GridBagConstraints gbc_panel_7 = new GridBagConstraints();
+		gbc_panel_7.anchor = GridBagConstraints.WEST;
+		gbc_panel_7.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_7.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_7.gridx = 1;
+		gbc_panel_7.gridy = 1;
+		frame.getContentPane().add(panel_7, gbc_panel_7);
+		
+		JLabel label_4 = new JLabel("User Tops File Location");
+		panel_7.add(label_4);
 		
 		Component horizontalStrut_7 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_7 = new GridBagConstraints();
@@ -190,8 +199,8 @@ public class FileGui {
 		frame.getContentPane().add(panel, gbc_panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		panel.add(topTextField);
-		topTextField.setColumns(42);
+		panel.add(userTopTextField);
+		userTopTextField.setColumns(42);
 		
 		JButton btnNewButton = new JButton("Browse");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -214,18 +223,55 @@ public class FileGui {
 		Component horizontalStrut = Box.createHorizontalStrut(30);
 		panel.add(horizontalStrut);
 		
+		Component verticalStrut_6 = Box.createVerticalStrut(21);
+		GridBagConstraints gbc_verticalStrut_6 = new GridBagConstraints();
+		gbc_verticalStrut_6.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalStrut_6.gridx = 1;
+		gbc_verticalStrut_6.gridy = 3;
+		frame.getContentPane().add(verticalStrut_6, gbc_verticalStrut_6);
+		
+		JPanel panel_6 = new JPanel();
+		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
+		gbc_panel_6.anchor = GridBagConstraints.WEST;
+		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_6.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_6.gridx = 1;
+		gbc_panel_6.gridy = 4;
+		frame.getContentPane().add(panel_6, gbc_panel_6);
+		
+		JLabel lblSystemTopsFile = new JLabel("System Tops File Location");
+		panel_6.add(lblSystemTopsFile);
+		
+		JPanel panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 1;
+		gbc_panel_5.gridy = 5;
+		frame.getContentPane().add(panel_5, gbc_panel_5);
+		panel_5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		systemTopTextField.setColumns(42);
+		panel_5.add(systemTopTextField);
+		
+		JButton button_3 = new JButton("Browse");
+		panel_5.add(button_3);
+		
+		Component horizontalStrut_15 = Box.createHorizontalStrut(30);
+		panel_5.add(horizontalStrut_15);
+		
 		Component verticalStrut_3 = Box.createVerticalStrut(21);
 		GridBagConstraints gbc_verticalStrut_3 = new GridBagConstraints();
 		gbc_verticalStrut_3.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_3.gridx = 1;
-		gbc_verticalStrut_3.gridy = 3;
+		gbc_verticalStrut_3.gridy = 6;
 		frame.getContentPane().add(verticalStrut_3, gbc_verticalStrut_3);
 		
 		Component horizontalStrut_5 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_5 = new GridBagConstraints();
 		gbc_horizontalStrut_5.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_5.gridx = 0;
-		gbc_horizontalStrut_5.gridy = 4;
+		gbc_horizontalStrut_5.gridy = 7;
 		frame.getContentPane().add(horizontalStrut_5, gbc_horizontalStrut_5);
 		
 		JLabel label = new JLabel("General Well File Location");
@@ -233,14 +279,14 @@ public class FileGui {
 		gbc_label.anchor = GridBagConstraints.WEST;
 		gbc_label.insets = new Insets(0, 0, 5, 0);
 		gbc_label.gridx = 1;
-		gbc_label.gridy = 4;
+		gbc_label.gridy = 7;
 		frame.getContentPane().add(label, gbc_label);
 		
 		Component horizontalStrut_4 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_4 = new GridBagConstraints();
 		gbc_horizontalStrut_4.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_4.gridx = 0;
-		gbc_horizontalStrut_4.gridy = 5;
+		gbc_horizontalStrut_4.gridy = 8;
 		frame.getContentPane().add(horizontalStrut_4, gbc_horizontalStrut_4);
 		
 		JPanel panel_1 = new JPanel();
@@ -248,7 +294,7 @@ public class FileGui {
 		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 1;
-		gbc_panel_1.gridy = 5;
+		gbc_panel_1.gridy = 8;
 		frame.getContentPane().add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -280,14 +326,14 @@ public class FileGui {
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
 		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_2.gridx = 1;
-		gbc_verticalStrut_2.gridy = 6;
+		gbc_verticalStrut_2.gridy = 9;
 		frame.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
 		
 		Component horizontalStrut_12 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_12 = new GridBagConstraints();
 		gbc_horizontalStrut_12.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_12.gridx = 0;
-		gbc_horizontalStrut_12.gridy = 7;
+		gbc_horizontalStrut_12.gridy = 10;
 		frame.getContentPane().add(horizontalStrut_12, gbc_horizontalStrut_12);
 		
 		JLabel label_1 = new JLabel("Las Data Directory Location");
@@ -295,14 +341,14 @@ public class FileGui {
 		gbc_label_1.anchor = GridBagConstraints.WEST;
 		gbc_label_1.insets = new Insets(0, 0, 5, 0);
 		gbc_label_1.gridx = 1;
-		gbc_label_1.gridy = 7;
+		gbc_label_1.gridy = 10;
 		frame.getContentPane().add(label_1, gbc_label_1);
 		
 		Component horizontalStrut_11 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_11 = new GridBagConstraints();
 		gbc_horizontalStrut_11.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_11.gridx = 0;
-		gbc_horizontalStrut_11.gridy = 8;
+		gbc_horizontalStrut_11.gridy = 11;
 		frame.getContentPane().add(horizontalStrut_11, gbc_horizontalStrut_11);
 		
 		JPanel panel_2 = new JPanel();
@@ -310,7 +356,7 @@ public class FileGui {
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
 		gbc_panel_2.gridx = 1;
-		gbc_panel_2.gridy = 8;
+		gbc_panel_2.gridy = 11;
 		frame.getContentPane().add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -343,14 +389,14 @@ public class FileGui {
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_1.gridx = 1;
-		gbc_verticalStrut_1.gridy = 9;
+		gbc_verticalStrut_1.gridy = 12;
 		frame.getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 		
 		Component horizontalStrut_10 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_10 = new GridBagConstraints();
 		gbc_horizontalStrut_10.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_10.gridx = 0;
-		gbc_horizontalStrut_10.gridy = 10;
+		gbc_horizontalStrut_10.gridy = 13;
 		frame.getContentPane().add(horizontalStrut_10, gbc_horizontalStrut_10);
 		
 		JLabel label_2 = new JLabel("Output Location");
@@ -358,14 +404,14 @@ public class FileGui {
 		gbc_label_2.anchor = GridBagConstraints.WEST;
 		gbc_label_2.insets = new Insets(0, 0, 5, 0);
 		gbc_label_2.gridx = 1;
-		gbc_label_2.gridy = 10;
+		gbc_label_2.gridy = 13;
 		frame.getContentPane().add(label_2, gbc_label_2);
 		
 		Component horizontalStrut_9 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_9 = new GridBagConstraints();
 		gbc_horizontalStrut_9.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut_9.gridx = 0;
-		gbc_horizontalStrut_9.gridy = 11;
+		gbc_horizontalStrut_9.gridy = 14;
 		frame.getContentPane().add(horizontalStrut_9, gbc_horizontalStrut_9);
 		
 		JPanel panel_3 = new JPanel();
@@ -373,7 +419,7 @@ public class FileGui {
 		gbc_panel_3.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_3.fill = GridBagConstraints.BOTH;
 		gbc_panel_3.gridx = 1;
-		gbc_panel_3.gridy = 11;
+		gbc_panel_3.gridy = 14;
 		frame.getContentPane().add(panel_3, gbc_panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -411,7 +457,7 @@ public class FileGui {
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut.gridx = 1;
-		gbc_verticalStrut.gridy = 12;
+		gbc_verticalStrut.gridy = 15;
 		frame.getContentPane().add(verticalStrut, gbc_verticalStrut);
 		
 		JLabel lblOutputFileName = new JLabel("Output File Name");
@@ -420,7 +466,7 @@ public class FileGui {
 		gbc_lblOutputFileName.anchor = GridBagConstraints.WEST;
 		gbc_lblOutputFileName.insets = new Insets(0, 0, 5, 0);
 		gbc_lblOutputFileName.gridx = 1;
-		gbc_lblOutputFileName.gridy = 13;
+		gbc_lblOutputFileName.gridy = 16;
 		frame.getContentPane().add(lblOutputFileName, gbc_lblOutputFileName);
 		
 		JPanel panel_4 = new JPanel();
@@ -429,7 +475,7 @@ public class FileGui {
 		gbc_panel_4.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_4.anchor = GridBagConstraints.EAST;
 		gbc_panel_4.gridx = 1;
-		gbc_panel_4.gridy = 14;
+		gbc_panel_4.gridy = 17;
 		frame.getContentPane().add(panel_4, gbc_panel_4);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -504,7 +550,7 @@ public class FileGui {
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_5 = new GridBagConstraints();
 		gbc_verticalStrut_5.gridx = 1;
-		gbc_verticalStrut_5.gridy = 15;
+		gbc_verticalStrut_5.gridy = 18;
 		frame.getContentPane().add(verticalStrut_5, gbc_verticalStrut_5);
 	}
 

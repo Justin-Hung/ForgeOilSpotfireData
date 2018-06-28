@@ -41,10 +41,10 @@ public class Controller {
 	
 	public Controller(UserInput user) {
 		userInput = user;
-		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getWorkingfilePath()); 
+		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getWorkingFilePath()); 
 		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getUpperBuffer(), userInput.getLowerBuffer()
-														, userInput.getTopfilePath()); 
-		lasFileReader = new LasFileReader(userInput.getLasfilePath()); 
+														, userInput.getTopFilePath()); 
+		lasFileReader = new LasFileReader(userInput.getLasFilePath()); 
 		MoreMnemonics mnemonics = new MoreMnemonics();
 		mnemonicList = mnemonics.readFile();
 		dataWriter = new DataWriter(mnemonicList);

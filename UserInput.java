@@ -13,11 +13,12 @@ public class UserInput {
 	private String townshipSE;
 	private double upperBuffer; 
 	private double lowerBuffer; 
-	private String topfilePath; 
-	private String lasfilePath; 
-	private String workingfilePath; 
-	private String outputfilePath; 
-	private String outputfileName; 
+	private String userTopFilePath; 
+	private String systemTopFilePath;
+	private String lasFilePath; 
+	private String workingFilePath; 
+	private String outputFilePath; 
+	private String outputFileName; 
 	
 	public UserInput() {
 		formations = new ArrayList<String>();
@@ -29,34 +30,34 @@ public class UserInput {
 		lowerBuffer = 0.0001; 
 	}
 	
-	public String getTopfilePath() { return topfilePath; } 
+	public String getUserTopFilePath() { return userTopFilePath; } 
 	
-	public String getLasfilePath() { return lasfilePath; } 
+	public String getLasFilePath() { return lasFilePath; } 
 	
-	public String getWorkingfilePath() { return workingfilePath; } 
+	public String getWorkingFilePath() { return workingFilePath; } 
 	
-	public String getOutputfilePath() { return outputfilePath; } 
+	public String getOutputFilePath() { return outputFilePath; } 
 	
-	public String getOutputfileName() { return outputfileName; }
+	public String getOutputFileName() { return outputFileName; }
 	
 	public void setOutputfileName(String name) { 
-		outputfileName = name;
+		outputFileName = name;
 	}
 	
-	public void setTopfilePath(String topfile) {
-		topfilePath = topfile; 
+	public void setUserTopFilePath(String topfile) {
+		userTopFilePath = topfile; 
 	}
 	
-	public void setLasfilePath(String lasfile) {
-		lasfilePath = lasfile; 
+	public void setLasFilePath(String lasfile) {
+		lasFilePath = lasfile; 
 	}
 	
-	public void setWorkingfilePath(String workingfile) {
-		workingfilePath = workingfile; 
+	public void setWorkingFilePath(String workingfile) {
+		workingFilePath = workingfile; 
 	}
 	
-	public void setOutputfilePath(String outputfile) {
-		outputfilePath = outputfile; 
+	public void setOutputFilePath(String outputfile) {
+		outputFilePath = outputfile; 
 	}
 	
 	public void setFormations(ArrayList<String> forms) { 
@@ -179,10 +180,11 @@ public class UserInput {
 			writer.write(townshipSE + System.lineSeparator());
 			writer.write(String.valueOf(upperBuffer) + System.lineSeparator());
 			writer.write(String.valueOf(lowerBuffer) + System.lineSeparator());
-			writer.write(topfilePath + System.lineSeparator());
-			writer.write(lasfilePath + System.lineSeparator());
-			writer.write(workingfilePath + System.lineSeparator());
-			writer.write(outputfilePath + System.lineSeparator());
+			writer.write(userTopFilePath + System.lineSeparator());
+			writer.write(systemTopFilePath + System.lineSeparator());
+			writer.write(lasFilePath + System.lineSeparator());
+			writer.write(workingFilePath + System.lineSeparator());
+			writer.write(outputFilePath + System.lineSeparator());
 			writer.close();
 		}
 		catch (IOException e) {
