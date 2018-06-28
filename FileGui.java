@@ -92,10 +92,10 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		topTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestInputFiles\\Twp11W4tops.xlsx");
-		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestInputFiles\\Twp11W4Gwi.xlsx");
-		lasTextField = new JTextField("E:\\ForgeOil\\LasFiles\\Twp 11W4\\log_files");
-		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestOutputFiles");
+		topTextField = new JTextField();
+		gwiTextField = new JTextField();
+		lasTextField = new JTextField();
+		outputTextField = new JTextField();
 		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
