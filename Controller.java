@@ -43,7 +43,7 @@ public class Controller {
 		userInput = user;
 		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getWorkingFilePath()); 
 		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getUpperBuffer(), userInput.getLowerBuffer()
-														, userInput.getTopFilePath()); 
+														, userInput.getPrimaryTopFilePath()); 
 		lasFileReader = new LasFileReader(userInput.getLasFilePath()); 
 		MoreMnemonics mnemonics = new MoreMnemonics();
 		mnemonicList = mnemonics.readFile();

@@ -70,6 +70,59 @@ public class TopFileReader {
 		return false;
 	}
 	
+	public ArrayList<SecondaryTopData> readSecondaryFile(ArrayList<TopData> primaryTopData, String secondaryFilePath) {
+		try { 
+			FileInputStream inputStream = new FileInputStream(new File(secondaryFilePath)); 
+			Workbook workbook = new XSSFWorkbook(inputStream); 
+			Sheet firstSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = firstSheet.iterator(); 
+			
+			Row checkFirstRow = iterator.next(); 
+			Iterator<Cell> checkFirstRowIterator = checkFirstRow.cellIterator(); 
+			Cell checkFirstRowCell = checkFirstRowIterator.next();
+			if (checkFirstRowCell.getStringCellValue().equals("©2018 IHS Markit")) {
+				iterator.next();
+			}
+			
+			boolean firstRow = true; 
+			String[] previousRow = new String[3]; 
+			String[] currentRow = new String[3]; 
+			String[] futureRow= new String[3]; 
+			
+			while (iterator.hasNext()) {
+				Row nextRow = iterator.next();
+				Iterator<Cell> cellIterator = nextRow.cellIterator();
+				
+				int index = 0; 
+				while (cellIterator.hasNext()) {
+					Cell cell = cellIterator.next(); 
+					if (index == uwiCol) { 
+						futureRow[0] = cell.getStringCellValue(); 
+					}
+					if (index == formationCol) { 
+						futureRow[1] = cell.getStringCellValue();
+					}
+					if (index == tvdCol) {
+						futureRow[2] = String.valueOf(cell.getNumericCellValue()); 
+					}
+					index++;
+ 				}
+				if (firstRow) {
+					
+				}
+				
+				previousRow = currentRow;
+				currentRow = futureRow; 
+				firstRow = false; 
+			}
+			
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public ArrayList<TopData> readFile() { 
 		try {
 			UserInput sort = new UserInput(); 

@@ -31,8 +31,8 @@ public class WriteToCSV {
 	}
 	
 	public void saveParameters() throws IOException { 
-		String filePath = userInput.getOutputfilePath(); 
-		String fileName = userInput.getOutputfileName();
+		String filePath = userInput.getOutputFilePath(); 
+		String fileName = userInput.getOutputFileName();
 		
 		if (data.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(), "Incorrect las file directory or incorrect formation input",
@@ -41,11 +41,11 @@ public class WriteToCSV {
 		}
 		String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 		
-		if (userInput.getOutputfileName().equals("")) {
+		if (userInput.getOutputFileName().equals("")) {
 			fileName = township + "masterfile";
 		}
-		if (userInput.getOutputfilePath().endsWith("csv")) { 
-			filePath = userInput.getOutputfilePath().substring(0, filePath.lastIndexOf("\\"));
+		if (userInput.getOutputFilePath().endsWith("csv")) { 
+			filePath = userInput.getOutputFilePath().substring(0, filePath.lastIndexOf("\\"));
 			saveFile = new File(filePath + "\\" + fileName + "parametersV2.txt");
 			int i = 3; 
 			while (!saveFile.createNewFile()) {
@@ -87,28 +87,28 @@ public class WriteToCSV {
 	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
 		try {
 			saveToResourceFile();
-			if (userInput.getOutputfilePath().equals("")) {
+			if (userInput.getOutputFilePath().equals("")) {
 				return;
 			}
 			saveParameters(); 
 			
-			String fileName = userInput.getOutputfileName();
-			if (userInput.getOutputfileName().equals("")) {
+			String fileName = userInput.getOutputFileName();
+			if (userInput.getOutputFileName().equals("")) {
 				fileName = "masterfile";
 			}
 			
 			String outputFilePath = saveFile.getPath().substring(0, saveFile.getPath().lastIndexOf("\\"));
 
-			String outputFileName = userInput.getOutputfileName();
+			String outputFileName = userInput.getOutputFileName();
 			
 			header = formatHeader(header);
 			FileWriter fileWriter; 
 
 			String township = "T" + data.get(0).getRow(0).substring(28, 30) + "R" + data.get(0).getRow(0).substring(31, 33);
 			
-			System.out.println(userInput.getOutputfilePath());
-			if (userInput.getOutputfilePath().endsWith("csv")) {
-				fileWriter = new FileWriter(new File(userInput.getOutputfilePath()), true);
+			System.out.println(userInput.getOutputFilePath());
+			if (userInput.getOutputFilePath().endsWith("csv")) {
+				fileWriter = new FileWriter(new File(userInput.getOutputFilePath()), true);
 			}
 			else if (!outputFilePath.equals("") && !outputFileName.equals("")) {
 				fileWriter = new FileWriter(new File(outputFilePath + "\\" + outputFileName + ".csv"));

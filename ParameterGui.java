@@ -223,10 +223,11 @@ public class ParameterGui {
 				user.setTownshipSe(br.readLine()); 
 				user.setUpperBuffer(Double.parseDouble(br.readLine()));
 				user.setLowerBuffer(Double.parseDouble(br.readLine()));
-				user.setTopfilePath(br.readLine());
-				user.setLasfilePath(br.readLine());
-				user.setWorkingfilePath(br.readLine());
-				user.setOutputfilePath(br.readLine());
+				user.setUserTopFilePath(br.readLine());
+				user.setSystemTopFilePath(br.readLine());
+				user.setLasFilePath(br.readLine());
+				user.setWorkingFilePath(br.readLine());
+				user.setOutputFilePath(br.readLine());
 					
 				frame.dispose();
 				new FileGui(user);
@@ -258,10 +259,11 @@ public class ParameterGui {
 							user.setTownshipSe(br.readLine()); 
 							user.setUpperBuffer(Double.parseDouble(br.readLine()));
 							user.setLowerBuffer(Double.parseDouble(br.readLine()));
-							user.setTopfilePath(br.readLine());
-							user.setLasfilePath(br.readLine());
-							user.setWorkingfilePath(br.readLine());
-							user.setOutputfilePath(br.readLine());
+							user.setUserTopFilePath(br.readLine());
+							user.setSystemTopFilePath(br.readLine());
+							user.setLasFilePath(br.readLine());
+							user.setWorkingFilePath(br.readLine());
+							user.setOutputFilePath(br.readLine());
 							frame.dispose();
 							new FileGui(user);
 							URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 

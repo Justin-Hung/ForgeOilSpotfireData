@@ -32,6 +32,8 @@ public class UserInput {
 	
 	public String getUserTopFilePath() { return userTopFilePath; } 
 	
+	public String getSystemTopFilePath() { return systemTopFilePath; }
+	
 	public String getLasFilePath() { return lasFilePath; } 
 	
 	public String getWorkingFilePath() { return workingFilePath; } 
@@ -40,12 +42,30 @@ public class UserInput {
 	
 	public String getOutputFileName() { return outputFileName; }
 	
+	public String getPrimaryTopFilePath() { 
+		if (userTopFilePath.equals("")) {
+			return systemTopFilePath;
+		}
+		return userTopFilePath; 
+	}
+	
+	public boolean secondaryTopFileExist() { 
+		if (!userTopFilePath.equals("") && !systemTopFilePath.equals("")) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void setOutputfileName(String name) { 
 		outputFileName = name;
 	}
 	
 	public void setUserTopFilePath(String topfile) {
 		userTopFilePath = topfile; 
+	}
+	
+	public void setSystemTopFilePath(String topfile) {
+		systemTopFilePath = topfile;
 	}
 	
 	public void setLasFilePath(String lasfile) {

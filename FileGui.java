@@ -41,9 +41,8 @@ import javax.swing.JCheckBox;
 public class FileGui {
 
 	private JFrame frame;
-	private JTextField topTextField;
 	private JTextField userTopTextField;
-	private JTextField useropTextField;
+	private JTextField systemTopTextField;
 	private JTextField gwiTextField;
 	private JTextField lasTextField;
 	private JTextField outputTextField;
@@ -52,7 +51,6 @@ public class FileGui {
 
 	private String rememberOutputField; 
 	private String rememberOutputName; 
-	private JTextField systemTopTextField;
 	/**
 	 * Launch the application.
 	 */
@@ -72,10 +70,11 @@ public class FileGui {
 					user.setTownshipSe(br.readLine()); 
 					user.setUpperBuffer(Double.parseDouble(br.readLine()));
 					user.setLowerBuffer(Double.parseDouble(br.readLine()));
-					user.setTopfilePath(br.readLine());
-					user.setLasfilePath(br.readLine());
-					user.setWorkingfilePath(br.readLine());
-					user.setOutputfilePath(br.readLine());
+					user.setUserTopFilePath(br.readLine());
+					user.setSystemTopFilePath(br.readLine());
+					user.setLasFilePath(br.readLine());
+					user.setWorkingFilePath(br.readLine());
+					user.setOutputFilePath(br.readLine());
 				}
 				catch (IOException e) {
 					e.printStackTrace();
@@ -108,12 +107,12 @@ public class FileGui {
 	
 	public FileGui(UserInput u) { 
 		user = u;
-		userTopTextField = new JTextField(user.getUserTopfilePath());
+		userTopTextField = new JTextField(user.getUserTopFilePath());
 		systemTopTextField = new JTextField(user.getSystemTopFilePath());
-		gwiTextField = new JTextField(user.getWorkingfilePath());
-		lasTextField = new JTextField(user.getLasfilePath());
-		outputTextField = new JTextField(user.getOutputfilePath());
-		outputNameTextField = new JTextField(user.getOutputfileName());
+		gwiTextField = new JTextField(user.getWorkingFilePath());
+		lasTextField = new JTextField(user.getLasFilePath());
+		outputTextField = new JTextField(user.getOutputFilePath());
+		outputNameTextField = new JTextField(user.getOutputFileName());
 		if (outputTextField.getText().endsWith("csv")) {
 			outputNameTextField.setText(outputTextField.getText().substring(outputTextField.getText().lastIndexOf("\\") + 1, outputTextField.getText().indexOf(".csv")));
 		}
@@ -123,8 +122,16 @@ public class FileGui {
 	
 	
 	public boolean checkTextFields() { 
-		if (!new File(topTextField.getText()).exists()) {
-			JOptionPane.showMessageDialog(frame, "Top file can not be found");
+		if (userTopTextField.getText().equals("") && systemTopTextField.getText().equals("")) {
+			JOptionPane.showMessageDialog(frame, "Please enter at least one top file path");
+			return true;
+		}
+		if (!userTopTextField.getText().equals("") && !new File(userTopTextField.getText()).exists()) {
+			JOptionPane.showMessageDialog(frame, "User Top file can not be found");
+			return true;
+		}
+		if (!systemTopTextField.getText().equals("") && !new File(systemTopTextField.getText()).exists()) {
+			JOptionPane.showMessageDialog(frame, "Systen Top file can not be found");
 			return true;
 		}
 		if (!new File(gwiTextField.getText()).exists()) {
@@ -142,7 +149,7 @@ public class FileGui {
 	 */
 	private void initialize() {
 		frame = new JFrame("Spotfire Data Generator");
-		frame.setBounds(100, 100, 645, 606);
+		frame.setBounds(100, 100, 645, 607);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		
@@ -206,15 +213,15 @@ public class FileGui {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileBrowser = new JFileChooser(); 
-				if (Files.exists(Paths.get(topTextField.getText()))) {
-					fileBrowser = new JFileChooser(new File(topTextField.getText())); 
+				if (Files.exists(Paths.get(userTopTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(userTopTextField.getText())); 
 				}
 				fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileBrowser.getCurrentDirectory();
 					File currentDir = fileBrowser.getSelectedFile(); 
 					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
-					topTextField.setText(filePath);
+					userTopTextField.setText(filePath);
 				}
 			}
 		});
@@ -223,7 +230,7 @@ public class FileGui {
 		Component horizontalStrut = Box.createHorizontalStrut(30);
 		panel.add(horizontalStrut);
 		
-		Component verticalStrut_6 = Box.createVerticalStrut(21);
+		Component verticalStrut_6 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_6 = new GridBagConstraints();
 		gbc_verticalStrut_6.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_6.gridx = 1;
@@ -234,7 +241,6 @@ public class FileGui {
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
 		gbc_panel_6.anchor = GridBagConstraints.WEST;
 		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_6.fill = GridBagConstraints.VERTICAL;
 		gbc_panel_6.gridx = 1;
 		gbc_panel_6.gridy = 4;
 		frame.getContentPane().add(panel_6, gbc_panel_6);
@@ -245,7 +251,7 @@ public class FileGui {
 		JPanel panel_5 = new JPanel();
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
 		gbc_panel_5.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_5.gridx = 1;
 		gbc_panel_5.gridy = 5;
 		frame.getContentPane().add(panel_5, gbc_panel_5);
@@ -260,7 +266,7 @@ public class FileGui {
 		Component horizontalStrut_15 = Box.createHorizontalStrut(30);
 		panel_5.add(horizontalStrut_15);
 		
-		Component verticalStrut_3 = Box.createVerticalStrut(21);
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_3 = new GridBagConstraints();
 		gbc_verticalStrut_3.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_3.gridx = 1;
@@ -322,7 +328,7 @@ public class FileGui {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(30);
 		panel_1.add(horizontalStrut_1);
 		
-		Component verticalStrut_2 = Box.createVerticalStrut(21);
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
 		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_2.gridx = 1;
@@ -385,7 +391,7 @@ public class FileGui {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
 		panel_2.add(horizontalStrut_2);
 		
-		Component verticalStrut_1 = Box.createVerticalStrut(21);
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_1.gridx = 1;
@@ -453,7 +459,7 @@ public class FileGui {
 		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
 		panel_3.add(horizontalStrut_3);
 		
-		Component verticalStrut = Box.createVerticalStrut(21);
+		Component verticalStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut.gridx = 1;
@@ -485,10 +491,11 @@ public class FileGui {
 				if (checkTextFields()) {
 					return; 
 				}
-				user.setLasfilePath(lasTextField.getText());
-				user.setOutputfilePath(outputTextField.getText());
-				user.setTopfilePath(topTextField.getText());
-				user.setWorkingfilePath(gwiTextField.getText());
+				user.setLasFilePath(lasTextField.getText());
+				user.setOutputFilePath(outputTextField.getText());
+				user.setUserTopFilePath(userTopTextField.getText());
+				user.setSystemTopFilePath(systemTopTextField.getText());
+				user.setWorkingFilePath(gwiTextField.getText());
 				user.setOutputfileName(outputNameTextField.getText());
 				UserInputGui inputGui = new UserInputGui(user);
 				frame.dispose();

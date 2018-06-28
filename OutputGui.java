@@ -76,7 +76,7 @@ public class OutputGui {
 	 */
 	public OutputGui(Controller controller) {
 		this.controller = controller;
-		outputFilePath =  controller.getUserInput().getOutputfilePath();
+		outputFilePath =  controller.getUserInput().getOutputFilePath();
 		this.outputData = controller.getOutputData();
 		initializeJList(); 
 		initialize();
