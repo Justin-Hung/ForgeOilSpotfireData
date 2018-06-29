@@ -59,6 +59,105 @@ public class DataWriter {
 			}
 		}
 	}
+	
+	public FormattedData secondaryFormatData(String h, String uwiInfo, LasData lasData, TopData topData, ArrayList<TopData> secondaryTopDataList) {
+	
+		TopData secondaryTopData = null;
+		for (int i = 0 ; i < secondaryTopDataList.size() ; i++) {
+			if (topData.getUwi().equals(secondaryTopDataList.get(i).getUwi())) {
+				secondaryTopData = secondaryTopDataList.get(i);
+			}
+		}
+		unknownPositions = new ArrayList<Integer>(); 
+		columnArray = new int[11];
+		header = h; 
+		header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step),";
+		headerOffset = header.split(",").length;
+		
+		FormattedData formattedData = new FormattedData();
+
+		String formattedHeader = lasData.getHeader().trim().replaceAll(" +", ",");
+		
+		formattedHeader = header + formattedHeader.substring(8);
+		
+		getPositions(formattedHeader);
+		getUnknownPositions(formattedHeader);
+		
+		String finalHeader = header; 
+		
+		for (int j = 0 ; j < position.length ; j++) {
+			if (position[j] != 0) {
+				finalHeader += formattedHeader.split(",")[position[j]] + ",";
+			}
+			else {
+				finalHeader += ",";
+			}
+		}
+		finalHeader += "Bit,Service Co.";
+		
+		setColumnArray(finalHeader);
+		
+		finalHeader = addCalcHeaders(finalHeader);
+		
+		for (int i = 0 ; i < unknownPositions.size() ; i++) {
+			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
+		}
+		
+		finalHeader = removeNewLine(finalHeader);
+		
+		formattedData.addHeader(finalHeader);
+
+		for (int i = 0; i < lasData.getSize(); i++) {
+			String formatRow = lasData.getRow(i).trim().replaceAll(" +", ",") + ",";
+
+			Double depth = Double.parseDouble(formatRow.substring(0, formatRow.indexOf(",")));
+
+			String data = formatRow.substring(ordinalIndexOf(formatRow, ",", 1));
+	
+			String generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," + topData.getFormation(depth) + ", ,0.1";
+			 
+			String formattedRow = generalWellInfo + data; 
+			
+			String finalRow = generalWellInfo + ",";	
+			for (int j = 0 ; j < position.length ; j++) {
+				boolean checkNum = true; 
+				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
+					if (j > 24 || j < 34) {
+						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
+						if ( porosity < 1.0 && porosity > -1.0) {
+							finalRow += String.valueOf((porosity*100)) + ",";
+						}
+						else {
+							finalRow += getCol(formattedRow, position[j]) + ","; 
+						}
+					}
+					else {
+						finalRow += getCol(formattedRow, position[j]) + ","; 	
+					}
+				}
+				else {
+					finalRow += ",";
+				}
+			}
+			
+			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
+			
+			finalRow = addCalcValues(finalRow);
+			
+			for (int j = 0 ; j < unknownPositions.size() ; j++) {
+				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
+			}
+			
+			finalRow = removeNewLine(finalRow);
+			
+			formattedData.addRow(finalRow);
+		}
+		resetPosition();
+		if (lasData.getMdForDir()) {
+			formattedData.setMdTrue(); 
+		}
+		return formattedData;
+	}
 
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
 		unknownPositions = new ArrayList<Integer>(); 

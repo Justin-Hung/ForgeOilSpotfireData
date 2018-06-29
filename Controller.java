@@ -10,6 +10,7 @@ public class Controller {
 	private DataWriter dataWriter;
 	private ArrayList<FormattedData> formattedDataList;
 	private ArrayList<TopData> topDataList;
+	private ArrayList<TopData> secondaryTopDataList = new ArrayList<TopData>(); 
 	private WorkingFileData workingData;
 	private UserInput userInput; 
 	private OutputData outputData;
@@ -55,6 +56,9 @@ public class Controller {
 		topRow = 0; 
 		
 		topDataList = topFileReader.readFile();
+		if (user.secondaryTopFileExist()) { 
+			secondaryTopDataList = topFileReader.readSecondaryFile(user.getSystemTopFilePath());
+		}
 		workingData = workingFileReader.readFile();
 		outputData = new OutputData();
 	}
@@ -76,8 +80,14 @@ public class Controller {
 			}
 			
 			if (lasData != null) { 
-				FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
-				//System.out.println(topDataList.get(topRow).getUwi());
+				FormattedData formattedData = null;
+				if (secondaryTopDataList.isEmpty()) {
+					formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+				}
+				else {
+					formattedData = dataWriter.secondaryFormatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow), secondaryTopDataList);
+				}
+					//System.out.println(topDataList.get(topRow).getUwi());
 				outputData.addSuccess(topDataList.get(topRow).getUwi());
 				formattedDataList.add(formattedData);
 				wellsCompleted++;

@@ -47,6 +47,14 @@ public class TopData {
 		return tvDepth.get(tvDepth.size()-1) + lowerbuffer + 0.1; 
 	}
 	
+	public TopData() { 
+		upperbuffer = 999;
+		lowerbuffer = 999; 
+		bottomCheck = false; 
+		form = new ArrayList<String>(); 
+		tvDepth = new ArrayList<Double>() ;
+	}
+	
 	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check) { 
 		bottomCheck = check;
 		upperFormation = upperForm;

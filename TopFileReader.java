@@ -15,6 +15,8 @@ public class TopFileReader {
 	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx";
 
 	private ArrayList<TopData> topDataList; 
+	private ArrayList<TopData> secondaryTopList;
+	private	int topDataIndex; 
 	private String currentUwi = ""; 
 	private ArrayList<String> data; 
 	private int upperbound;
@@ -70,7 +72,7 @@ public class TopFileReader {
 		return false;
 	}
 	
-	public ArrayList<SecondaryTopData> readSecondaryFile(ArrayList<TopData> primaryTopData, String secondaryFilePath) {
+	public ArrayList<TopData> readSecondaryFile(String secondaryFilePath) {
 		try { 
 			FileInputStream inputStream = new FileInputStream(new File(secondaryFilePath)); 
 			Workbook workbook = new XSSFWorkbook(inputStream); 
@@ -88,6 +90,8 @@ public class TopFileReader {
 			String[] previousRow = new String[3]; 
 			String[] currentRow = new String[3]; 
 			String[] futureRow= new String[3]; 
+			secondaryTopList = new ArrayList<TopData>();
+			topDataIndex = 0;
 			
 			while (iterator.hasNext()) {
 				Row nextRow = iterator.next();
@@ -95,6 +99,7 @@ public class TopFileReader {
 				
 				int index = 0; 
 				while (cellIterator.hasNext()) {
+					
 					Cell cell = cellIterator.next(); 
 					if (index == uwiCol) { 
 						futureRow[0] = cell.getStringCellValue(); 
@@ -107,19 +112,34 @@ public class TopFileReader {
 					}
 					index++;
  				}
-				if (firstRow) {
-					
+				if (!firstRow) {
+					checkRow(previousRow,currentRow,futureRow);
 				}
-				
 				previousRow = currentRow;
 				currentRow = futureRow; 
 				firstRow = false; 
 			}
-			
-
+			return secondaryTopList;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void checkRow(String[] previousRow, String[] currentRow, String[] futureRow) {
+		if (currentRow[0].equals(topDataList.get(topDataIndex).getUwi()) && !currentUwi.equals(currentRow[0])) {
+			currentUwi = currentRow[0];
+			data = new ArrayList<String>(); 
+			data.add(currentRow[0]);
+		}
+		if (currentUwi.equals(currentRow[0])) { 
+			data.add(currentRow[1]);
+			data.add(currentRow[2]);
+		}
+		if (!futureRow[0].equals(currentUwi) && currentUwi.equals(currentRow[0])) { 
+			secondaryTopList.add(new TopData(data, 999, 999, "unknown", false));
+			topDataIndex++; 
 		}
 	}
 	
