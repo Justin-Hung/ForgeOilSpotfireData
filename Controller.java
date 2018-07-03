@@ -10,7 +10,7 @@ public class Controller {
 	private DataWriter dataWriter;
 	private ArrayList<FormattedData> formattedDataList;
 	private ArrayList<TopData> topDataList;
-	private ArrayList<TopData> secondaryTopDataList = new ArrayList<TopData>(); 
+	private ArrayList<TopData> secondaryTopDataList;
 	private WorkingFileData workingData;
 	private UserInput userInput; 
 	private OutputData outputData;
@@ -55,8 +55,10 @@ public class Controller {
 		workingWellRow = 0; 
 		topRow = 0; 
 		
+		secondaryTopDataList = null;
 		topDataList = topFileReader.readFile();
 		if (user.secondaryTopFileExist()) { 
+			System.out.println("runningSecondary read file");
 			secondaryTopDataList = topFileReader.readSecondaryFile(user.getSystemTopFilePath());
 		}
 		workingData = workingFileReader.readFile();
@@ -82,14 +84,20 @@ public class Controller {
 				}
 				
 				if (lasData != null) { 
-					FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
-					System.out.println(topDataList.get(topRow).getUwi());
+					FormattedData formattedData = null;
+					if (secondaryTopDataList == null) { 
+						formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+					}
+					else { 
+						formattedData = dataWriter.secondaryFormatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow),secondaryTopDataList);
+					}
+					//System.out.println(topDataList.get(topRow).getUwi());
 					outputData.addSuccess(topDataList.get(topRow).getUwi());
 					formattedDataList.add(formattedData);
 					wellsCompleted++;
 				}
 				else { 
-					System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
+				//	System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
 					outputData.addLasError(topDataList.get(topRow).getUwi());
 				}
 				workingWellRow++; 
@@ -97,12 +105,12 @@ public class Controller {
 			}
 			else {
 				if (userInput.fullSortTownship(topUwi) < userInput.fullSortTownship(workingUwi)) {
-					System.err.println(topUwi + " Does not have a matching GWI");
+				//	System.err.println(topUwi + " Does not have a matching GWI");
 					outputData.addGwiError(topUwi);
 					topRow++;
 				}
 				else {
-					System.err.println(workingUwi + " Does not have a Top");
+				//	System.err.println(workingUwi + " Does not have a Top");
 					outputData.addTopError(workingUwi);
 					workingWellRow++; 
 				}
@@ -117,7 +125,7 @@ public class Controller {
 	
 	public void writeToFile() {
 		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput);
-		writer.write(workingData.getHeader(), mnemonicList);
+		writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist());
 		System.out.println("DONE");
 		System.out.println("wells completed: " + wellsCompleted);
 	}

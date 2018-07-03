@@ -68,10 +68,16 @@ public class DataWriter {
 				secondaryTopData = secondaryTopDataList.get(i);
 			}
 		}
+		if (secondaryTopData == null) {
+//			System.out.println(topData.getUwi());
+//			System.out.println("HAS NO SECONDARY");
+		}
 		unknownPositions = new ArrayList<Integer>(); 
 		columnArray = new int[11];
 		header = h; 
+
 		header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step),";
+
 		headerOffset = header.split(",").length;
 		
 		FormattedData formattedData = new FormattedData();
@@ -113,17 +119,31 @@ public class DataWriter {
 			Double depth = Double.parseDouble(formatRow.substring(0, formatRow.indexOf(",")));
 
 			String data = formatRow.substring(ordinalIndexOf(formatRow, ",", 1));
-	
-			String generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," + topData.getFormation(depth) + ", ,0.1";
-			 
+			
+			String generalWellInfo = null;
+			if (secondaryTopData != null) {
+				generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," 
+						+ topData.getFormation(depth) + "," + secondaryTopData.getFormation(depth) + ", ,0.1";
+			}
+			else {
+				generalWellInfo = uwiInfo.substring(0, uwiInfo.length() - 1) + "," +  depth.toString() + "," 
+						+ topData.getFormation(depth) + ", , ,0.1"; 
+			}
+			
 			String formattedRow = generalWellInfo + data; 
 			
 			String finalRow = generalWellInfo + ",";	
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
-					if (j > 24 || j < 34) {
-						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
+					if (j > 21 || j < 34) {
+						double porosity = -999;
+						try {
+							porosity = Double.parseDouble(getCol(formattedRow, position[j]));
+						}
+						catch (NumberFormatException e) {
+							e.printStackTrace();
+						}
 						if ( porosity < 1.0 && porosity > -1.0) {
 							finalRow += String.valueOf((porosity*100)) + ",";
 						}
@@ -214,7 +234,7 @@ public class DataWriter {
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
-					if (j > 24 || j < 34) {
+					if (j > 21 || j < 34) {
 						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
 						if ( porosity < 1.0 && porosity > -1.0) {
 							finalRow += String.valueOf((porosity*100)) + ",";

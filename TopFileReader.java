@@ -66,7 +66,6 @@ public class TopFileReader {
 			cell = cellIterator.next();
 			index++; 
 		}
-		System.out.println(cell.getStringCellValue());
 		if (cell.getStringCellValue().equals("")) {
 			return true;
 		}
@@ -116,9 +115,16 @@ public class TopFileReader {
 				if (!firstRow) {
 					checkRow(previousRow,currentRow,futureRow);
 				}
-				previousRow = currentRow;
-				currentRow = futureRow; 
+				previousRow = currentRow.clone();
+				currentRow = futureRow.clone(); 
 				firstRow = false; 
+			}
+			for (int i = 0; i < topDataList.size() ; i++ ) {
+				System.err.println(i + ":" + topDataList.get(i).getUwi());
+			}
+			
+			for (int i = 0; i < secondaryTopList.size() ; i++ ) {
+				 System.out.println(i + ":" + secondaryTopList.get(i).getUwi());
 			}
 			return secondaryTopList;
 		}
@@ -129,6 +135,7 @@ public class TopFileReader {
 	}
 	
 	public void checkRow(String[] previousRow, String[] currentRow, String[] futureRow) {
+		while ()
 		if (currentRow[0].equals(topDataList.get(topDataIndex).getUwi()) && !currentUwi.equals(currentRow[0])) {
 			currentUwi = currentRow[0];
 			data = new ArrayList<String>(); 

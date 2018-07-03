@@ -94,11 +94,11 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		userTopTextField = new JTextField();
-		systemTopTextField = new JTextField();
-		gwiTextField = new JTextField();
-		lasTextField = new JTextField();
-		outputTextField = new JTextField();
+		userTopTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\MannvilleUserTops.xlsx");
+		systemTopTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx");
+		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx");
+		lasTextField = new JTextField("C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files");
+		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestOutputFiles");
 		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
@@ -261,6 +261,21 @@ public class FileGui {
 		panel_5.add(systemTopTextField);
 		
 		JButton button_3 = new JButton("Browse");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileBrowser = new JFileChooser(); 
+				if (Files.exists(Paths.get(systemTopTextField.getText()))) {
+					fileBrowser = new JFileChooser(new File(systemTopTextField.getText())); 
+				}
+				fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if (fileBrowser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileBrowser.getCurrentDirectory();
+					File currentDir = fileBrowser.getSelectedFile(); 
+					String filePath = file.getAbsolutePath() + "\\" + currentDir.getName();
+					systemTopTextField.setText(filePath);
+				}
+			}
+		});
 		panel_5.add(button_3);
 		
 		Component horizontalStrut_15 = Box.createHorizontalStrut(30);

@@ -84,7 +84,7 @@ public class WriteToCSV {
 		userInput.write(previousParameterWrite); 
 	}
 	
-	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
+	public void write(String header, ArrayList<MnemonicData> mnemonicList, boolean secondaryTopFileExist) { 
 		try {
 			saveToResourceFile();
 			if (userInput.getOutputFilePath().equals("")) {
@@ -123,7 +123,12 @@ public class WriteToCSV {
 				fileWriter = new FileWriter(new File( outputFileName + ".csv"));
 			}
 			
-			header += "DEPT,Formation,VKNS Isopach,Interval (step)";
+			if (secondaryTopFileExist) {
+				header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step)";
+			}
+			else {
+				header += "DEPT,Formation,VKNS Isopach,Interval (step)";
+			}
 
 			for (int i = 0 ; i < mnemonicList.size() ; i++) {
 				header += "," + mnemonicList.get(i).getName();
@@ -131,22 +136,17 @@ public class WriteToCSV {
 
 			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite,Unknown Mnemonic?";
 			
-			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
-			String uwi = data.get(0).getRow(0).substring(21, 35);
-			
-			fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + header);
+			fileWriter.write("Break," + "Using MD values for directional well?," + header);
+			fileWriter.write(System.lineSeparator());
+			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,0.1,0.1,0.1,0.1,0.1,0.1,0.1,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,0.1,placeholder,placeholder,,0.1");
+			for (int i = 0; i < mnemonicList.size()+100; i++) {
+				fileWriter.write(",0.1");
+			}
 			fileWriter.write(System.lineSeparator());
 			
-			if (data.get(0).isMdforDir()) {
-				data.get(0).write(fileWriter, true);
-			}
-			else {
-				data.get(0).write(fileWriter, false);
-			}
-			
-			for (int i = 1 ; i < data.size() ; i++) {
-				uniqueWell = data.get(i).getRow(0).substring(18, 20);
-				uwi = data.get(i).getRow(0).substring(21, 34);
+			for (int i = 0 ; i < data.size() ; i++) {
+				String uniqueWell = data.get(i).getRow(0).substring(18, 20);
+				String uwi = data.get(i).getRow(0).substring(21, 34);
 				if (data.get(i).isMdforDir()) {
 					fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + data.get(i).getHeader());
 					fileWriter.write(System.lineSeparator());

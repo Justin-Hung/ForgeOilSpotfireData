@@ -80,19 +80,21 @@ public class ExamineWellGui {
 			return null; 
 		}
 		
-		//System.out.println(header);
-		
 		int headerOffset =  controller.getDataWriter().getHeaderOffset();
 		String[] headerArray = header.split(",");
 		ArrayList<String> lasMnemonicArray = new ArrayList<String>(); 
 		ArrayList<String> mnemonicNameArray = new ArrayList<String>(); 
 		
-		for (int i = headerOffset ; i < serviceCoIndex - 2 ; i++) {
+		System.out.println("headerOffset: " + headerOffset + " serviceCoIndex: " + serviceCoIndex );
+		int mnemonicIndex = 0;
+		for (int i = headerOffset + 1 ; i < serviceCoIndex - 2 ; i++) {
+			System.out.println(headerArray[i]);
 			if (!headerArray[i].equals("")) {
-				mnemonicNameArray.add(controller.getMnemonicList().get(i - headerOffset).getName());
+				mnemonicNameArray.add(controller.getMnemonicList().get(mnemonicIndex).getName());
 				lasMnemonicArray.add(headerArray[i]);
 			//	System.out.println(controller.getMnemonicList().get(i - headerOffset).getName() + "   " + headerArray[i]);
 			}
+			mnemonicIndex++;
 		}
 		if (!headerArray[serviceCoIndex - 2].equals("")) {
 			lasMnemonicArray.add(headerArray[serviceCoIndex - 2]); 
