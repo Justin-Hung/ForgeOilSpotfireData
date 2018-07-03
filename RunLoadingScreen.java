@@ -66,7 +66,9 @@ public class RunLoadingScreen {
         protected Void doInBackground() throws Exception {
         	controller = new Controller(user);
             while (controller.getWorkingWellRow() < controller.getSize()) {
-            	controller.formatWellData();
+            	if (controller.formatWellData()) {
+            		break;
+            	}
             	int percent = (int) Math.round( (((double) controller.getWorkingWellRow()) / ((double) controller.getSize())) * 100.0 );
                 publish(percent);
             }

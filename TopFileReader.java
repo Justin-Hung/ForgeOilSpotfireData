@@ -58,14 +58,15 @@ public class TopFileReader {
 		checkBottom = false;
 	}
 	
-	public boolean checkIsEmptyFormation(Iterator<Cell> iterator) { 
+	public boolean checkIsEmptyFormation(Iterator<Cell> iterator, String test) { 
 		Iterator<Cell> cellIterator = iterator;
-		int index = uwiCol;
-		Cell cell = null; 
-		while (index < formationCol) {
-			cell = cellIterator.next(); 
+		int index = 0;
+		Cell cell = null;
+		while (index <= formationCol) {
+			cell = cellIterator.next();
 			index++; 
 		}
+		System.out.println(cell.getStringCellValue());
 		if (cell.getStringCellValue().equals("")) {
 			return true;
 		}
@@ -175,7 +176,7 @@ public class TopFileReader {
 						else {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
 						}
-						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator())) {
+						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18))) {
 							break;
 						}
 					}
@@ -209,7 +210,6 @@ public class TopFileReader {
 								upperFormation = previousFormation;
 							}
 							//check next row for bottom
-							//System.out.println(currentUwi); 
 							Iterator<Row> checkNextRow = iterator;
 						
 							if (checkNextRow.hasNext()) {

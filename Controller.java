@@ -63,54 +63,56 @@ public class Controller {
 		outputData = new OutputData();
 	}
 	
-	public void formatWellData() { 
-		String topUwi = topDataList.get(topRow).getUwi(); 
-		String workingUwi = workingData.getRow(workingWellRow).substring(17, 37);
-		if (topUwi.startsWith("0")) {
-			topUwi = "1" + topUwi;
-		}
-		if (topUwi.equals(workingUwi)) {
-			LasData lasData = null;
-			if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
-			{
-				lasData = lasFileReader.readFile(topDataList.get(topRow), true);
+	public boolean formatWellData() { 
+		try {
+			String topUwi = topDataList.get(topRow).getUwi(); 
+				
+			String workingUwi = workingData.getRow(workingWellRow).substring(17, 37);
+			if (topUwi.startsWith("0")) {
+				topUwi = "1" + topUwi;
 			}
-			else {
-				lasData = lasFileReader.readFile(topDataList.get(topRow), false);
-			}
-			
-			if (lasData != null) { 
-				FormattedData formattedData = null;
-				if (secondaryTopDataList.isEmpty()) {
-					formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+			if (topUwi.equals(workingUwi)) {
+				LasData lasData = null;
+				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
+				{
+					lasData = lasFileReader.readFile(topDataList.get(topRow), true);
 				}
 				else {
-					formattedData = dataWriter.secondaryFormatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow), secondaryTopDataList);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), false);
 				}
-					//System.out.println(topDataList.get(topRow).getUwi());
-				outputData.addSuccess(topDataList.get(topRow).getUwi());
-				formattedDataList.add(formattedData);
-				wellsCompleted++;
-			}
-			else { 
-				//System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
-				outputData.addLasError(topDataList.get(topRow).getUwi());
-			}
-			workingWellRow++; 
-			topRow++; 
-		}
-		else {
-			if (userInput.fullSortTownship(topUwi) < userInput.fullSortTownship(workingUwi)) {
-				//System.err.println(topUwi + " Does not have a matching GWI");
-				outputData.addGwiError(topUwi);
-				topRow++;
+				
+				if (lasData != null) { 
+					FormattedData formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+					System.out.println(topDataList.get(topRow).getUwi());
+					outputData.addSuccess(topDataList.get(topRow).getUwi());
+					formattedDataList.add(formattedData);
+					wellsCompleted++;
+				}
+				else { 
+					System.err.println(topDataList.get(topRow).getUwi() + " Error in lasfile");
+					outputData.addLasError(topDataList.get(topRow).getUwi());
+				}
+				workingWellRow++; 
+				topRow++; 
 			}
 			else {
-				//System.err.println(workingUwi + " Does not have a Top");
-				outputData.addTopError(workingUwi);
-				workingWellRow++; 
+				if (userInput.fullSortTownship(topUwi) < userInput.fullSortTownship(workingUwi)) {
+					System.err.println(topUwi + " Does not have a matching GWI");
+					outputData.addGwiError(topUwi);
+					topRow++;
+				}
+				else {
+					System.err.println(workingUwi + " Does not have a Top");
+					outputData.addTopError(workingUwi);
+					workingWellRow++; 
+				}
 			}
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return true; 
+		}
+		return false;
 	}
 	
 	public void writeToFile() {
