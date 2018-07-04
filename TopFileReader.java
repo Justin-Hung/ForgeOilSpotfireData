@@ -112,7 +112,7 @@ public class TopFileReader {
 					if (index == uwiCol && !currentUwi.equals(cell.getStringCellValue())) {
 						if (!nextRowHasFormationCheck) {
 							if (!data.isEmpty()) {
-								if (formations.get(formations.size()-1).equals("BOTTOM") || checkBottom) {
+								if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
 									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
 									checkBottom = false;
 								}
@@ -130,7 +130,6 @@ public class TopFileReader {
 							previousFormation = "UNKNOWN";
 						}
 						else { 
-							System.out.println(currentUwi);
 							currentUwi = cell.getStringCellValue();
 							nextRowHasFormationCheck = false;
 							topCheck = true;
@@ -138,7 +137,6 @@ public class TopFileReader {
 					}
 				
 					if (index == formationCol) {
-						System.out.println(cell.getStringCellValue());
 						if (cell.getStringCellValue().substring(1).equals(formations.get(formations.size()-1)) || cell.getStringCellValue().equals(formations.get(formations.size()-1))) {
 							data.add(cell.getStringCellValue());
 							while (index < tvdCol) { 
@@ -150,49 +148,49 @@ public class TopFileReader {
 								upperFormation = previousFormation;
 							}
 							//check next row for bottom
-							Iterator<Row> checkNextRow = iterator;
-						
-							if (checkNextRow.hasNext()) {
-								Row checkRow = checkNextRow.next();
-								Iterator<Cell> checkCellIterator = checkRow.cellIterator();
-								int checkIndex = 0;
-								String[] rowData = new String[3]; 
-								while (checkCellIterator.hasNext()) {
-									Cell checkCell = checkCellIterator.next();
-									if (checkIndex == uwiCol) {
-										rowData[0] = checkCell.getStringCellValue(); 
-									}
-									if (checkIndex == formationCol) {
-										rowData[1] = checkCell.getStringCellValue();
-									}
-									if (checkIndex == tvdCol) {
-										rowData[2] = String.valueOf(checkCell.getNumericCellValue()); 
-										break;
-									}
-									checkIndex++;
-								}
-								if (!currentUwi.equals(rowData[0])) {
-									checkBottom = true; 
-									if (rowData[1].equals(formations.get(0))) {
-										nextRowHasFormationCheck = true;
-										upperFormation = "UNKNOWN";
-										topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
-										checkBottom = false;
-										data = new ArrayList<String>(); 
-										data.add(rowData[0]);
-										data.add(rowData[1]);
-										data.add(rowData[2]);
-										previousFormation = "UNKNOWN";
-									}
-								}
-								else { 
-									data.add(rowData[1]);
-									data.add(rowData[2]);
-								}
-							}
-							else {
-								checkBottom = true; 
-							}
+//							Iterator<Row> checkNextRow = iterator;
+//						
+//							if (checkNextRow.hasNext()) {
+//								Row checkRow = checkNextRow.next();
+//								Iterator<Cell> checkCellIterator = checkRow.cellIterator();
+//								int checkIndex = 0;
+//								String[] rowData = new String[3]; 
+//								while (checkCellIterator.hasNext()) {
+//									Cell checkCell = checkCellIterator.next();
+//									if (checkIndex == uwiCol) {
+//										rowData[0] = checkCell.getStringCellValue(); 
+//									}
+//									if (checkIndex == formationCol) {
+//										rowData[1] = checkCell.getStringCellValue();
+//									}
+//									if (checkIndex == tvdCol) {
+//										rowData[2] = String.valueOf(checkCell.getNumericCellValue()); 
+//										break;
+//									}
+//									checkIndex++;
+//								}
+//								if (!currentUwi.equals(rowData[0])) {
+//									checkBottom = true; 
+//									if (rowData[1].equals(formations.get(0))) {
+//										nextRowHasFormationCheck = true;
+//										upperFormation = "UNKNOWN";
+//										topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+//										checkBottom = false;
+//										data = new ArrayList<String>(); 
+//										data.add(rowData[0]);
+//										data.add(rowData[1]);
+//										data.add(rowData[2]);
+//										previousFormation = "UNKNOWN";
+//									}
+//								}
+//								else { 
+//									data.add(rowData[1]);
+//									data.add(rowData[2]);
+//								}
+//							}
+//							else {
+//								checkBottom = true; 
+//							}
 							topCheck = false; 
 							break;
 						}

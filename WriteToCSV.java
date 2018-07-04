@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -84,11 +85,11 @@ public class WriteToCSV {
 		userInput.write(previousParameterWrite); 
 	}
 	
-	public void write(String header, ArrayList<MnemonicData> mnemonicList) { 
+	public boolean write(String header, ArrayList<MnemonicData> mnemonicList) { 
 		try {
 			saveToResourceFile();
 			if (userInput.getOutputfilePath().equals("")) {
-				return;
+				return true;
 			}
 			saveParameters(); 
 			
@@ -160,9 +161,15 @@ public class WriteToCSV {
 			}
 			
 			fileWriter.close(); 
+			return false;
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return true; 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			return true; 
 		}
 	}	
 }

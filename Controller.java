@@ -111,10 +111,13 @@ public class Controller {
 		return false;
 	}
 	
-	public void writeToFile() {
+	public boolean writeToFile() {
 		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput);
-		writer.write(workingData.getHeader(), mnemonicList);
+		if (writer.write(workingData.getHeader(), mnemonicList)) {
+			return true;
+		}
 		System.out.println("DONE");
 		System.out.println("wells completed: " + wellsCompleted);
+		return false; 
 	}
 }
