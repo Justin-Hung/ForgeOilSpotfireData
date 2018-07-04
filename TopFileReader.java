@@ -119,13 +119,6 @@ public class TopFileReader {
 				currentRow = futureRow.clone(); 
 				firstRow = false; 
 			}
-			for (int i = 0; i < topDataList.size() ; i++ ) {
-				System.err.println(i + ":" + topDataList.get(i).getUwi());
-			}
-			
-			for (int i = 0; i < secondaryTopList.size() ; i++ ) {
-				 System.out.println(i + ":" + secondaryTopList.get(i).getUwi());
-			}
 			return secondaryTopList;
 		}
 		catch (Exception e) {
@@ -136,7 +129,7 @@ public class TopFileReader {
 	
 	public void checkRow(String[] previousRow, String[] currentRow, String[] futureRow) {
 		if (!currentUwi.equals(currentRow[0])) {
-			while (!currentRow[0].equals(topDataList.get(topDataIndex).getUwi())) {
+			while (topDataIndex < topDataList.size() && !currentRow[0].equals(topDataList.get(topDataIndex).getUwi())) {
 				if (new UserInput().fullSortTownship(topDataList.get(topDataIndex).getUwi()) < new UserInput().fullSortTownship(currentRow[0])) { 
 					topDataIndex++;
 				}
