@@ -135,8 +135,15 @@ public class TopFileReader {
 	}
 	
 	public void checkRow(String[] previousRow, String[] currentRow, String[] futureRow) {
-		while ()
-		if (currentRow[0].equals(topDataList.get(topDataIndex).getUwi()) && !currentUwi.equals(currentRow[0])) {
+		if (!currentUwi.equals(currentRow[0])) {
+			while (!currentRow[0].equals(topDataList.get(topDataIndex).getUwi())) {
+				if (new UserInput().fullSortTownship(topDataList.get(topDataIndex).getUwi()) < new UserInput().fullSortTownship(currentRow[0])) { 
+					topDataIndex++;
+				}
+				else {
+					return; 
+				}
+			}
 			currentUwi = currentRow[0];
 			data = new ArrayList<String>(); 
 			data.add(currentRow[0]);
