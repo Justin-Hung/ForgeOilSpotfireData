@@ -97,11 +97,11 @@ public class ParameterGui {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 645, 201);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
+		frame.setLocationRelativeTo(null);      
 		
 		URL url = Main.class.getResource("/resources/forgeIcon.png");
 		ImageIcon forgeIcon = new ImageIcon(url);
-		frame.setIconImage(forgeIcon.getImage());
+		frame.setIconImage(forgeIcon.getImage()); 
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
