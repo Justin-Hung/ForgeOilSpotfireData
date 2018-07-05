@@ -57,27 +57,27 @@ public class UserInput {
 	}
 	
 	public void setOutputfileName(String name) { 
-		outputFileName = name;
+		outputFileName = convertFilePath(name);
 	}
 	
 	public void setUserTopFilePath(String topfile) {
-		userTopFilePath = topfile; 
+		userTopFilePath = convertFilePath(topfile); 
 	}
 	
 	public void setSystemTopFilePath(String topfile) {
-		systemTopFilePath = topfile;
+		systemTopFilePath = convertFilePath(topfile);
 	}
 	
 	public void setLasFilePath(String lasfile) {
-		lasFilePath = lasfile; 
+		lasFilePath = convertFilePath(lasfile); 
 	}
 	
 	public void setWorkingFilePath(String workingfile) {
-		workingFilePath = workingfile; 
+		workingFilePath = convertFilePath(workingfile); 
 	}
 	
 	public void setOutputFilePath(String outputfile) {
-		outputFilePath = outputfile; 
+		outputFilePath = convertFilePath(outputfile); 
 	}
 	
 	public void setFormations(ArrayList<String> forms) { 
@@ -140,6 +140,14 @@ public class UserInput {
 	
 	public double getLowerBuffer() { 
 		return lowerBuffer;
+	}
+	
+	
+	public String convertFilePath(String filePath) {
+		if (filePath.contains("users$") && filePath.contains("Desktop")) {
+			return "H:\\" + filePath.substring(filePath.indexOf("Desktop"));
+		}
+		return filePath;
 	}
 	
 	public int sortTownship(String town) {

@@ -131,7 +131,7 @@ public class FileGui {
 			return true;
 		}
 		if (!systemTopTextField.getText().equals("") && !new File(systemTopTextField.getText()).exists()) {
-			JOptionPane.showMessageDialog(frame, "Systen Top file can not be found");
+			JOptionPane.showMessageDialog(frame, "System Top file can not be found");
 			return true;
 		}
 		if (!new File(gwiTextField.getText()).exists()) {

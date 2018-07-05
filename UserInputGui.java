@@ -600,7 +600,6 @@ public class UserInputGui {
 		JButton button_1 = new JButton("Run");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				user.setUpperBuffer(Double.parseDouble(upperBufferTextField.getText())); 
 				user.setLowerBuffer(Double.parseDouble(lowerBufferTextField.getText()));
 				ArrayList<String> forms = new ArrayList<String>();
