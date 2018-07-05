@@ -123,10 +123,13 @@ public class Controller {
 		return false;
 	}
 	
-	public void writeToFile() {
+	public boolean writeToFile() {
 		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput);
-		writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist());
+		if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist())) {
+			return true;
+		}
 		System.out.println("DONE");
 		System.out.println("wells completed: " + wellsCompleted);
+		return false; 
 	}
 }

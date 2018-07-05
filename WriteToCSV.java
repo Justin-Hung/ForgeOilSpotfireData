@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -84,11 +85,11 @@ public class WriteToCSV {
 		userInput.write(previousParameterWrite); 
 	}
 	
-	public void write(String header, ArrayList<MnemonicData> mnemonicList, boolean secondaryTopFileExist) { 
+	public boolean write(String header, ArrayList<MnemonicData> mnemonicList, boolean secondaryTopFileExist) { 
 		try {
 			saveToResourceFile();
 			if (userInput.getOutputFilePath().equals("")) {
-				return;
+				return true;
 			}
 			saveParameters(); 
 			
@@ -138,7 +139,7 @@ public class WriteToCSV {
 			
 			fileWriter.write("Break," + "Using MD values for directional well?," + header);
 			fileWriter.write(System.lineSeparator());
-			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,0.1,0.1,0.1,0.1,0.1,0.1,0.1,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,0.1,placeholder,placeholder,,0.1");
+			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,0.1,0.1,0.1,0.1,0.1,0.1,0.1,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,0.1,placeholder,placeholder,,0.1");
 			for (int i = 0; i < mnemonicList.size()+100; i++) {
 				fileWriter.write(",0.1");
 			}
@@ -160,9 +161,15 @@ public class WriteToCSV {
 			}
 			
 			fileWriter.close(); 
+			return false;
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return true; 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			return true; 
 		}
 	}	
 }

@@ -79,8 +79,12 @@ public class RunLoadingScreen {
         protected void done() {
             try {
                 get();
-                controller.writeToFile();
-                JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+                if (controller.writeToFile()) {
+                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else {
+                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
                 frame.dispose();
                 new OutputGui(controller);
             } 
