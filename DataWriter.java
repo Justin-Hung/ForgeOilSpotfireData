@@ -115,7 +115,7 @@ public class DataWriter {
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
-					if (j > 24 || j < 34) {
+					if (j > 21 && j < 30) {
 						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
 						if ( porosity < 1.0 && porosity > -1.0) {
 							finalRow += String.valueOf((porosity*100)) + ",";

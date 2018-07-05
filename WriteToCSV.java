@@ -130,24 +130,22 @@ public class WriteToCSV {
 				header += "," + mnemonicList.get(i).getName();
 			}
 
-			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite,Unknown Mnemonic?";
-			
-			String uniqueWell = data.get(0).getRow(0).substring(18, 20);
-			String uwi = data.get(0).getRow(0).substring(21, 35);
-			
-			fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + header);
+			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
+			for (int i = 0; i < 50; i++) {
+				header += ",Unknown Mnemonic?";
+			}
+		
+			fileWriter.write("Break," + "Using MD values for directional well?," + header);
+			fileWriter.write(System.lineSeparator());
+			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,placeholder,placeholder,-999.25,placeholder,placeholder,-999.25");
+			for (int i = 0; i < mnemonicList.size()+100; i++) {
+				fileWriter.write(",-999.25");
+			}
 			fileWriter.write(System.lineSeparator());
 			
-			if (data.get(0).isMdforDir()) {
-				data.get(0).write(fileWriter, true);
-			}
-			else {
-				data.get(0).write(fileWriter, false);
-			}
-			
-			for (int i = 1 ; i < data.size() ; i++) {
-				uniqueWell = data.get(i).getRow(0).substring(18, 20);
-				uwi = data.get(i).getRow(0).substring(21, 34);
+			for (int i = 0 ; i < data.size() ; i++) {
+				String uniqueWell = data.get(i).getRow(0).substring(18, 20);
+				String uwi = data.get(i).getRow(0).substring(21, 34);
 				if (data.get(i).isMdforDir()) {
 					fileWriter.write("Break " + uniqueWell + "_" + uwi + "," + "Using MD values for directional well?," + data.get(i).getHeader());
 					fileWriter.write(System.lineSeparator());
