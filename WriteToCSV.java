@@ -135,13 +135,16 @@ public class WriteToCSV {
 				header += "," + mnemonicList.get(i).getName();
 			}
 
-			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite,Unknown Mnemonic?";
-			
+			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
+			for (int i = 0; i < 50; i++) {
+				header += ",Unknown Mnemonic?";
+			}
+		
 			fileWriter.write("Break," + "Using MD values for directional well?," + header);
 			fileWriter.write(System.lineSeparator());
-			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,0.1,0.1,0.1,0.1,0.1,0.1,0.1,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,0.1,placeholder,placeholder,,0.1");
+			fileWriter.write(",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,placeholder,placeholder,-999.25,placeholder,placeholder,-999.25");
 			for (int i = 0; i < mnemonicList.size()+100; i++) {
-				fileWriter.write(",0.1");
+				fileWriter.write(",-999.25");
 			}
 			fileWriter.write(System.lineSeparator());
 			
