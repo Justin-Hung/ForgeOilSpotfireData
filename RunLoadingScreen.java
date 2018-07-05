@@ -59,7 +59,12 @@ public class RunLoadingScreen {
         protected void process(List<Integer> chunks) {
             int i = chunks.get(chunks.size()-1);
             jpb.setValue(i); // The last value in this array is all we care about.
-            label.setText("Working Well: " + controller.getCurrentUwi());
+            if (i == 100) {
+            	label.setText("Writing Data...");
+            }
+            else {
+            	label.setText("Working Well: " + controller.getCurrentUwi());
+            }
         }
 
         @Override
