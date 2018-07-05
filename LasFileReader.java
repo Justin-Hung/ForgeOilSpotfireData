@@ -17,8 +17,7 @@ public class LasFileReader {
 		lasFilePath = filePath + "\\"; 
 	}
 	
-	public LasData readFile(TopData topData, boolean dir) { 
-		//topData.displayTop();
+	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists) { 
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
@@ -26,7 +25,12 @@ public class LasFileReader {
 			boolean usingMdforDir = false;
 			String bit = null;
 			String serviceCo = null;
-			lasFile = convertUwi(topData.getUwi(), dir); 
+			if (lasFileExists) { 
+				lasFile = convertUwi(topData.getUwi(), dir); 
+			}
+			else {
+				lasFile = convertUwiWithPath(topData.getUwi(), dir);
+			}
 			//System.out.println(lasFile);
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
@@ -38,7 +42,13 @@ public class LasFileReader {
 				fileTest = new File(fileLocation);
 				if (!fileTest.exists()) {
 					if (dir) {
-						String mdFile = convertUwi(topData.getUwi(), false); 
+						String mdFile; 
+						if (lasFileExists) {
+							mdFile = convertUwi(topData.getUwi(), false); 
+						}
+						else {
+							mdFile = convertUwiWithPath(topData.getUwi(), false);
+						}
 						fileLocation= lasFilePath + mdFile; 
 						fileTest = new File(fileLocation);
 						usingMdforDir = true;
@@ -124,6 +134,33 @@ public class LasFileReader {
 			}
 			else {
 				fileUwi = fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
+			}
+		}
+		//System.out.println(fileUwi);
+		return fileUwi;
+	}
+	
+	public String convertUwiWithPath(String uwi, boolean dir) {
+		String township = uwi.substring(11,13);
+		String range = uwi.substring(14,16); 
+		String meridian = uwi.substring(17,18); 
+		String fileUwi = uwi.replaceFirst("/", "");
+		fileUwi = fileUwi.replaceAll("/", "0");
+		fileUwi = fileUwi.replaceAll("-", "");
+		if (dir) { 
+			if (uwi.startsWith("0")) {
+				fileUwi = "Twp " + township + "W" + meridian + "\\" + township + "-" + range + "W" + meridian + "\\1" + fileUwi + "_1000_TVD_COMBINED_MERGED.las"; 
+			}
+			else {
+				fileUwi =  "Twp " + township + "W" + meridian + "\\" + township + "-" + range + "W" + meridian + "\\" + fileUwi + "_1000_TVD_COMBINED_MERGED.las";
+			}
+		}
+		else { 
+			if (uwi.startsWith("0")) {
+				fileUwi =  "Twp " + township + "W" + meridian + "\\" + township + "-" + range + "W" + meridian + "\\1" + fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
+			}
+			else {
+				fileUwi =  "Twp " + township + "W" + meridian + "\\" + township + "-" + range + "W" + meridian + "\\" + fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
 			}
 		}
 		//System.out.println(fileUwi);

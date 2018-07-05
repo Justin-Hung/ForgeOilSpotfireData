@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ public class Controller {
 	private WorkingFileData workingData;
 	private UserInput userInput; 
 	private OutputData outputData;
+	private boolean lasFileExists; 
 	
 	private int wellsCompleted = 0; 
 	private int workingWellRow = 0; 
@@ -63,6 +65,21 @@ public class Controller {
 		}
 		workingData = workingFileReader.readFile();
 		outputData = new OutputData();
+		
+		checkIfLasFileExists(); 
+	}
+	
+	public void checkIfLasFileExists() { 
+		File folder = new File(userInput.getLasFilePath());
+		File[] listOfFiles = folder.listFiles();
+		
+		for (File file : listOfFiles) {
+			if (file.getName().endsWith(".las")) {
+				lasFileExists = true; 
+				return; 
+			}
+		}
+		lasFileExists = false;
 	}
 	
 	public boolean formatWellData() { 
@@ -77,10 +94,10 @@ public class Controller {
 				LasData lasData = null;
 				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
 				{
-					lasData = lasFileReader.readFile(topDataList.get(topRow), true);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists);
 				}
 				else {
-					lasData = lasFileReader.readFile(topDataList.get(topRow), false);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists);
 				}
 				
 				if (lasData != null) { 

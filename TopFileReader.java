@@ -191,8 +191,8 @@ public class TopFileReader {
 				
 					if (index == uwiCol && !currentUwi.equals(cell.getStringCellValue())) {
 						if (!nextRowHasFormationCheck) {
-							if (!data.isEmpty()) {
-								if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
+							if (data.size() > 2) {
+								if (formations.get(formations.size()-1).equals("TD") || !data.get(data.size()-2).equals(formations.get(formations.size()-1))) {
 									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
 									checkBottom = false;
 								}
@@ -203,9 +203,6 @@ public class TopFileReader {
 							}
 							data = new ArrayList<String>(); 
 							currentUwi = cell.getStringCellValue();
-							if (currentUwi.equals("100/06-19-039-21W4/0")) { 
-								System.out.println("atBuggyFormationTop");
-							}
 							data.add(currentUwi);
 							previousFormation = "UNKNOWN";
 						}
@@ -294,7 +291,7 @@ public class TopFileReader {
 				}
 				row++;
 			}
-			if (formations.get(formations.size()-1).equals("BOTTOM") || checkBottom) {
+			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
 				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
 				checkBottom = false;
 			}
