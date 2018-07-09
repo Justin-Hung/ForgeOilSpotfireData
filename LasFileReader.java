@@ -22,6 +22,7 @@ public class LasFileReader {
 			return null;
 		}
 		try {
+			
 			boolean usingMdforDir = false;
 			String bit = null;
 			String serviceCo = null;
@@ -31,7 +32,8 @@ public class LasFileReader {
 			else {
 				lasFile = convertUwiWithPath(topData.getUwi(), dir);
 			}
-			//System.out.println(lasFile);
+			lasFile = checkForLogPath(lasFile); 
+			System.out.println(lasFile);
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
 			File fileTest = new File(fileLocation);
@@ -114,6 +116,13 @@ public class LasFileReader {
 //			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public String checkForLogPath(String lasFile) {
+		if (lasFilePath.contains("ForgeOil") && lasFilePath.contains("LasFiles")) { 
+			return lasFile.substring(0, lasFile.indexOf("\\") + 1) + "log_files" + lasFile.substring(lasFile.indexOf("\\"));
+		}
+		return lasFile;
 	}
 	
 	public String convertUwi(String uwi, boolean dir) {

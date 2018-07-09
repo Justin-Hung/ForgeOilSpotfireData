@@ -94,11 +94,11 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		userTopTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\MannvilleUserTops.xlsx");
-		systemTopTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleSystemTops.xlsx");
-		gwiTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\Mannville\\PerpetualMannvilleGWI.xlsx");
-		lasTextField = new JTextField("C:\\Users\\jhung\\LasFiles\\T51R10W4toT49R8W4\\log_files");
-		outputTextField = new JTextField("C:\\Users\\jhung\\SpotfireDataFiles\\TestOutputFiles");
+		userTopTextField = new JTextField();
+		systemTopTextField = new JTextField();
+		gwiTextField = new JTextField();
+		lasTextField = new JTextField();
+		outputTextField = new JTextField();
 		outputNameTextField = new JTextField();
 		user = new UserInput();
 		initialize();
@@ -144,6 +144,7 @@ public class FileGui {
 		} 
 		return false; 
 	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */

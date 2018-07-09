@@ -57,6 +57,15 @@ public class UserInputGui {
 			}
 		});
 	}
+	
+	public boolean checkTownship() { 
+		int nwTownship = Integer.parseInt(nwMerTextField.getText() + nwTwpTextField.getText() + nwRgeTextField.getText() + nwSecTextField.getText());
+		int seTownship = Integer.parseInt(seMerTextField.getText() + seTwpTextField.getText() + seRgeTextField.getText() + seSecTextField.getText());
+		if (seTownship > nwTownship) { 
+			return true; 
+		}
+		return false; 
+	}
 
 	/**
 	 * Create the application.
@@ -600,6 +609,9 @@ public class UserInputGui {
 		JButton button_1 = new JButton("Run");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(checkTownship()) {
+					return; 
+				}
 				user.setUpperBuffer(Double.parseDouble(upperBufferTextField.getText())); 
 				user.setLowerBuffer(Double.parseDouble(lowerBufferTextField.getText()));
 				ArrayList<String> forms = new ArrayList<String>();
