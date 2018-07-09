@@ -20,6 +20,14 @@ public class TopData {
 			return form.get(tvDepth.size()-1);
 		}
 		for (int i = 0; i < tvDepth.size(); i++) {
+			if (tvDepth.size() == 1) {
+				if (depth >= tvDepth.get(i)) {
+					return form.get(i); 
+				}
+				else { 
+					break; 
+				}
+			}
 			if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
 				if (form.get(i).equals("VKNS UNCF")) {
 					return "VKNS";
