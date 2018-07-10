@@ -145,21 +145,21 @@ public class WriteToCSV {
 			fileWriter.write(System.lineSeparator());
 			
 			//fileWriter.write(",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,placeholder,placeholder,-999.25,placeholder,placeholder,-999.25");
-			for (int j = 0 ; j < 3 ; j++) {	
-				for (int i = 0 ; i < gwiOffset + 2; i++) { 
-					fileWriter.write(",");
-				}
-				if (secondaryTopFileExist) {
-					fileWriter.write("-999.25,PLACEHOLDER,PLACEHOLDER, ,-999.25");
-				}
-				else { 
-					fileWriter.write("-999.25,PLACEHOLDER, ,-999.25");
-				}
-				for (int i = 0; i < mnemonicList.size()+21; i++) {
-					fileWriter.write(",-999.25");
-				}
-				fileWriter.write(System.lineSeparator());
+	
+			for (int i = 0 ; i < gwiOffset + 2; i++) { 
+				fileWriter.write(",");
 			}
+			if (secondaryTopFileExist) {
+				fileWriter.write("-999.25,PLACEHOLDER,PLACEHOLDER, ,-999.25");
+			}
+			else { 
+				fileWriter.write("-999.25,PLACEHOLDER, ,-999.25");
+			}
+			for (int i = 0; i < mnemonicList.size()+21; i++) {
+				fileWriter.write(",-999.25");
+			}
+			fileWriter.write(System.lineSeparator());
+			fileWriter.write(System.lineSeparator());
 			
 			for (int i = 0 ; i < data.size() ; i++) {
 				String uniqueWell = data.get(i).getRow(0).substring(18, 20);

@@ -188,8 +188,8 @@ public class FileGui {
 		gbc_panel_7.gridy = 1;
 		frame.getContentPane().add(panel_7, gbc_panel_7);
 		
-		JLabel label_4 = new JLabel("User Tops File Location");
-		panel_7.add(label_4);
+		JLabel lblPrimaryTopsFile = new JLabel("Primary Tops File Location");
+		panel_7.add(lblPrimaryTopsFile);
 		
 		Component horizontalStrut_7 = Box.createHorizontalStrut(30);
 		GridBagConstraints gbc_horizontalStrut_7 = new GridBagConstraints();
@@ -246,7 +246,7 @@ public class FileGui {
 		gbc_panel_6.gridy = 4;
 		frame.getContentPane().add(panel_6, gbc_panel_6);
 		
-		JLabel lblSystemTopsFile = new JLabel("System Tops File Location");
+		JLabel lblSystemTopsFile = new JLabel("Secondary Tops File Location");
 		panel_6.add(lblSystemTopsFile);
 		
 		JPanel panel_5 = new JPanel();
