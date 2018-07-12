@@ -17,7 +17,7 @@ public class LasFileReader {
 		lasFilePath = filePath + "\\"; 
 	}
 	
-	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists) { 
+	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
@@ -32,6 +32,9 @@ public class LasFileReader {
 				lasFile = convertUwiWithPath(topData.getUwi(), dir);
 			}
 			lasFile = checkForLogPath(lasFile); 
+			if (meridianExists) {
+				lasFile = "W" + topData.getUwi().substring(17,18) + "\\" + lasFile; 
+			}
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
 			File fileTest = new File(fileLocation);

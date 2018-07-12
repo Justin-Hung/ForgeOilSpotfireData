@@ -16,6 +16,7 @@ public class Controller {
 	private UserInput userInput; 
 	private OutputData outputData;
 	private boolean lasFileExists; 
+	private boolean meridianExists;
 	private WriteToCSV writer;
 	
 	private int wellsCompleted = 0; 
@@ -69,6 +70,20 @@ public class Controller {
 		outputData = new OutputData();
 		
 		checkIfLasFileExists(); 
+		checkIfLasMeridianExists();
+	}
+	
+	public void checkIfLasMeridianExists() { 
+		File folder = new File(userInput.getLasFilePath());
+		File[] listOfFiles = folder.listFiles(); 
+		
+		for (File file : listOfFiles) { 
+			if (file.getName().startsWith("W")) { 
+				meridianExists = true;
+				return; 
+			}
+		}
+		meridianExists = false; 
 	}
 	
 	public void checkIfLasFileExists() { 
@@ -96,10 +111,10 @@ public class Controller {
 				LasData lasData = null;
 				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
 				{
-					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists);
 				}
 				else {
-					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists, meridianExists);
 				}
 				
 				if (lasData != null) { 

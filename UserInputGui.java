@@ -233,14 +233,10 @@ public class UserInputGui {
 		JLabel lblNewLabel = new JLabel("Upper Buffer");
 		panel.add(lblNewLabel);
 		
-		Component horizontalStrut_1 = Box.createHorizontalStrut(68);
-		panel.add(horizontalStrut_1);
-		
 		JPanel panel_1 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.anchor = GridBagConstraints.WEST;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_1.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 2;
 		frame.getContentPane().add(panel_1, gbc_panel_1);
@@ -253,11 +249,8 @@ public class UserInputGui {
 		JLabel lblMeters = new JLabel("Meters");
 		panel_1.add(lblMeters);
 		
-		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
-		panel_1.add(horizontalStrut_4);
-		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(90);
-		panel_1.add(horizontalStrut_2);
+		Component horizontalStrut_1 = Box.createHorizontalStrut(30);
+		panel_1.add(horizontalStrut_1);
 		
 		URL url2 = Main.class.getResource("/resources/transparentFinal.png");
 		ImageIcon forgeLogo = new ImageIcon(url2);
@@ -289,14 +282,10 @@ public class UserInputGui {
 		JLabel label_2 = new JLabel("Lower Buffer");
 		panel_2.add(label_2);
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(68);
-		panel_2.add(horizontalStrut_3);
-		
 		JPanel panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
-		gbc_panel_3.anchor = GridBagConstraints.WEST;
 		gbc_panel_3.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_3.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
 		gbc_panel_3.gridx = 1;
 		gbc_panel_3.gridy = 5;
 		frame.getContentPane().add(panel_3, gbc_panel_3);
@@ -309,8 +298,8 @@ public class UserInputGui {
 		JLabel label_11 = new JLabel("Meters");
 		panel_3.add(label_11);
 		
-		Component horizontalStrut_10 = Box.createHorizontalStrut(90);
-		panel_3.add(horizontalStrut_10);
+		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
+		panel_3.add(horizontalStrut_2);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_4 = new GridBagConstraints();
@@ -422,6 +411,9 @@ public class UserInputGui {
 		upperFormationTextField.setColumns(20);
 		panel_10.add(upperFormationTextField);
 		
+		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
+		panel_10.add(horizontalStrut_3);
+		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_3 = new GridBagConstraints();
 		gbc_verticalStrut_3.insets = new Insets(0, 0, 5, 5);
@@ -521,6 +513,9 @@ public class UserInputGui {
 		lowerFormationTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		lowerFormationTextField.setColumns(20);
 		panel_17.add(lowerFormationTextField);
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(30);
+		panel_17.add(horizontalStrut_4);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(12);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
