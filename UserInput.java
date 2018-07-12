@@ -152,6 +152,9 @@ public class UserInput {
 	
 	
 	public String convertFilePath(String filePath) {
+		if (filePath == null) {
+			return ""; 
+		}
 		if (filePath.contains("users$") && filePath.contains("Desktop")) {
 			return "H:\\" + filePath.substring(filePath.indexOf("Desktop"));
 		}

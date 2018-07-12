@@ -30,13 +30,11 @@ public class UserInputGui {
 
 	private JFrame frame;
 	private UserInput user;
-	private JTextField seSecTextField;
 	private JTextField seTwpTextField;
 	private JTextField seRgeTextField;
 	private JTextField seMerTextField;
 	private JTextField upperBufferTextField;
 	private JTextField lowerBufferTextField;
-	private JTextField nwSecTextField;
 	private JTextField nwTwpTextField;
 	private JTextField nwRgeTextField;
 	private JTextField nwMerTextField;
@@ -59,8 +57,8 @@ public class UserInputGui {
 	}
 	
 	public boolean checkTownship() { 
-		int nwTownship = Integer.parseInt(nwMerTextField.getText() + nwTwpTextField.getText() + nwRgeTextField.getText() + nwSecTextField.getText());
-		int seTownship = Integer.parseInt(seMerTextField.getText() + seTwpTextField.getText() + seRgeTextField.getText() + seSecTextField.getText());
+		int nwTownship = Integer.parseInt(nwMerTextField.getText() + nwTwpTextField.getText() + nwRgeTextField.getText());
+		int seTownship = Integer.parseInt(seMerTextField.getText() + seTwpTextField.getText() + seRgeTextField.getText());
 		if (seTownship > nwTownship) { 
 			return true; 
 		}
@@ -84,10 +82,7 @@ public class UserInputGui {
 		frame.setVisible(true);
 	}
 	
-	private void initializeTextFields() { 
-		seSecTextField = new JTextField(); 
-		PlainDocument seSecDoc = (PlainDocument) seSecTextField.getDocument(); 
-		seSecDoc.setDocumentFilter(new MyIntFilter(2)); 
+	private void initializeTextFields() {
 		
 		seTwpTextField = new JTextField(); 
 		PlainDocument seTwpDoc = (PlainDocument) seTwpTextField.getDocument(); 
@@ -107,11 +102,7 @@ public class UserInputGui {
 		
 		lowerBufferTextField = new JTextField(); 
 		PlainDocument lowerBufferDoc = (PlainDocument) lowerBufferTextField.getDocument(); 
-		lowerBufferDoc.setDocumentFilter(new MyIntFilter(5)); 
-		
-		nwSecTextField = new JTextField(); 
-		PlainDocument nwSecDoc = (PlainDocument) nwSecTextField.getDocument(); 
-		nwSecDoc.setDocumentFilter(new MyIntFilter(2)); 
+		lowerBufferDoc.setDocumentFilter(new MyIntFilter(5));
 		
 		nwTwpTextField = new JTextField(); 
 		PlainDocument nwTwpDoc = (PlainDocument) nwTwpTextField.getDocument(); 
@@ -153,9 +144,6 @@ public class UserInputGui {
 			lowerFormationTextField.setText(u.getFormations().get(1));
 		}
 
-		if (!u.getTownshipNW().split("-")[0].equals("")) { 
-			nwSecTextField.setText(u.getTownshipNW().split("-")[0]);
-		}
 		if (!u.getTownshipNW().split("-")[1].equals("")) { 
 			nwTwpTextField.setText(u.getTownshipNW().split("-")[1]);
 		}
@@ -171,9 +159,6 @@ public class UserInputGui {
 			}
 		}
 		
-		if (!u.getTownshipSE().split("-")[0].equals("")) { 
-			seSecTextField.setText(u.getTownshipSE().split("-")[0]);
-		}
 		if (!u.getTownshipSE().split("-")[1].equals("")) { 
 			seTwpTextField.setText(u.getTownshipSE().split("-")[1]);
 		}
@@ -253,8 +238,9 @@ public class UserInputGui {
 		
 		JPanel panel_1 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.anchor = GridBagConstraints.WEST;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.fill = GridBagConstraints.VERTICAL;
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 2;
 		frame.getContentPane().add(panel_1, gbc_panel_1);
@@ -266,6 +252,9 @@ public class UserInputGui {
 		
 		JLabel lblMeters = new JLabel("Meters");
 		panel_1.add(lblMeters);
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		panel_1.add(horizontalStrut_4);
 		
 		Component horizontalStrut_2 = Box.createHorizontalStrut(90);
 		panel_1.add(horizontalStrut_2);
@@ -305,8 +294,9 @@ public class UserInputGui {
 		
 		JPanel panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+		gbc_panel_3.anchor = GridBagConstraints.WEST;
 		gbc_panel_3.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_3.fill = GridBagConstraints.BOTH;
+		gbc_panel_3.fill = GridBagConstraints.VERTICAL;
 		gbc_panel_3.gridx = 1;
 		gbc_panel_3.gridy = 5;
 		frame.getContentPane().add(panel_3, gbc_panel_3);
@@ -380,13 +370,6 @@ public class UserInputGui {
 		JPanel panel_7 = new JPanel();
 		panel_6.add(panel_7);
 		panel_7.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
-
-		nwSecTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		nwSecTextField.setColumns(3);
-		panel_7.add(nwSecTextField);
-		
-		JLabel label_3 = new JLabel("-");
-		panel_7.add(label_3);
 		
 		nwTwpTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		nwTwpTextField.setColumns(3);
@@ -409,12 +392,6 @@ public class UserInputGui {
 		JPanel panel_9 = new JPanel();
 		panel_6.add(panel_9);
 		panel_9.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 1));
-		
-		JLabel label_6 = new JLabel("SEC");
-		panel_9.add(label_6);
-		
-		Component horizontalStrut_4 = Box.createHorizontalStrut(16);
-		panel_9.add(horizontalStrut_4);
 		
 		JLabel label_7 = new JLabel("TWP");
 		panel_9.add(label_7);
@@ -494,13 +471,6 @@ public class UserInputGui {
 		panel_12.add(panel_13);
 		panel_13.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
 		
-		seSecTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		seSecTextField.setColumns(3);
-		panel_13.add(seSecTextField);
-		
-		JLabel label_24 = new JLabel("-");
-		panel_13.add(label_24);
-		
 		seTwpTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		seTwpTextField.setColumns(3);
 		panel_13.add(seTwpTextField);
@@ -522,12 +492,6 @@ public class UserInputGui {
 		JPanel panel_14 = new JPanel();
 		panel_12.add(panel_14);
 		panel_14.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 1));
-		
-		JLabel label_27 = new JLabel("SEC");
-		panel_14.add(label_27);
-		
-		Component horizontalStrut_7 = Box.createHorizontalStrut(16);
-		panel_14.add(horizontalStrut_7);
 		
 		JLabel label_28 = new JLabel("TWP");
 		panel_14.add(label_28);
@@ -595,9 +559,9 @@ public class UserInputGui {
 				}
 				user.setFormations(forms);
 				
-				user.setTownshipNw(nwSecTextField.getText() + "-" + nwTwpTextField.getText() + "-" + nwRgeTextField.getText()
+				user.setTownshipNw("31" + "-" + nwTwpTextField.getText() + "-" + nwRgeTextField.getText()
 								   + "W" + nwMerTextField.getText());
-				user.setTownshipSe(seSecTextField.getText() + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
+				user.setTownshipSe("01" + "-" + seTwpTextField.getText() + "-" + seRgeTextField.getText()
 								   + "W" + seMerTextField.getText()); 
 				frame.dispose();
 				
@@ -618,9 +582,9 @@ public class UserInputGui {
 				forms.add(upperFormationTextField.getText().toUpperCase());
 				forms.add(lowerFormationTextField.getText().toUpperCase());
 				user.setFormations(forms);
-				user.setTownshipNw(formatNumber(nwSecTextField.getText(),2) + "-" + formatNumber(nwTwpTextField.getText(),3) + "-" + formatNumber(nwRgeTextField.getText(),2)
+				user.setTownshipNw("31" + "-" + formatNumber(nwTwpTextField.getText(),3) + "-" + formatNumber(nwRgeTextField.getText(),2)
 								   + "W" + nwMerTextField.getText());
-				user.setTownshipSe(formatNumber(seSecTextField.getText(),2) + "-" + formatNumber(seTwpTextField.getText(),3) + "-" + formatNumber(seRgeTextField.getText(),2)
+				user.setTownshipSe("01" + "-" + formatNumber(seTwpTextField.getText(),3) + "-" + formatNumber(seRgeTextField.getText(),2)
 								   + "W" + seMerTextField.getText());
 				frame.dispose();
 				RunLoadingScreen swingWorker = new RunLoadingScreen();
