@@ -68,10 +68,6 @@ public class DataWriter {
 				secondaryTopData = secondaryTopDataList.get(i);
 			}
 		}
-		if (secondaryTopData == null) {
-//			System.out.println(topData.getUwi());
-//			System.out.println("HAS NO SECONDARY");
-		}
 		unknownPositions = new ArrayList<Integer>(); 
 		columnArray = new int[11];
 		header = h; 
@@ -136,7 +132,16 @@ public class DataWriter {
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
-					if (j > 21 || j < 34) {
+					if (j == 18) {
+						double density = Double.parseDouble(getCol(formattedRow, position[j]));
+						if ( density <= 4.0 && density >= 0.0) {
+							finalRow += String.valueOf((density*1000)) + ",";
+						}
+						else {
+							finalRow += getCol(formattedRow, position[j]) + ","; 
+						}
+					}
+					else if (j > 20 && j < 33) {
 						double porosity = -999;
 						try {
 							porosity = Double.parseDouble(getCol(formattedRow, position[j]));
@@ -234,7 +239,16 @@ public class DataWriter {
 			for (int j = 0 ; j < position.length ; j++) {
 				boolean checkNum = true; 
 				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
-					if (j > 21 && j < 30) {
+					if (j == 18) {
+						double density = Double.parseDouble(getCol(formattedRow, position[j]));
+						if ( density <= 4.0 && density >= 0.0) {
+							finalRow += String.valueOf((density*1000)) + ",";
+						}
+						else {
+							finalRow += getCol(formattedRow, position[j]) + ","; 
+						}
+					}
+					else if (j > 20 && j < 33) {
 						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
 						if ( porosity < 1.0 && porosity > -1.0) {
 							finalRow += String.valueOf((porosity*100)) + ",";

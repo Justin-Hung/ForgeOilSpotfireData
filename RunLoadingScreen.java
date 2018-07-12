@@ -74,6 +74,18 @@ public class RunLoadingScreen {
             	if (controller.formatWellData()) {
             		break;
             	}
+            	if (controller.getWellsCompleted() == 100 && !controller.getFormattedDataList().isEmpty()) {
+            		if (controller.writeToFile()) {
+            			JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            			System.exit(0);
+            		}
+            	}
+            	if (controller.getWellsCompleted() != 100 && controller.getWellsCompleted() % 100 == 0 && controller.getWellsCompleted() != 0 && !controller.getFormattedDataList().isEmpty()) {
+            		if (controller.appendToFile()) {
+            			JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            			System.exit(0);
+            		}
+            	}
             	int percent = (int) Math.round( (((double) controller.getWorkingWellRow()) / ((double) controller.getSize())) * 100.0 );
                 publish(percent);
             }
@@ -84,11 +96,21 @@ public class RunLoadingScreen {
         protected void done() {
             try {
                 get();
-                if (controller.writeToFile()) {
-                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                if (controller.getWellsCompleted() > 100 && controller.getWellsCompleted() % 100 != 0) {
+	                if (controller.appendToFile()) {
+	                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	                else {
+	                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+	                }
                 }
-                else {
-                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+                else { 
+                	if (controller.writeToFile()) {
+	                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	                else {
+	                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+	                }
                 }
                 frame.dispose();
                 new OutputGui(controller);

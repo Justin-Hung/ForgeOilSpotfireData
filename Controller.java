@@ -16,10 +16,13 @@ public class Controller {
 	private UserInput userInput; 
 	private OutputData outputData;
 	private boolean lasFileExists; 
+	private WriteToCSV writer;
 	
 	private int wellsCompleted = 0; 
 	private int workingWellRow = 0; 
-	private int topRow = 0; 
+	private int topRow = 0;
+	
+	public int getWellsCompleted() { return wellsCompleted; } 
 	
 	public ArrayList<MnemonicData> getMnemonicList() { return mnemonicList; }
 	
@@ -45,13 +48,12 @@ public class Controller {
 	public Controller(UserInput user) {
 		userInput = user;
 		WorkingFileReader workingFileReader = new WorkingFileReader(userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getWorkingFilePath()); 
-		TopFileReader topFileReader = new TopFileReader(userInput.getFormations(), userInput.getNwSortUwi(), userInput.getSeSortUwi(), userInput.getUpperBuffer(), userInput.getLowerBuffer()
-														, userInput.getPrimaryTopFilePath()); 
+		TopFileReader topFileReader = new TopFileReader(userInput); 
 		lasFileReader = new LasFileReader(userInput.getLasFilePath()); 
 		MoreMnemonics mnemonics = new MoreMnemonics();
 		mnemonicList = mnemonics.readFile();
 		dataWriter = new DataWriter(mnemonicList);
-		formattedDataList = new ArrayList<FormattedData>();
+		formattedDataList = new ArrayList<FormattedData>(); 
 		
 		wellsCompleted = 0; 
 		workingWellRow = 0; 
@@ -141,11 +143,33 @@ public class Controller {
 	}
 	
 	public boolean writeToFile() {
-		WriteToCSV writer = new WriteToCSV(formattedDataList, userInput);
-		if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist())) {
+		writer = new WriteToCSV(formattedDataList, userInput);
+		try { 
+			writer.saveToResourceFile();
+			if (userInput.getOutputFilePath().equals("")) {
+				return true;
+			}
+			writer.saveParameters(); 
+			if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
+				return true;
+			}
+			String appendFile = userInput.getOutputFilePath() + "\\" + userInput.getOutputFileName() + "\\" + userInput.getOutputFileName() + ".csv";
+			userInput.setOutputFilePath(appendFile);
+			formattedDataList.clear();
+			System.out.println("wells completed: " + wellsCompleted);
+			return false; 
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true; 
+	}
+	
+	public boolean appendToFile() {
+		if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
 			return true;
 		}
-		System.out.println("DONE");
+		formattedDataList.clear();
 		System.out.println("wells completed: " + wellsCompleted);
 		return false; 
 	}

@@ -75,7 +75,11 @@ public class WorkingFileReader {
 								break; 
 							}
 							else {
-								row += cell.getStringCellValue();
+								String s = cell.getStringCellValue();
+								if (s.equals("N/A")) { 
+									s = ""; 
+								}
+								row += s;
 								col++;
 								break;
 							}

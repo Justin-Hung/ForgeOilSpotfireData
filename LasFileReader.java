@@ -22,7 +22,6 @@ public class LasFileReader {
 			return null;
 		}
 		try {
-			
 			boolean usingMdforDir = false;
 			String bit = null;
 			String serviceCo = null;
@@ -33,13 +32,11 @@ public class LasFileReader {
 				lasFile = convertUwiWithPath(topData.getUwi(), dir);
 			}
 			lasFile = checkForLogPath(lasFile); 
-			System.out.println(lasFile);
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
 			File fileTest = new File(fileLocation);
 			if(!fileTest.exists()) { 
 				lasFile = lasFile.substring(0, lasFile.indexOf("COMBINED")) + lasFile.substring(lasFile.indexOf("MERGED"));
-				//System.out.println(lasFile);
 				fileLocation = lasFilePath + lasFile; 
 				fileTest = new File(fileLocation);
 				if (!fileTest.exists()) {
@@ -145,7 +142,6 @@ public class LasFileReader {
 				fileUwi = fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
 			}
 		}
-		//System.out.println(fileUwi);
 		return fileUwi;
 	}
 	

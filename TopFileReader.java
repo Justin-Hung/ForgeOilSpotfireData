@@ -26,6 +26,8 @@ public class TopFileReader {
 	private String upperFormation; 
 	private String previousFormation; 
 	private boolean checkBottom; 
+	private int upperRange; 
+	private int lowerRange;
 	
 	private final int uwiCol = 1;
 	private final int formationCol = 3; 
@@ -45,13 +47,16 @@ public class TopFileReader {
 		checkBottom = false;
 	}
 	
-	public TopFileReader(ArrayList<String> forms, int nw, int se, double upperbuff, double lowerbuff, String filePath) {
-		topFilePath = filePath;
-		upperbuffer = upperbuff; 
-		lowerbuffer = lowerbuff;
-		formations = forms;
-		upperbound = nw; 
-		lowerbound = se;
+	public TopFileReader(UserInput userInput) {
+		topFilePath = userInput.getPrimaryTopFilePath();
+		upperbuffer = userInput.getUpperBuffer(); 
+		lowerbuffer = userInput.getLowerBuffer();
+		formations = userInput.getFormations();
+		upperbound = userInput.getNwSortUwi(); 
+		lowerbound = userInput.getSeSortUwi();
+		upperRange = userInput.getUpperRange();
+		lowerRange = userInput.getLowerRange(); 
+		
 		upperFormation = "UNKNOWN";
 		topDataList = new ArrayList<TopData>(); 
 		data = new ArrayList<String>();
@@ -178,13 +183,16 @@ public class TopFileReader {
 					Cell cell = cellIterator.next();
 					if (index == uwiCol) {
 						int sortUwi = 0;
+						int range = 0;
 						if (cell.getStringCellValue().startsWith("1") ) {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
+							range = Integer.parseInt(cell.getStringCellValue().substring(14, 16));
 						}
 						else {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
+							range = Integer.parseInt(cell.getStringCellValue().substring(13, 15));
 						}
-						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18))) {
+						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18)) || range > upperRange || range < lowerRange) {
 							break;
 						}
 					}

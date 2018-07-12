@@ -19,6 +19,8 @@ public class UserInput {
 	private String workingFilePath; 
 	private String outputFilePath; 
 	private String outputFileName; 
+	private int upperRange;
+	private int lowerRange; 
 	
 	public UserInput() {
 		formations = new ArrayList<String>();
@@ -29,6 +31,10 @@ public class UserInput {
 		upperBuffer = 0.0001; 
 		lowerBuffer = 0.0001; 
 	}
+	
+	public int getUpperRange() { return upperRange; }
+	
+	public int getLowerRange() { return lowerRange; }
 	
 	public String getUserTopFilePath() { return userTopFilePath; } 
 	
@@ -87,6 +93,7 @@ public class UserInput {
 	public void setTownshipNw(String townshipNw) {
 		townshipNW = townshipNw;
 		if (townshipNw.length() == 11) {
+			upperRange = Integer.parseInt(townshipNw.substring(7, 9));
 			nwSortUwi = sortTownship(townshipNW); 
 		}
 	}
@@ -102,6 +109,7 @@ public class UserInput {
 	public void setTownshipSe(String townshipSe) {
 		townshipSE = townshipSe; 
 		if (townshipSe.length() == 11) {
+			lowerRange = Integer.parseInt(townshipSe.substring(7, 9));
 			seSortUwi = sortTownship(townshipSE);
 		}
 	}
