@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -110,7 +111,7 @@ public class WriteToCSV {
 				fileWriter = new FileWriter(new File( outputFileName + ".csv"));
 			}
 			
-			int gwiOffset = header.split(",").length + 3;
+			int gwiOffset = header.split(",").length;
 			if (secondaryTopFileExist) {
 				header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step)";
 			}
@@ -123,21 +124,15 @@ public class WriteToCSV {
 			}
 
 			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
-			for (int i = 0; i < 10; i++) {
-				header += ",Unknown Mnemonic?";
-			}
 			
 			if (!userInput.getOutputFilePath().endsWith("csv")) {
 				fileWriter.write("Break, Using MD values for directional well?," + header);
 				fileWriter.write(System.lineSeparator());
 				
-				String standardGwi = ",placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,placeholder,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,-999.25,placeholder,placeholder,placeholder,placeholder,placeholder,7/6/2000,7/6/2000,7/6/2000,7/6/2000,placeholder,placeholder,placeholder,placeholder";
-				fileWriter.write(standardGwi);
-				int standardGwiLength = standardGwi.split(",").length;
+				String gwiDummyRow = checkForBlanks(Arrays.copyOfRange(header.split(","), 0, gwiOffset), Arrays.copyOfRange(data.get(0).getRow(0).split(","), 0, gwiOffset)); 
+				System.out.println(gwiDummyRow);
+				fileWriter.write(",," + gwiDummyRow);
 				
-				for (int i = 0 ; i < gwiOffset - standardGwiLength ; i++) { 
-					fileWriter.write(",");
-				}
 				if (secondaryTopFileExist) {
 					fileWriter.write("-999.25,PLACEHOLDER,PLACEHOLDER, ,-999.25");
 				}
@@ -145,7 +140,7 @@ public class WriteToCSV {
 					fileWriter.write("-999.25,PLACEHOLDER, ,-999.25");
 				}
 				
-				for (int i = 0; i < mnemonicList.size()+21; i++) {
+				for (int i = 0; i < mnemonicList.size()+11; i++) {
 					if (mnemonicList.size() + 2 == i) {
 						fileWriter.write(",placeholder");
 					}
@@ -189,4 +184,49 @@ public class WriteToCSV {
 			return true; 
 		}
 	}	
+	
+	public String checkForBlanks(String[] gwiHeader, String[] gwiData) {
+		String[] gwiBlanks = new String[gwiHeader.length]; 
+		for (int i = 0 ; i < gwiBlanks.length; i++) {
+			gwiBlanks[i] = "";
+		}
+		ArrayList<Integer> blankColumns = new ArrayList<Integer>(); 
+		
+		for (int i = 0 ; i < gwiData.length ; i++) {
+			if (gwiData[i].length() == 0) {
+				blankColumns.add(i);
+			}
+		}
+		for (int i = 0 ; i < blankColumns.size() ; i++) {
+			String dummyType = getDummyTypeFromHeader(gwiHeader[blankColumns.get(i)]);
+			gwiBlanks[blankColumns.get(i)] = dummyType; 
+		}
+		String dummyHeader = gwiBlanks[0]; 
+		for (int i = 1 ; i < gwiBlanks.length ; i++) {
+			dummyHeader += "," + gwiBlanks[i];
+		}
+		return dummyHeader + ",";
+	}
+	
+	public String getDummyTypeFromHeader(String headerName) { 
+		String [] commonBlankHeaders = {   
+				"Projected Total Depth", 
+				"On Production Date",
+				"Projected Total Depth",
+				"Unit Name"
+		};
+		String [] dummyType = {
+				"-999.25", 
+				"7/6/2000",
+				"placeholder",
+				"placeholder"
+		};
+		
+		for (int i = 0 ; i < commonBlankHeaders.length ; i++) {
+			if (headerName.contains(commonBlankHeaders[i])) {
+				return dummyType[i];
+			}
+		}
+		return "HeaderUnknown";
+	}
 }
