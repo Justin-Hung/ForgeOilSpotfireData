@@ -17,6 +17,21 @@ public class LasFileReader {
 		lasFilePath = filePath + "\\"; 
 	}
 	
+	public String formatLine(String line) { 
+		char[] charArray = line.toCharArray(); 
+		StringBuilder builder = new StringBuilder(line);
+		char previousChar = ' ';
+		int insertOffset = 0; 
+		for (int i = 0 ; i < charArray.length ; i++) {
+			if (previousChar != ' ' && charArray[i] == '-') {
+				builder.insert(i + insertOffset, "  "); 
+				insertOffset+=2;
+			}
+			previousChar = charArray[i];
+		}
+		return builder.toString();
+	}
+	
 	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
@@ -89,16 +104,17 @@ public class LasFileReader {
 				if (line.startsWith("~A")) {
 					lasContainer.addHeader(line);
 				}
-				if (line.startsWith("      ")) {
-					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
-							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
-						lasContainer.addRow(line + "          buffer              buffer" );
-					}
-				}
-				else if (line.startsWith("   ")) {
+//				if (line.startsWith("      ")) {
+//					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
+//							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
+//						lasContainer.addRow(line + "          buffer              buffer" );
+//					}
+//				}   
+				else if (line.startsWith("   ")) { 
 					if (Double.parseDouble(line.substring(0, 11)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 11)) < topData.getUpperBound()) {
-						lasContainer.addRow(line + "      " + bit + "      " + serviceCo);
+						String formattedLine = formatLine(line);
+						lasContainer.addRow(formattedLine + "      " + bit + "      " + serviceCo);
 					}
 				}
 			}   
