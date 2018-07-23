@@ -72,7 +72,7 @@ public class DataWriter {
 		columnArray = new int[11];
 		header = h; 
 
-		header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step),";
+		header += "DEPT,Primary Formation,Secondary Formation,VKNS Isopach,Interval (step),";
 
 		headerOffset = header.split(",").length;
 		
@@ -166,7 +166,9 @@ public class DataWriter {
 			}
 			
 			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
-			
+			if (topData.getUwi().equals("102/02-11-049-27W4/0")) {
+				topData.displayTop();
+			}
 			finalRow = addCalcValues(finalRow);
 			
 			for (int j = 0 ; j < unknownPositions.size() ; j++) {
@@ -313,42 +315,81 @@ public class DataWriter {
 	
 		String separation = "";
 		if (!rowArray[columnArray[7]].equals("") && !rowArray[columnArray[6]].equals("")) {
-			separation = String.valueOf(Double.parseDouble(rowArray[columnArray[7]]) - Double.parseDouble(rowArray[columnArray[6]]));
+			try { 
+				separation = String.valueOf(Double.parseDouble(rowArray[columnArray[7]]) - Double.parseDouble(rowArray[columnArray[6]]));
+			}
+			catch (Exception e) {
+				separation = "";
+			}
 		}
-		
 		String mediumSeparation = "";
 		if (!rowArray[columnArray[4]].equals("") && !rowArray[columnArray[3]].equals("")) {
-			mediumSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[4]]) - Double.parseDouble(rowArray[columnArray[3]]));
+			try {
+				mediumSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[4]]) - Double.parseDouble(rowArray[columnArray[3]]));
+			}
+			catch (Exception e) {
+				mediumSeparation = ""; 
+			}
 		}
 		
 		String deepSeparation = "";
 		if (!rowArray[columnArray[5]].equals("") && !rowArray[columnArray[4]].equals("")) {
-			deepSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[5]]) - Double.parseDouble(rowArray[columnArray[4]]));
+			try {	
+				deepSeparation = String.valueOf(Double.parseDouble(rowArray[columnArray[5]]) - Double.parseDouble(rowArray[columnArray[4]]));
+			}
+			catch (Exception e) {
+				deepSeparation = ""; 
+			}
 		}
 		
 		String mudCake = "";
 		if (!rowArray[columnArray[8]].equals("") && !rowArray[columnArray[9]].equals("")) {
-			mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
+			try { 
+				mudCake = String.valueOf(Double.parseDouble(rowArray[columnArray[8]]) - Double.parseDouble(rowArray[columnArray[9]]));
+			}
+			catch (Exception e) {
+				mudCake = ""; 
+			}
 		}	
 		
 		String subsea = "";
 		if (!rowArray[columnArray[0]].equals("") && !rowArray[columnArray[1]].equals("")) {
-			subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[0]]) - Double.parseDouble(rowArray[columnArray[1]]));
-		}	
+			try {
+				subsea = String.valueOf(Double.parseDouble(rowArray[columnArray[0]]) - Double.parseDouble(rowArray[columnArray[1]]));
+			}	
+			catch (Exception e) {
+				subsea = "";
+			}
+		}
 		
-		String sandstonePoro = "";
+		String sandstonePoro = "";  
 		if (!rowArray[columnArray[10]].equals("")) {
-			sandstonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2650) / -16.50);
+			try { 
+				sandstonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2650) / -16.50);
+			}
+			catch (Exception e) {
+				sandstonePoro = ""; 
+			}
 		}
 		
 		String limestonePoro = "";
 		if (!rowArray[columnArray[10]].equals("")) {
-			limestonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2710) / -17.10);
+			try {
+				limestonePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2710) / -17.10);
+			}
+			catch (Exception e) {
+				limestonePoro = "";
+			}
 		}
 		
 		String dolomitePoro = ""; 
 		if (!rowArray[columnArray[10]].equals("")) {
-			dolomitePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2870) / -18.70);
+			try {
+				dolomitePoro = String.valueOf((Double.parseDouble(rowArray[columnArray[10]]) - 2870) / -18.70);
+			}
+			catch (Exception e) { 
+				dolomitePoro = "";
+			}
 		}
 		
 		String temp = row + "," + separation + "," + mediumSeparation + "," + deepSeparation + "," + mudCake + "," + subsea + "," + sandstonePoro + "," + limestonePoro + "," + dolomitePoro;

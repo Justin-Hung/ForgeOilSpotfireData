@@ -61,12 +61,29 @@ public class Controller {
 		topRow = 0; 
 		
 		secondaryTopDataList = null;
-		topDataList = topFileReader.readFile();
+		if (user.getPrimaryTopFilePath().endsWith("csv")) {
+			topDataList = topFileReader.csvReadFile(); 
+		}
+		else {
+			topDataList = topFileReader.readFile();
+		}
 		if (user.secondaryTopFileExist()) { 
 			System.out.println("runningSecondary read file");
-			secondaryTopDataList = topFileReader.readSecondaryFile(user.getSystemTopFilePath());
+			if (user.getSystemTopFilePath().endsWith("csv")) {
+				secondaryTopDataList = topFileReader.readSecondaryCsvFile(user.getSystemTopFilePath());
+			}
+			else {
+				secondaryTopDataList = topFileReader.readSecondaryFile(user.getSystemTopFilePath());
+			}
 		}
-		workingData = workingFileReader.readFile();
+		
+		if (user.getWorkingFilePath().endsWith("csv")) { 
+			workingData = workingFileReader.readCsvFile(); 
+		}
+		else { 
+			workingData = workingFileReader.readFile();
+		}
+		workingData.display();
 		outputData = new OutputData();
 		
 		checkIfLasFileExists(); 
@@ -109,7 +126,7 @@ public class Controller {
 			}
 			if (topUwi.equals(workingUwi)) {
 				LasData lasData = null;
-				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeRow()].equals("Vertical"))
+				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeCol()].equals("Vertical"))
 				{
 					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists);
 				}

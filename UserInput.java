@@ -170,7 +170,7 @@ public class UserInput {
 	}
 	
 	public long fullSortTownship(String town) {
-	//	System.out.println(town);
+		//System.out.println(town);
 		String wackZone = town.substring(1,3);
 		if (Character.isLetter(wackZone.charAt(0))) {
 			wackZone = String.valueOf(wackZone.charAt(0) - 'A' + 1);

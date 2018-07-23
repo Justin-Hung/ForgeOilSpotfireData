@@ -71,6 +71,9 @@ public class LasFileReader {
 			}
 
 			while((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith(" BS  .M")) {
+					bit = line.substring(12,18);
+				}
 				if (line.startsWith(" BS  .MM")) {
 					bit = line.substring(12,18);
 				}

@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -77,6 +79,172 @@ public class TopFileReader {
 		return false;
 	}
 	
+	public ArrayList<TopData> csvReadFile() { 
+		try {
+			UserInput sort = new UserInput(); 
+			
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(topFilePath)));
+			String line = bufferedReader.readLine();
+			if (line.contains("©2018 IHS Markit")) {
+				line = bufferedReader.readLine();
+			}
+			
+			boolean nextRowHasFormationCheck = false;
+			boolean topCheck = false;
+			int row = 0;
+			
+			line = bufferedReader.readLine();
+			while (line != null) {
+				String[] lineArray = line.split(",");
+				
+				int index = 0; 
+				while (index < lineArray.length) {
+					if (index == uwiCol) {
+						int sortUwi = 0;
+						int range = 0;
+						if (lineArray[index].charAt(3) == '/' ) {
+							sortUwi = sort.sortTownship(lineArray[index].substring(7, 18));
+							range = Integer.parseInt(lineArray[index].substring(14, 16));
+						}
+						else {
+							sortUwi = sort.sortTownship(lineArray[index].substring(6, 17));
+							range = Integer.parseInt(lineArray[index].substring(13, 15));
+						}
+						try { 
+							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || range > upperRange || range < lowerRange) {
+								break;
+							}
+						}
+						catch (ArrayIndexOutOfBoundsException e) {
+							break; 
+						}
+					}
+				
+					if (index == uwiCol && !currentUwi.equals(lineArray[index])) {
+						if (!nextRowHasFormationCheck) {
+							if (data.size() > 2) {
+								if (formations.get(formations.size()-1).equals("TD") || !data.get(data.size()-2).equals(formations.get(formations.size()-1))) {
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+									checkBottom = false;
+								}
+								else {
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+								}
+								topCheck = false;
+							}
+							data = new ArrayList<String>(); 
+							currentUwi = lineArray[index];
+							if (currentUwi.charAt(3) == '/') { 
+								data.add(currentUwi);
+							}
+							else {
+								data.add("1" + currentUwi);
+							}
+							previousFormation = "UNKNOWN";
+						}
+						else { 
+							currentUwi = lineArray[index];
+							nextRowHasFormationCheck = false;
+							topCheck = true;
+						}
+					}
+				
+					if (index == formationCol) {
+						if (lineArray[index].substring(1).equals(formations.get(formations.size()-1)) || lineArray[index].equals(formations.get(formations.size()-1))) {
+							data.add(lineArray[index]);
+							data.add(lineArray[tvdCol]);
+							if (formations.get(formations.size()-1).equals(formations.get(0))) {
+								upperFormation = previousFormation;
+							}
+							topCheck = false; 
+							break;
+						}
+						if (lineArray[index].substring(1).equals(formations.get(0)) || lineArray[index].equals(formations.get(0))) {
+							upperFormation = previousFormation;
+							topCheck = true; 
+						}
+						if (topCheck) {
+							data.add(lineArray[index]);
+						}
+						previousFormation = lineArray[index];
+					}
+					
+					if (index == tvdCol) {
+						if (topCheck) {
+							data.add(String.valueOf(lineArray[index]));
+							break;
+						}
+					}
+					index++; 
+				}
+				line = bufferedReader.readLine();
+				row++;
+			}
+			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+				checkBottom = false;
+			}
+			else {
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+			}
+			bufferedReader.close();
+			return topDataList;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public ArrayList<TopData> readSecondaryCsvFile(String secondaryFilePath) {
+		try { 
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(secondaryFilePath)));
+			String line = bufferedReader.readLine();
+			if (line.contains("©2018 IHS Markit")) {
+				line = bufferedReader.readLine();
+			}
+			boolean firstRow = true; 
+			String[] previousRow = new String[3]; 
+			String[] currentRow = new String[3]; 
+			String[] futureRow= new String[3]; 
+			secondaryTopList = new ArrayList<TopData>();
+			topDataIndex = 0;
+			
+			line = bufferedReader.readLine();
+			while (line != null) {
+				String[] lineArray = line.split(",");
+				String uwi = lineArray[uwiCol]; 
+				try { 
+					String temp = lineArray[formationCol];
+					temp = lineArray[tvdCol];
+					if (uwi.charAt(3) == '/') { 
+						futureRow[0] = uwi; 
+					}
+					else { 
+						futureRow[0] = "1" + uwi; 
+					}
+					futureRow[1] = lineArray[formationCol];
+					futureRow[2] = lineArray[tvdCol];
+					if (!firstRow) {
+						checkRow(previousRow,currentRow,futureRow);
+					}
+					previousRow = currentRow.clone();
+					currentRow = futureRow.clone();
+					firstRow = false; 
+				}
+				catch (IndexOutOfBoundsException e) {
+					
+				}
+				line = bufferedReader.readLine();
+			}
+			bufferedReader.close();
+			return secondaryTopList;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public ArrayList<TopData> readSecondaryFile(String secondaryFilePath) {
 		try { 
 			FileInputStream inputStream = new FileInputStream(new File(secondaryFilePath)); 
@@ -107,7 +275,13 @@ public class TopFileReader {
 					
 					Cell cell = cellIterator.next(); 
 					if (index == uwiCol) { 
-						futureRow[0] = cell.getStringCellValue(); 
+						String uwi = cell.getStringCellValue(); 
+						if (uwi.charAt(3) == '/') { 
+							futureRow[0] = cell.getStringCellValue(); 
+						}
+						else { 
+							futureRow[0] = "1" + cell.getStringCellValue(); 
+						}
 					}
 					if (index == formationCol) { 
 						futureRow[1] = cell.getStringCellValue();
@@ -151,9 +325,20 @@ public class TopFileReader {
 			data.add(currentRow[2]);
 		}
 		if (!futureRow[0].equals(currentUwi) && currentUwi.equals(currentRow[0])) { 
-			secondaryTopList.add(new TopData(data, 999, 999, "unknown", false));
+			if (!data.isEmpty() && checkData(data)) {
+				secondaryTopList.add(new TopData(data, 999, 999, "unknown", false));
+			}
 			topDataIndex++; 
 		}
+	}
+	
+	public boolean checkData(ArrayList<String> data) {
+		for (int i = 0 ; i < data.size() ; i++) {
+			if (data.get(i).isEmpty() || data.get(i).equals(" ")) { 
+				return false; 
+			}
+		}
+		return true;
 	}
 	
 	public ArrayList<TopData> readFile() { 
@@ -184,7 +369,7 @@ public class TopFileReader {
 					if (index == uwiCol) {
 						int sortUwi = 0;
 						int range = 0;
-						if (cell.getStringCellValue().startsWith("1") ) {
+						if (cell.getStringCellValue().charAt(3) == '/' ) {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
 							range = Integer.parseInt(cell.getStringCellValue().substring(14, 16));
 						}
@@ -211,7 +396,12 @@ public class TopFileReader {
 							}
 							data = new ArrayList<String>(); 
 							currentUwi = cell.getStringCellValue();
-							data.add(currentUwi);
+							if (currentUwi.charAt(3) == '/') { 
+								data.add(currentUwi);
+							}
+							else {
+								data.add("1" + currentUwi);
+							}
 							previousFormation = "UNKNOWN";
 						}
 						else { 

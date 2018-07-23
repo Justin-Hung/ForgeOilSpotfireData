@@ -1,27 +1,36 @@
 import java.util.ArrayList;
 
 public class WorkingFileData {
-	private int typeRow; 
+	private int typeCol; 
+	private int producingCol;
 	private String header;
 	private ArrayList<String> rows; 
 	
 	public WorkingFileData() {
+		typeCol = -1; 
+		producingCol = -1; 
 		rows = new ArrayList<String>(); 
 	}
 	
-	public int getTypeRow() { return typeRow; } 
+	public int getTypeCol() { return typeCol; } 
+	
+	public int getProducingCol() { return producingCol; }
 	
 	public void addHeader(String head) {
 		header = new DataWriter().removeNewLine(head); 
-		setTypeRow();
+		setCol(); 
 	}
+
 	
-	public void setTypeRow() { 
+	public void setCol() { 
 		String[] headerArray = header.split(",");
 		
 		for (int i = 0 ; i < headerArray.length ; i++) {
+			if (headerArray[i].equals("Producing Zone")) {
+				producingCol = i; 
+			}
 			if ( headerArray[i].equals("Type")) {
-				typeRow = i;
+				typeCol = i;
 			}
 		}
 	}

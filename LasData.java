@@ -36,6 +36,8 @@ public class LasData {
 		uwi = u;
 		rows = new ArrayList<String>(); 
 		mdForDir = false;
+		serviceCo = "";
+		bit = "";
 	}
 	
 	public boolean getMdForDir() { return mdForDir; } 

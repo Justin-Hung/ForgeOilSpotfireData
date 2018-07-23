@@ -113,7 +113,7 @@ public class WriteToCSV {
 			
 			int gwiOffset = header.split(",").length;
 			if (secondaryTopFileExist) {
-				header += "DEPT,User Formation,System Formation,VKNS Isopach,Interval (step)";
+				header += "DEPT,Primary Formation,Secondary Formation,VKNS Isopach,Interval (step)";
 			}
 			else {
 				header += "DEPT,Formation,VKNS Isopach,Interval (step)";
@@ -130,7 +130,7 @@ public class WriteToCSV {
 				fileWriter.write(System.lineSeparator());
 				
 				String gwiDummyRow = checkForBlanks(Arrays.copyOfRange(header.split(","), 0, gwiOffset), Arrays.copyOfRange(data.get(0).getRow(0).split(","), 0, gwiOffset)); 
-				System.out.println(gwiDummyRow);
+
 				fileWriter.write(",," + gwiDummyRow);
 				
 				if (secondaryTopFileExist) {

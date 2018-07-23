@@ -28,14 +28,19 @@ public class TopData {
 					break; 
 				}
 			}
-			if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
-				if (form.get(i).equals("VKNS UNCF")) {
-					return "VKNS";
+			try {
+				if (depth >= tvDepth.get(i) && depth < tvDepth.get(i+1)) {
+					if (form.get(i).equals("VKNS UNCF")) {
+						return "VKNS";
+					}
+					if (form.get(i).equals("VKNS") && form.get(i+1).equals("VKNS UNCF")) {
+						return "VKNS UNCF";
+					}
+					return form.get(i);
 				}
-				if (form.get(i).equals("VKNS") && form.get(i+1).equals("VKNS UNCF")) {
-					return "VKNS UNCF";
-				}
-				return form.get(i);
+			}
+			catch (IndexOutOfBoundsException e) {
+				return form.get(form.size()-1);
 			}
 		}
 		return upperFormation;
