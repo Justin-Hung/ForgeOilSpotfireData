@@ -138,6 +138,14 @@ public class FileGui {
 			JOptionPane.showMessageDialog(frame, "GWI file can not be found");
 			return true; 
 		}
+		if (outputNameTextField.getText().equals("")) {
+			JOptionPane.showMessageDialog(frame, "Please specify output file name");
+			return true;
+		}	
+		if (new File(outputTextField.getText() + "\\" + outputNameTextField.getText()).exists()) {
+			JOptionPane.showMessageDialog(frame, "Output file name exists already. Please rename output file name.");
+			return true; 
+		}
 		if (!new File(lasTextField.getText()).isDirectory()) {
 			JOptionPane.showMessageDialog(frame, "las directory can not be found");
 			return true; 
