@@ -83,7 +83,7 @@ public class DataWriter {
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
-		getUnknownPositions(formattedHeader);
+		//getUnknownPositions(formattedHeader);
 		
 		String finalHeader = header; 
 		
@@ -101,9 +101,9 @@ public class DataWriter {
 		
 		finalHeader = addCalcHeaders(finalHeader);
 		
-		for (int i = 0 ; i < unknownPositions.size() ; i++) {
-			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
-		}
+//		for (int i = 0 ; i < unknownPositions.size() ; i++) {
+//			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
+//		}
 		
 		finalHeader = removeNewLine(finalHeader);
 		
@@ -171,9 +171,9 @@ public class DataWriter {
 			}
 			finalRow = addCalcValues(finalRow);
 			
-			for (int j = 0 ; j < unknownPositions.size() ; j++) {
-				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
-			}
+//			for (int j = 0 ; j < unknownPositions.size() ; j++) {
+//				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
+//			}
 			
 			finalRow = removeNewLine(finalRow);
 			
@@ -200,7 +200,7 @@ public class DataWriter {
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
-		getUnknownPositions(formattedHeader);
+		//getUnknownPositions(formattedHeader);
 		
 		String finalHeader = header; 
 		
@@ -218,9 +218,9 @@ public class DataWriter {
 		
 		finalHeader = addCalcHeaders(finalHeader);
 		
-		for (int i = 0 ; i < unknownPositions.size() ; i++) {
-			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
-		}
+//		for (int i = 0 ; i < unknownPositions.size() ; i++) {
+//			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
+//		}
 		
 		finalHeader = removeNewLine(finalHeader);
 		
@@ -272,9 +272,9 @@ public class DataWriter {
 			
 			finalRow = addCalcValues(finalRow);
 			
-			for (int j = 0 ; j < unknownPositions.size() ; j++) {
-				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
-			}
+//			for (int j = 0 ; j < unknownPositions.size() ; j++) {
+//				finalRow += "," + getCol(formattedRow, unknownPositions.get(j)); 
+//			}
 			
 			finalRow = removeNewLine(finalRow);
 			

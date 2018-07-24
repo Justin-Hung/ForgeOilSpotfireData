@@ -29,7 +29,7 @@ public class WorkingFileData {
 			if (headerArray[i].equals("Producing Zone")) {
 				producingCol = i; 
 			}
-			if ( headerArray[i].equals("Type")) {
+			if (headerArray[i].equals("Type")) {
 				typeCol = i;
 			}
 		}
