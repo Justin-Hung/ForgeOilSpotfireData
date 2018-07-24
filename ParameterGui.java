@@ -338,6 +338,9 @@ public class ParameterGui {
 		panel_3.add(horizontalStrut_4);
 		panel_3.add(btnAppendToFile);
 		
+		Component horizontalStrut_5 = Box.createHorizontalStrut(31);
+		panel_3.add(horizontalStrut_5);
+		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.gridx = 1;

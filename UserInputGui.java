@@ -25,6 +25,7 @@ import javax.swing.text.PlainDocument;
 import org.apache.log4j.chainsaw.Main;
 
 import javax.swing.JProgressBar;
+import javax.swing.JCheckBox;
 
 public class UserInputGui {
 
@@ -249,7 +250,7 @@ public class UserInputGui {
 		JLabel lblMeters = new JLabel("Meters");
 		panel_1.add(lblMeters);
 		
-		Component horizontalStrut_1 = Box.createHorizontalStrut(30);
+		Component horizontalStrut_1 = Box.createHorizontalStrut(48);
 		panel_1.add(horizontalStrut_1);
 		
 		URL url2 = Main.class.getResource("/resources/transparentFinal.png");
@@ -298,7 +299,7 @@ public class UserInputGui {
 		JLabel label_11 = new JLabel("Meters");
 		panel_3.add(label_11);
 		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
+		Component horizontalStrut_2 = Box.createHorizontalStrut(48);
 		panel_3.add(horizontalStrut_2);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
@@ -326,7 +327,7 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_15, gbc_panel_15);
 		panel_15.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		Component horizontalStrut_12 = Box.createHorizontalStrut(75);
+		Component horizontalStrut_12 = Box.createHorizontalStrut(68);
 		panel_15.add(horizontalStrut_12);
 		
 		JLabel label = new JLabel("Upper Formation");
@@ -411,7 +412,7 @@ public class UserInputGui {
 		upperFormationTextField.setColumns(20);
 		panel_10.add(upperFormationTextField);
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
+		Component horizontalStrut_3 = Box.createHorizontalStrut(33);
 		panel_10.add(horizontalStrut_3);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
@@ -439,7 +440,7 @@ public class UserInputGui {
 		frame.getContentPane().add(panel_16, gbc_panel_16);
 		panel_16.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		Component horizontalStrut_14 = Box.createHorizontalStrut(75);
+		Component horizontalStrut_14 = Box.createHorizontalStrut(68);
 		panel_16.add(horizontalStrut_14);
 		
 		JLabel lowerFormationLbl = new JLabel("Lower Formation");
@@ -514,7 +515,7 @@ public class UserInputGui {
 		lowerFormationTextField.setColumns(20);
 		panel_17.add(lowerFormationTextField);
 		
-		Component horizontalStrut_4 = Box.createHorizontalStrut(30);
+		Component horizontalStrut_4 = Box.createHorizontalStrut(33);
 		panel_17.add(horizontalStrut_4);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(12);
@@ -523,6 +524,14 @@ public class UserInputGui {
 		gbc_verticalStrut_2.gridx = 1;
 		gbc_verticalStrut_2.gridy = 13;
 		frame.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
+		
+		JCheckBox chckbxRunWithUnknown = new JCheckBox("Run unknown mnemonics?");
+		chckbxRunWithUnknown.setSelected(true);
+		GridBagConstraints gbc_chckbxRunWithUnknown = new GridBagConstraints();
+		gbc_chckbxRunWithUnknown.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxRunWithUnknown.gridx = 1;
+		gbc_chckbxRunWithUnknown.gridy = 14;
+		frame.getContentPane().add(chckbxRunWithUnknown, gbc_chckbxRunWithUnknown);
 		
 		JPanel panel_18 = new JPanel();
 		GridBagConstraints gbc_panel_18 = new GridBagConstraints();
