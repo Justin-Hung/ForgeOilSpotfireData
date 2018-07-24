@@ -56,6 +56,7 @@ public class OutputGui {
 	private Controller controller;
 	
 	private String outputFilePath; 
+	private String outputFileName; 
 	/**
 	 * Launch the application.
 	 */
@@ -77,6 +78,7 @@ public class OutputGui {
 	public OutputGui(Controller controller) {
 		this.controller = controller;
 		outputFilePath =  controller.getUserInput().getOutputFilePath();
+		outputFileName = controller.getUserInput().getOutputFileName();
 		this.outputData = controller.getOutputData();
 		initializeJList(); 
 		initialize();
@@ -132,7 +134,13 @@ public class OutputGui {
 		}
 		LinkLabel hyperLinkText = null;
 		if (!outputFilePath.equals("")) {
-			File outputFile = new File(outputFilePath);	
+			String hyperLinkPath = outputFilePath;
+			//System.out.println(hyperLinkPath);
+			if (outputFilePath.contains(".csv")) {
+				hyperLinkPath = outputFilePath.substring(0, hyperLinkPath.indexOf(outputFileName) + outputFileName.length());
+				//System.out.println(hyperLinkPath);
+			}
+			File outputFile = new File(hyperLinkPath);	
 			hyperLinkText = new LinkLabel(outputFile.toURI());
 			hyperLinkText.init();
 		}

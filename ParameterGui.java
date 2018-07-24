@@ -95,7 +95,7 @@ public class ParameterGui {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 645, 201);
+		frame.setBounds(100, 100, 643, 203);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);      
 		
@@ -186,7 +186,7 @@ public class ParameterGui {
 		gbc_panel_3.gridy = 4;
 		panel.add(panel_3, gbc_panel_3);
 		
-		JButton btnNewButton = new JButton("Use New Parameters");
+		JButton btnNewButton = new JButton("Use New");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new FileGui();
@@ -195,10 +195,7 @@ public class ParameterGui {
 		});
 		panel_3.add(btnNewButton);
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
-		panel_3.add(horizontalStrut_3);
-		
-		JButton btnNewButton_1 = new JButton("Use Last Parameters");
+		JButton btnNewButton_1 = new JButton("Use Last");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 			try { 
@@ -237,12 +234,12 @@ public class ParameterGui {
 				}
 			}
 		});
+		
+		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
+		panel_3.add(horizontalStrut_2);
 		panel_3.add(btnNewButton_1);
 		
-		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
-		panel_3.add(horizontalStrut_4);
-		
-		JButton btnNewButton_2 = new JButton("Use Saved Parameters");
+		JButton btnNewButton_2 = new JButton("Use Saved");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!textField.getText().equals("")) {
@@ -285,10 +282,61 @@ public class ParameterGui {
 				}
 			}
 		});
+		
+		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
+		panel_3.add(horizontalStrut_3);
 		panel_3.add(btnNewButton_2);
 		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(30);
-		panel_3.add(horizontalStrut_2);
+		JButton btnAppendToFile = new JButton("Append");
+		btnAppendToFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (!textField.getText().equals("")) {
+					File parameterFile = new File(textField.getText());
+					UserInput user = new UserInput();
+					if (parameterFile.exists()) {
+						try { 
+							BufferedReader br = new BufferedReader(new FileReader(parameterFile));
+							ArrayList<String> forms = new ArrayList<String>(); 
+							forms.add(br.readLine());
+							forms.add(br.readLine());
+							user.setFormations(forms);
+							user.setTownshipNw(br.readLine()); 
+							user.setTownshipSe(br.readLine()); 
+							user.setUpperBuffer(Double.parseDouble(br.readLine()));
+							user.setLowerBuffer(Double.parseDouble(br.readLine()));
+							user.setUserTopFilePath(br.readLine());
+							user.setSystemTopFilePath(br.readLine());
+							user.setLasFilePath(br.readLine());
+							user.setWorkingFilePath(br.readLine());
+							String fileName = textField.getText().substring(textField.getText().lastIndexOf('\\') + 1, textField.getText().length()-14);
+							user.setOutputFilePath(br.readLine() + "\\" + fileName + "\\" + fileName + ".csv");
+							user.setOutputfileName(fileName);
+							frame.dispose();
+							FileGui fileGui = new FileGui(user);
+							fileGui.disableOutputTextFields(); 
+							URL url = Main.class.getResource("/resources/previousParameterPath.txt"); 
+							String filePath = url.getPath();
+							if (filePath.contains("!")) {
+								filePath = filePath.substring(0, filePath.lastIndexOf("SpotfireDataProgram"));
+								filePath = filePath + "Resources/previousParameterPath.txt";
+								filePath = filePath.substring(5);
+							}
+							File previousSaveFile = new File(filePath); 
+							FileWriter saveParameterPath = new FileWriter(previousSaveFile);
+							saveParameterPath.write(textField.getText());
+							saveParameterPath.close();
+						}
+						catch (IOException ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		panel_3.add(horizontalStrut_4);
+		panel_3.add(btnAppendToFile);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();

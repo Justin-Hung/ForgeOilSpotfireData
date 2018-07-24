@@ -48,6 +48,8 @@ public class FileGui {
 	private JTextField outputTextField;
 	private UserInput user;
 	private JTextField outputNameTextField;
+	private JButton button_2 = new JButton("Browse");
+	private JCheckBox chckbxDontCreateOutput = new JCheckBox("Run with no output");
 
 	private String rememberOutputField; 
 	private String rememberOutputName; 
@@ -118,6 +120,13 @@ public class FileGui {
 		}
 		initialize();
 		frame.setVisible(true);
+	}
+	
+	public void disableOutputTextFields() {
+		outputNameTextField.setEnabled(false);
+		outputTextField.setEnabled(false);
+		button_2.setEnabled(false);
+		chckbxDontCreateOutput.setEnabled(false);
 	}
 	
 	
@@ -456,11 +465,10 @@ public class FileGui {
 		outputTextField.setColumns(42);
 		panel_3.add(outputTextField);
 		
-		JButton button_2 = new JButton("Browse");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileBrowser = new JFileChooser(); 
-				if (Files.isDirectory(Paths.get(outputTextField.getText()))) {
+				if (Files.exists(Paths.get(outputTextField.getText()))) {
 					fileBrowser = new JFileChooser(new File(outputTextField.getText())); 
 				}
 				fileBrowser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -532,7 +540,6 @@ public class FileGui {
 		Component horizontalStrut_6 = Box.createHorizontalStrut(1);
 		panel_4.add(horizontalStrut_6);
 		
-		JCheckBox chckbxDontCreateOutput = new JCheckBox("Run with no output");
 		chckbxDontCreateOutput.addItemListener(new ItemListener() { 
 			public void itemStateChanged(ItemEvent e) { 
 				if (chckbxDontCreateOutput.isSelected()) { 
