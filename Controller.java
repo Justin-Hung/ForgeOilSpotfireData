@@ -185,8 +185,10 @@ public class Controller {
 			if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
 				return true;
 			}
-			String appendFile = userInput.getOutputFilePath() + "\\" + userInput.getOutputFileName() + "\\" + userInput.getOutputFileName() + ".csv";
-			userInput.setOutputFilePath(appendFile);
+			if (!userInput.getOutputFilePath().endsWith(".csv")) {
+				String appendFile = userInput.getOutputFilePath() + "\\" + userInput.getOutputFileName() + "\\" + userInput.getOutputFileName() + ".csv";
+				userInput.setOutputFilePath(appendFile);
+			}
 			formattedDataList.clear();
 			System.out.println("wells completed: " + wellsCompleted);
 			return false; 

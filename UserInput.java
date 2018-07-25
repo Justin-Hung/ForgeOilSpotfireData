@@ -21,6 +21,7 @@ public class UserInput {
 	private String outputFileName; 
 	private int upperRange;
 	private int lowerRange; 
+	private boolean unknownMnemonicOutput;
 	
 	public UserInput() {
 		formations = new ArrayList<String>();
@@ -30,7 +31,10 @@ public class UserInput {
 		townshipSE = "--W"; 
 		upperBuffer = 0.0001; 
 		lowerBuffer = 0.0001; 
+		unknownMnemonicOutput = true;
 	}
+	
+	public boolean isUnknownRun() { return unknownMnemonicOutput; } 
 	
 	public int getUpperRange() { return upperRange; }
 	
@@ -60,6 +64,10 @@ public class UserInput {
 			return true;
 		}
 		return false;
+	}
+	
+	public void setUnknownMnemonicOutput(boolean value) {
+		unknownMnemonicOutput = value; 
 	}
 	
 	public void setOutputfileName(String name) { 

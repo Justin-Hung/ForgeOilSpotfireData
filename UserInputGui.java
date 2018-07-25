@@ -26,6 +26,8 @@ import org.apache.log4j.chainsaw.Main;
 
 import javax.swing.JProgressBar;
 import javax.swing.JCheckBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class UserInputGui {
 
@@ -41,6 +43,7 @@ public class UserInputGui {
 	private JTextField nwMerTextField;
 	private JTextField lowerFormationTextField;
 	private JTextField upperFormationTextField;
+	private JCheckBox chckbxRunWithUnknown = new JCheckBox("Run unknown mnemonics?");
 	
 	/**
 	 * Launch the application.
@@ -174,6 +177,8 @@ public class UserInputGui {
 				seMerTextField.setText(u.getTownshipSE().split("-")[2].split("W")[1]);
 			}
 		}	
+		
+		chckbxRunWithUnknown.setSelected(user.isUnknownRun());
 	}
 	
 	public String formatNumber(String number, int desiredSize) {
@@ -524,8 +529,17 @@ public class UserInputGui {
 		gbc_verticalStrut_2.gridx = 1;
 		gbc_verticalStrut_2.gridy = 13;
 		frame.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
-		
-		JCheckBox chckbxRunWithUnknown = new JCheckBox("Run unknown mnemonics?");
+	
+		chckbxRunWithUnknown.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (chckbxRunWithUnknown.isSelected()) { 
+					user.setUnknownMnemonicOutput(true);
+				}
+				else { 
+					user.setUnknownMnemonicOutput(false);
+				}
+			}
+		});
 		chckbxRunWithUnknown.setSelected(true);
 		GridBagConstraints gbc_chckbxRunWithUnknown = new GridBagConstraints();
 		gbc_chckbxRunWithUnknown.insets = new Insets(0, 0, 5, 5);

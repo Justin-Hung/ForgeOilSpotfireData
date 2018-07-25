@@ -180,6 +180,9 @@ public class TopFileReader {
 				line = bufferedReader.readLine();
 				row++;
 			}
+			if (data.isEmpty()) {
+				System.out.println("ERRROR");
+			}
 			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
 				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
 				checkBottom = false;

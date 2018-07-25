@@ -128,7 +128,7 @@ public class ParameterGui {
 		
 		JPanel panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.anchor = GridBagConstraints.WEST;
+		gbc_panel_2.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.gridx = 1;
 		gbc_panel_2.gridy = 1;
@@ -186,7 +186,7 @@ public class ParameterGui {
 		gbc_panel_3.gridy = 4;
 		panel.add(panel_3, gbc_panel_3);
 		
-		JButton btnNewButton = new JButton("Use New");
+		JButton btnNewButton = new JButton("New Paramenters");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new FileGui();
@@ -195,7 +195,7 @@ public class ParameterGui {
 		});
 		panel_3.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Use Last");
+		JButton btnNewButton_1 = new JButton("Last Parameters");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 			try { 
@@ -235,11 +235,11 @@ public class ParameterGui {
 			}
 		});
 		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
+		Component horizontalStrut_2 = Box.createHorizontalStrut(5);
 		panel_3.add(horizontalStrut_2);
 		panel_3.add(btnNewButton_1);
 		
-		JButton btnNewButton_2 = new JButton("Use Saved");
+		JButton btnNewButton_2 = new JButton("Saved Parameters");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!textField.getText().equals("")) {
@@ -283,11 +283,11 @@ public class ParameterGui {
 			}
 		});
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
+		Component horizontalStrut_3 = Box.createHorizontalStrut(5);
 		panel_3.add(horizontalStrut_3);
 		panel_3.add(btnNewButton_2);
 		
-		JButton btnAppendToFile = new JButton("Append");
+		JButton btnAppendToFile = new JButton("Append Data");
 		btnAppendToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!textField.getText().equals("")) {
@@ -334,11 +334,11 @@ public class ParameterGui {
 			}
 		});
 		
-		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		Component horizontalStrut_4 = Box.createHorizontalStrut(5);
 		panel_3.add(horizontalStrut_4);
 		panel_3.add(btnAppendToFile);
 		
-		Component horizontalStrut_5 = Box.createHorizontalStrut(31);
+		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
 		panel_3.add(horizontalStrut_5);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
