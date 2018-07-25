@@ -16,6 +16,7 @@ public class TopFileReader {
 
 	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx";
 
+	private boolean meridianCross; 
 	private ArrayList<TopData> topDataList; 
 	private ArrayList<TopData> secondaryTopList;
 	private	int topDataIndex; 
@@ -58,6 +59,12 @@ public class TopFileReader {
 		lowerbound = userInput.getSeSortUwi();
 		upperRange = userInput.getUpperRange();
 		lowerRange = userInput.getLowerRange(); 
+		meridianCross = false;
+		int upperMeridian = Integer.parseInt(Integer.toString(upperbound).substring(0, 1));
+		int lowerMeridian = Integer.parseInt(Integer.toString(lowerbound).substring(0, 1));
+		if (upperMeridian != lowerMeridian) { 
+			meridianCross = true; 
+		}
 		
 		upperFormation = "UNKNOWN";
 		topDataList = new ArrayList<TopData>(); 
@@ -79,7 +86,31 @@ public class TopFileReader {
 		return false;
 	}
 	
+	public boolean rangeCheck(int range, int town) {
+		if (meridianCross) {
+			if (range <= upperRange || range >= lowerRange) {
+				int upperTown = Integer.parseInt(Integer.toString(upperbound).substring(1, 4));
+				int lowerTown = Integer.parseInt(Integer.toString(lowerbound).substring(1, 4));
+				if (town > upperTown || town < lowerTown) {
+					return true;
+				}
+				return false;
+			}
+			return true;
+		}
+		else { 
+			if (range > upperRange ||  range < lowerRange) { 
+				return true; 
+			}
+		}
+		return false; 
+	}
+	
 	public ArrayList<TopData> csvReadFile() { 
+		System.out.println("UPPER BOUND: " + upperbound);
+		System.out.println("LOWER BOUND: " + lowerbound);
+		System.out.println("UPPER RANGE: " + upperRange);
+		System.out.println("LOWER RANGE: " + lowerRange);
 		try {
 			UserInput sort = new UserInput(); 
 			
@@ -102,16 +133,23 @@ public class TopFileReader {
 					if (index == uwiCol) {
 						int sortUwi = 0;
 						int range = 0;
+						int town = 0;
 						if (lineArray[index].charAt(3) == '/' ) {
+							if (lineArray[index].equals("100/04-03-052-21W4/0")) {
+								System.out.println("break");
+							}
 							sortUwi = sort.sortTownship(lineArray[index].substring(7, 18));
 							range = Integer.parseInt(lineArray[index].substring(14, 16));
+							town = Integer.parseInt(lineArray[index].substring(10, 13));
 						}
 						else {
 							sortUwi = sort.sortTownship(lineArray[index].substring(6, 17));
 							range = Integer.parseInt(lineArray[index].substring(13, 15));
+							town = Integer.parseInt(lineArray[index].substring(9, 12));
 						}
 						try { 
-							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || range > upperRange || range < lowerRange) {
+							System.out.println(sortUwi);
+							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || rangeCheck(range, town)) {
 								break;
 							}
 						}
@@ -369,15 +407,18 @@ public class TopFileReader {
 					if (index == uwiCol) {
 						int sortUwi = 0;
 						int range = 0;
+						int town = 0;
 						if (cell.getStringCellValue().charAt(3) == '/' ) {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
 							range = Integer.parseInt(cell.getStringCellValue().substring(14, 16));
+							town = Integer.parseInt(cell.getStringCellValue().substring(10, 13));
 						}
 						else {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
 							range = Integer.parseInt(cell.getStringCellValue().substring(13, 15));
+							town = Integer.parseInt(cell.getStringCellValue().substring(9, 12));
 						}
-						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18)) || range > upperRange || range < lowerRange) {
+						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18)) || rangeCheck(range, town)) {
 							break;
 						}
 					}
