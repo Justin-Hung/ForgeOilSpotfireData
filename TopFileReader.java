@@ -135,9 +135,6 @@ public class TopFileReader {
 						int range = 0;
 						int town = 0;
 						if (lineArray[index].charAt(3) == '/' ) {
-							if (lineArray[index].equals("100/04-03-052-21W4/0")) {
-								System.out.println("break");
-							}
 							sortUwi = sort.sortTownship(lineArray[index].substring(7, 18));
 							range = Integer.parseInt(lineArray[index].substring(14, 16));
 							town = Integer.parseInt(lineArray[index].substring(10, 13));

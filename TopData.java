@@ -49,6 +49,7 @@ public class TopData {
 	public String getUwi() {
 		return uwi;
 	}
+	
 	public double getLowerBound() {
 		return tvDepth.get(0) - (upperbuffer + 0.1001); 
 	}
@@ -93,6 +94,10 @@ public class TopData {
 			if (i % 2 == 0) {
 				tvDepth.add(Double.parseDouble(data.get(i)));
 			}
+		}
+		if (uwi.equals("100/04-01-039-20W4/0")) {
+			System.out.println("LOWER BOUND: " + getLowerBound());
+			System.out.println("UPPER BOUND: " + getUpperBound());
 		}
 	}
 	
