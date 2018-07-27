@@ -12,6 +12,7 @@ public class TopData {
 	private double lowerbuffer;
 	private String upperFormation; 
 	private boolean bottomCheck;
+	private String upperUserFormation; 
 	
 	public ArrayList<Double> getTvDepth() { return tvDepth; }
 	
@@ -49,7 +50,11 @@ public class TopData {
 	public String getUwi() {
 		return uwi;
 	}
+	
 	public double getLowerBound() {
+		if (upperUserFormation.equals("")) {
+			return 0;
+		}
 		return tvDepth.get(0) - (upperbuffer + 0.1001); 
 	}
 	
@@ -68,7 +73,12 @@ public class TopData {
 		tvDepth = new ArrayList<Double>() ;
 	}
 	
-	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check) { 
+	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check, String upperUserForm) { 
+		for (int i = 0 ; i < data.size() ; i++) {
+			System.out.print( " | " + data.get(i));
+		}
+		System.out.println();
+		upperUserFormation = upperUserForm;
 		bottomCheck = check;
 		upperFormation = upperForm;
 		upperbuffer = upper; 

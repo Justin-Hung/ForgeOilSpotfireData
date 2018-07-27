@@ -115,6 +115,7 @@ public class OutputGui {
 			lasErrorModel.addElement(outputData.getLasErrorUwis().get(i));
 		}
 	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */

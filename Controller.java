@@ -83,7 +83,6 @@ public class Controller {
 		else { 
 			workingData = workingFileReader.readFile();
 		}
-		workingData.display();
 		outputData = new OutputData();
 		
 		checkIfLasFileExists(); 

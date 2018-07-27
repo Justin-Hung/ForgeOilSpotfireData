@@ -96,7 +96,7 @@ public class FileGui {
 	 * Create the application.
 	 */
 	public FileGui() {
-		userTopTextField = new JTextField();
+		userTopTextField = new JTextField(); 
 		systemTopTextField = new JTextField();
 		gwiTextField = new JTextField();
 		lasTextField = new JTextField();

@@ -16,6 +16,7 @@ public class TopFileReader {
 
 	private String topFilePath = "C:\\Users\\jhung\\SpotfireDataFiles\\NorthernViking\\newTops.xlsx";
 
+	private boolean meridianCross; 
 	private ArrayList<TopData> topDataList; 
 	private ArrayList<TopData> secondaryTopList;
 	private	int topDataIndex; 
@@ -58,6 +59,12 @@ public class TopFileReader {
 		lowerbound = userInput.getSeSortUwi();
 		upperRange = userInput.getUpperRange();
 		lowerRange = userInput.getLowerRange(); 
+		meridianCross = false;
+		int upperMeridian = Integer.parseInt(Integer.toString(upperbound).substring(0, 1));
+		int lowerMeridian = Integer.parseInt(Integer.toString(lowerbound).substring(0, 1));
+		if (upperMeridian != lowerMeridian) { 
+			meridianCross = true; 
+		}
 		
 		upperFormation = "UNKNOWN";
 		topDataList = new ArrayList<TopData>(); 
@@ -77,6 +84,26 @@ public class TopFileReader {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean rangeCheck(int range, int town) {
+		if (meridianCross) {
+			if (range <= upperRange || range >= lowerRange) {
+				int upperTown = Integer.parseInt(Integer.toString(upperbound).substring(1, 4));
+				int lowerTown = Integer.parseInt(Integer.toString(lowerbound).substring(1, 4));
+				if (town > upperTown || town < lowerTown) {
+					return true;
+				}
+				return false;
+			}
+			return true;
+		}
+		else { 
+			if (range > upperRange ||  range < lowerRange) { 
+				return true; 
+			}
+		}
+		return false; 
 	}
 	
 	public ArrayList<TopData> csvReadFile() { 
@@ -102,16 +129,20 @@ public class TopFileReader {
 					if (index == uwiCol) {
 						int sortUwi = 0;
 						int range = 0;
+						int town = 0;
 						if (lineArray[index].charAt(3) == '/' ) {
 							sortUwi = sort.sortTownship(lineArray[index].substring(7, 18));
 							range = Integer.parseInt(lineArray[index].substring(14, 16));
+							town = Integer.parseInt(lineArray[index].substring(10, 13));
 						}
 						else {
 							sortUwi = sort.sortTownship(lineArray[index].substring(6, 17));
 							range = Integer.parseInt(lineArray[index].substring(13, 15));
+							town = Integer.parseInt(lineArray[index].substring(9, 12));
 						}
 						try { 
-							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || range > upperRange || range < lowerRange) {
+							System.out.println(sortUwi);
+							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || rangeCheck(range, town)) {
 								break;
 							}
 						}
@@ -124,11 +155,11 @@ public class TopFileReader {
 						if (!nextRowHasFormationCheck) {
 							if (data.size() > 2) {
 								if (formations.get(formations.size()-1).equals("TD") || !data.get(data.size()-2).equals(formations.get(formations.size()-1))) {
-									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
 									checkBottom = false;
 								}
 								else {
-									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
 								}
 								topCheck = false;
 							}
@@ -141,6 +172,10 @@ public class TopFileReader {
 								data.add("1" + currentUwi);
 							}
 							previousFormation = "UNKNOWN";
+							if (formations.get(0).equals("")) {
+								upperFormation = previousFormation;
+								topCheck = true; 
+							}
 						}
 						else { 
 							currentUwi = lineArray[index];
@@ -184,11 +219,11 @@ public class TopFileReader {
 				System.out.println("ERRROR");
 			}
 			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
 				checkBottom = false;
 			}
 			else {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
 			}
 			bufferedReader.close();
 			return topDataList;
@@ -329,7 +364,7 @@ public class TopFileReader {
 		}
 		if (!futureRow[0].equals(currentUwi) && currentUwi.equals(currentRow[0])) { 
 			if (!data.isEmpty() && checkData(data)) {
-				secondaryTopList.add(new TopData(data, 999, 999, "unknown", false));
+				secondaryTopList.add(new TopData(data, 999, 999, "unknown", false, formations.get(0)));
 			}
 			topDataIndex++; 
 		}
@@ -372,15 +407,18 @@ public class TopFileReader {
 					if (index == uwiCol) {
 						int sortUwi = 0;
 						int range = 0;
+						int town = 0;
 						if (cell.getStringCellValue().charAt(3) == '/' ) {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(7, 18));
 							range = Integer.parseInt(cell.getStringCellValue().substring(14, 16));
+							town = Integer.parseInt(cell.getStringCellValue().substring(10, 13));
 						}
 						else {
 							sortUwi = sort.sortTownship(cell.getStringCellValue().substring(6, 17));
 							range = Integer.parseInt(cell.getStringCellValue().substring(13, 15));
+							town = Integer.parseInt(cell.getStringCellValue().substring(9, 12));
 						}
-						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18)) || range > upperRange || range < lowerRange) {
+						if (sortUwi < lowerbound || sortUwi > upperbound || checkIsEmptyFormation(nextRow.cellIterator(), cell.getStringCellValue().substring(7, 18)) || rangeCheck(range, town)) {
 							break;
 						}
 					}
@@ -389,11 +427,11 @@ public class TopFileReader {
 						if (!nextRowHasFormationCheck) {
 							if (data.size() > 2) {
 								if (formations.get(formations.size()-1).equals("TD") || !data.get(data.size()-2).equals(formations.get(formations.size()-1))) {
-									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
 									checkBottom = false;
 								}
 								else {
-									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+									topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
 								}
 								topCheck = false;
 							}
@@ -406,6 +444,10 @@ public class TopFileReader {
 								data.add("1" + currentUwi);
 							}
 							previousFormation = "UNKNOWN";
+							if (formations.get(0).equals("")) {
+								upperFormation = previousFormation;
+								topCheck = true; 
+							}
 						}
 						else { 
 							currentUwi = cell.getStringCellValue();
@@ -425,50 +467,6 @@ public class TopFileReader {
 							if (formations.get(formations.size()-1).equals(formations.get(0))) {
 								upperFormation = previousFormation;
 							}
-							//check next row for bottom
-//							Iterator<Row> checkNextRow = iterator;
-//						
-//							if (checkNextRow.hasNext()) {
-//								Row checkRow = checkNextRow.next();
-//								Iterator<Cell> checkCellIterator = checkRow.cellIterator();
-//								int checkIndex = 0;
-//								String[] rowData = new String[3]; 
-//								while (checkCellIterator.hasNext()) {
-//									Cell checkCell = checkCellIterator.next();
-//									if (checkIndex == uwiCol) {
-//										rowData[0] = checkCell.getStringCellValue(); 
-//									}
-//									if (checkIndex == formationCol) {
-//										rowData[1] = checkCell.getStringCellValue();
-//									}
-//									if (checkIndex == tvdCol) {
-//										rowData[2] = String.valueOf(checkCell.getNumericCellValue()); 
-//										break;
-//									}
-//									checkIndex++;
-//								}
-//								if (!currentUwi.equals(rowData[0])) {
-//									checkBottom = true; 
-//									if (rowData[1].equals(formations.get(0))) {
-//										nextRowHasFormationCheck = true;
-//										upperFormation = "UNKNOWN";
-//										topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
-//										checkBottom = false;
-//										data = new ArrayList<String>(); 
-//										data.add(rowData[0]);
-//										data.add(rowData[1]);
-//										data.add(rowData[2]);
-//										previousFormation = "UNKNOWN";
-//									}
-//								}
-//								else { 
-//									data.add(rowData[1]);
-//									data.add(rowData[2]);
-//								}
-//							}
-//							else {
-//								checkBottom = true; 
-//							}
 							topCheck = false; 
 							break;
 						}
@@ -493,11 +491,11 @@ public class TopFileReader {
 				row++;
 			}
 			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true));
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
 				checkBottom = false;
 			}
 			else {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false)); 
+				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
 			}
 			workbook.close(); 
 			inputStream.close();

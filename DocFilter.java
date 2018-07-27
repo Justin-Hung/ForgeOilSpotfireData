@@ -21,6 +21,9 @@ class MyIntFilter extends DocumentFilter {
           if (testText.isEmpty()) {
              return true;
           }
+          if (testText.equals("-")) { 
+      		  return true;
+      	  }
           int intValue = 0;
           try {
              intValue = Integer.parseInt(testText.trim());

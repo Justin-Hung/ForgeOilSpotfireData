@@ -33,6 +33,7 @@ public class LasFileReader {
 	}
 	
 	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
+		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
@@ -111,8 +112,8 @@ public class LasFileReader {
 //					}
 //				}   
 				else if (line.startsWith("   ")) { 
-					if (Double.parseDouble(line.substring(0, 11)) > topData.getLowerBound() 
-							&& Double.parseDouble(line.substring(0, 11)) < topData.getUpperBound()) {
+					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
+							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
 						String formattedLine = formatLine(line);
 						lasContainer.addRow(formattedLine + "      " + bit + "      " + serviceCo);
 					}
