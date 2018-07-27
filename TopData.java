@@ -12,6 +12,7 @@ public class TopData {
 	private double lowerbuffer;
 	private String upperFormation; 
 	private boolean bottomCheck;
+	private String upperUserFormation; 
 	
 	public ArrayList<Double> getTvDepth() { return tvDepth; }
 	
@@ -51,6 +52,9 @@ public class TopData {
 	}
 	
 	public double getLowerBound() {
+		if (upperUserFormation.equals("")) {
+			return 0;
+		}
 		return tvDepth.get(0) - (upperbuffer + 0.1001); 
 	}
 	
@@ -69,7 +73,12 @@ public class TopData {
 		tvDepth = new ArrayList<Double>() ;
 	}
 	
-	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check) { 
+	public TopData(ArrayList<String> data, double upper, double lower, String upperForm, boolean check, String upperUserForm) { 
+		for (int i = 0 ; i < data.size() ; i++) {
+			System.out.print( " | " + data.get(i));
+		}
+		System.out.println();
+		upperUserFormation = upperUserForm;
 		bottomCheck = check;
 		upperFormation = upperForm;
 		upperbuffer = upper; 
@@ -94,10 +103,6 @@ public class TopData {
 			if (i % 2 == 0) {
 				tvDepth.add(Double.parseDouble(data.get(i)));
 			}
-		}
-		if (uwi.equals("100/04-01-039-20W4/0")) {
-			System.out.println("LOWER BOUND: " + getLowerBound());
-			System.out.println("UPPER BOUND: " + getUpperBound());
 		}
 	}
 	

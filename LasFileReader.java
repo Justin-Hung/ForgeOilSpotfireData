@@ -112,7 +112,6 @@ public class LasFileReader {
 //					}
 //				}   
 				else if (line.startsWith("   ")) { 
-					System.out.println( "Depth: " + Double.parseDouble(line.substring(0, 15)) );
 					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
 						String formattedLine = formatLine(line);
