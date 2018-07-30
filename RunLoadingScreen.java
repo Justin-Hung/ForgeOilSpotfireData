@@ -100,18 +100,18 @@ public class RunLoadingScreen {
 	                if (controller.appendToFile()) {
 	                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
 	                }
-	                else {
-	                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
-	                }
                 }
                 else { 
                 	if (controller.writeToFile()) {
 	                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
-	                }
-	                else {
-	                	JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
-	                }
+                	}	                
                 }
+                if (controller.getUserInput().isUnknownRun()) {
+                	if (controller.writeUnknown()) {
+                		JOptionPane.showMessageDialog(jpb.getParent(), "Could not write unknown mnemonics", "Error", JOptionPane.INFORMATION_MESSAGE);
+                	}
+                }
+                JOptionPane.showMessageDialog(jpb.getParent(), "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose();
                 new OutputGui(controller);
             } 

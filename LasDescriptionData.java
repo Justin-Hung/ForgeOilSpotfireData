@@ -13,6 +13,22 @@ public class LasDescriptionData {
 		uwi = u;
 	}
 	
+	public int size() { return mnemonicList.size(); }
+	
+	public String getUwi() { return uwi; }
+	
+	public String getMnemonic(int i) { 
+		return mnemonicList.get(i);
+	}
+	
+	public String getUnit(int i) { 
+		return unitList.get(i);
+	}
+	
+	public String getDescription(int i) {
+		return descriptionList.get(i);
+	}
+	
 	public void addLine(String line) { 
 		addMnemonic(line.substring(1, 7).trim());
 		addUnit(line.substring(8,18).trim());

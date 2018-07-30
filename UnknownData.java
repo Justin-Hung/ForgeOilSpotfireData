@@ -4,6 +4,9 @@ public class UnknownData {
 	private String uwi; 
 	private ArrayList<String> unknownMnemonics; 
 	
+	public String getUwi() { return uwi; } 
+	
+	public int size() { return unknownMnemonics.size(); } 
 	public UnknownData(String uwi) {
 		this.uwi = uwi; 
 		unknownMnemonics = new ArrayList<String>(); 

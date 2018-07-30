@@ -144,7 +144,7 @@ public class LasFileReader {
 			}
 			lasContainer.formatHeader();
 			if (unknownOutput) {
-				descriptionData.display();
+				//descriptionData.display();
 				descriptionDataList.add(descriptionData);
 			}
 			return lasContainer;

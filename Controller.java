@@ -206,4 +206,9 @@ public class Controller {
 		System.out.println("wells completed: " + wellsCompleted);
 		return false; 
 	}
+	
+	public boolean writeUnknown() { 
+		
+		return false;
+	}
 }
