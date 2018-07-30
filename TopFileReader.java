@@ -83,6 +83,13 @@ public class TopFileReader {
 		if (cell.getStringCellValue().equals("")) {
 			return true;
 		}
+		while (index <= tvdCol) {
+			cell = cellIterator.next();
+			index++; 
+		}
+		if (cell.getStringCellValue().equals("")) {
+			return true; 
+		}
 		return false;
 	}
 	
@@ -142,7 +149,7 @@ public class TopFileReader {
 						}
 						try { 
 							System.out.println(sortUwi);
-							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || rangeCheck(range, town)) {
+							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || rangeCheck(range, town) || lineArray[tvdCol].equals("")) {
 								break;
 							}
 						}

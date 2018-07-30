@@ -166,9 +166,6 @@ public class DataWriter {
 			}
 			
 			finalRow += lasData.getBit() + "," + lasData.getServiceCo();
-			if (topData.getUwi().equals("102/02-11-049-27W4/0")) {
-				topData.displayTop();
-			}
 			finalRow = addCalcValues(finalRow);
 			
 //			for (int j = 0 ; j < unknownPositions.size() ; j++) {
