@@ -3,11 +3,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
  
 public class LasFileReader {
 
 	private String lasFilePath = "E:\\ForgeOil\\LasFiles\\Bellatrix\\";
 	private String lasFile;
+	private	ArrayList<LasDescriptionData> descriptionDataList; 
 	
 	public LasFileReader() { 
 		
@@ -15,6 +17,7 @@ public class LasFileReader {
 	
 	public LasFileReader(String filePath) { 
 		lasFilePath = filePath + "\\"; 
+		descriptionDataList = new ArrayList<LasDescriptionData>(); 
 	}
 	
 	public String formatLine(String line) { 
@@ -32,7 +35,15 @@ public class LasFileReader {
 		return builder.toString();
 	}
 	
-	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
+	public ArrayList<LasDescriptionData> getDescriptionList() { 
+		return descriptionDataList; 
+	}
+	
+	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists, boolean unknownOutput) { 
+		LasDescriptionData descriptionData = null; 
+		if (unknownOutput) {
+			descriptionData = new LasDescriptionData(topData.getUwi());
+		}
 		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
@@ -87,6 +98,15 @@ public class LasFileReader {
 			}
 
 			while((line = bufferedReader.readLine()) != null) {
+				if (line.contains("~Curve Information") && unknownOutput) { 
+					line = bufferedReader.readLine();
+					line = bufferedReader.readLine();
+					line = bufferedReader.readLine();
+					while (!line.startsWith("~A")) {
+						descriptionData.addLine(line);
+						line = bufferedReader.readLine();
+					}
+				}
 				if (line.startsWith(" BS  .M")) {
 					bit = line.substring(12,18);
 				}
@@ -104,13 +124,7 @@ public class LasFileReader {
 				}
 				if (line.startsWith("~A")) {
 					lasContainer.addHeader(line);
-				}
-//				if (line.startsWith("      ")) {
-//					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
-//							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
-//						lasContainer.addRow(line + "          buffer              buffer" );
-//					}
-//				}   
+				} 
 				else if (line.startsWith("   ")) { 
 					if (Double.parseDouble(line.substring(0, 15)) > topData.getLowerBound() 
 							&& Double.parseDouble(line.substring(0, 15)) < topData.getUpperBound()) {
@@ -124,16 +138,18 @@ public class LasFileReader {
 			lasContainer.setBit(bit);
 			
 			bufferedReader.close(); 
-			
+			  
 			if (lasContainer.isEmpty()) {
 				return null;
 			}
 			lasContainer.formatHeader();
-			
+			if (unknownOutput) {
+				descriptionData.display();
+				descriptionDataList.add(descriptionData);
+			}
 			return lasContainer;
 		}
 		catch (Exception e) {
-//			e.printStackTrace();
 			return null;
 		}
 	}

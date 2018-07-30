@@ -3,7 +3,8 @@ import java.util.ArrayList;
 import org.apache.commons.codec.binary.StringUtils;
 
 public class DataWriter {
-
+	
+	private ArrayList<UnknownData> unknownDataList;
 	private String header;
 	private int row;
 	private ArrayList<MnemonicData> mnemonics;
@@ -19,6 +20,11 @@ public class DataWriter {
 	public DataWriter(ArrayList<MnemonicData> m) { 
 		mnemonics = m;
 		position = new int[m.size()+1];
+		unknownDataList = new ArrayList<UnknownData>(); 
+	}
+	
+	public ArrayList<UnknownData> getUnknownDataList() { 
+		return unknownDataList; 
 	}
 	
 	public void setColumnArray(String head) {
@@ -60,8 +66,11 @@ public class DataWriter {
 		}
 	}
 	
-	public FormattedData secondaryFormatData(String h, String uwiInfo, LasData lasData, TopData topData, ArrayList<TopData> secondaryTopDataList) {
-	
+	public FormattedData secondaryFormatData(String h, String uwiInfo, LasData lasData, TopData topData, ArrayList<TopData> secondaryTopDataList, boolean unknownOutput) {
+		UnknownData unknownData = null;
+		if (unknownOutput) { 
+			unknownData = new UnknownData(topData.getUwi());
+		}
 		TopData secondaryTopData = null;
 		for (int i = 0 ; i < secondaryTopDataList.size() ; i++) {
 			if (topData.getUwi().equals(secondaryTopDataList.get(i).getUwi())) {
@@ -83,7 +92,10 @@ public class DataWriter {
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
-		//getUnknownPositions(formattedHeader);
+		
+		if (unknownOutput) { 
+			getUnknownPositions(formattedHeader);
+		}
 		
 		String finalHeader = header; 
 		
@@ -101,9 +113,11 @@ public class DataWriter {
 		
 		finalHeader = addCalcHeaders(finalHeader);
 		
-//		for (int i = 0 ; i < unknownPositions.size() ; i++) {
-//			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
-//		}
+		if (unknownOutput) { 
+			for (int i = 0 ; i < unknownPositions.size() ; i++) {
+				unknownData.addUnknownMnemonic(formattedHeader.split(",")[unknownPositions.get(i)]);
+			}
+		}
 		
 		finalHeader = removeNewLine(finalHeader);
 		
@@ -183,10 +197,17 @@ public class DataWriter {
 		if (lasData.getMdForDir()) {
 			formattedData.setMdTrue(); 
 		}
+		if (unknownOutput) {
+			unknownDataList.add(unknownData);
+		}
 		return formattedData;
 	}
 
-	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData) {
+	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData, boolean unknownOutput) {
+		UnknownData unknownData = null;
+		if (unknownOutput) {
+			unknownData = new UnknownData(topData.getUwi());
+		}
 		unknownPositions = new ArrayList<Integer>(); 
 		columnArray = new int[11];
 		header = h; 
@@ -200,7 +221,9 @@ public class DataWriter {
 		formattedHeader = header + formattedHeader.substring(8);
 		
 		getPositions(formattedHeader);
-		//getUnknownPositions(formattedHeader);
+		if (unknownOutput) {
+			getUnknownPositions(formattedHeader);
+		}
 		
 		String finalHeader = header; 
 		
@@ -218,9 +241,11 @@ public class DataWriter {
 		
 		finalHeader = addCalcHeaders(finalHeader);
 		
-//		for (int i = 0 ; i < unknownPositions.size() ; i++) {
-//			finalHeader += "," + formattedHeader.split(",")[unknownPositions.get(i)];
-//		}
+		if (unknownOutput) {
+			for (int i = 0 ; i < unknownPositions.size() ; i++) {
+				unknownData.addUnknownMnemonic(formattedHeader.split(",")[unknownPositions.get(i)]);
+			}
+		}
 		
 		finalHeader = removeNewLine(finalHeader);
 		
@@ -283,6 +308,9 @@ public class DataWriter {
 		resetPosition();
 		if (lasData.getMdForDir()) {
 			formattedData.setMdTrue(); 
+		}
+		if (unknownOutput) {
+			unknownDataList.add(unknownData);
 		}
 		return formattedData;
 	}

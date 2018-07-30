@@ -127,19 +127,19 @@ public class Controller {
 				LasData lasData = null;
 				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeCol()].equals("Vertical"))
 				{
-					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists, userInput.isUnknownRun());
 				}
 				else {
-					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists, meridianExists);
+					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists, meridianExists, userInput.isUnknownRun());
 				}
 				
 				if (lasData != null) { 
 					FormattedData formattedData = null;
 					if (secondaryTopDataList == null) { 
-						formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow));
+						formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow), userInput.isUnknownRun());
 					}
 					else { 
-						formattedData = dataWriter.secondaryFormatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow),secondaryTopDataList);
+						formattedData = dataWriter.secondaryFormatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow),secondaryTopDataList, userInput.isUnknownRun());
 					}
 					System.out.println(topDataList.get(topRow).getUwi());
 					outputData.addSuccess(topDataList.get(topRow).getUwi());
@@ -183,7 +183,7 @@ public class Controller {
 			writer.saveParameters(); 
 			if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
 				return true;
-			}
+			}   
 			if (!userInput.getOutputFilePath().endsWith(".csv")) {
 				String appendFile = userInput.getOutputFilePath() + "\\" + userInput.getOutputFileName() + "\\" + userInput.getOutputFileName() + ".csv";
 				userInput.setOutputFilePath(appendFile);
