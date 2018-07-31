@@ -207,7 +207,7 @@ public class OutputGui {
 				new ExamineWellGui(controller, successList.getSelectedValue());
 			}
 		});
-		panel.add(btnExamine);
+		//panel.add(btnExamine);
 		
 		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
 		panel.add(horizontalStrut_7);
