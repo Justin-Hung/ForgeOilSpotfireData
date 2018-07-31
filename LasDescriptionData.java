@@ -30,9 +30,19 @@ public class LasDescriptionData {
 	}
 	
 	public void addLine(String line) { 
-		addMnemonic(line.substring(1, 7).trim());
-		addUnit(line.substring(8,18).trim());
-		addDescription(line.substring(35).trim());
+		line = line.replaceAll(",", "");
+		addMnemonic(line.substring(1, line.indexOf('.')).trim());
+		addUnit(line.substring(line.indexOf('.'), line.indexOf(':')-13).trim());
+		
+		int descriptionIndex = line.indexOf(':') + 2;
+		while(true) {
+			if (line.charAt(descriptionIndex) == ' ') {
+				descriptionIndex++; 
+				break;
+			}
+			descriptionIndex++; 
+		}
+		addDescription(line.substring(descriptionIndex).trim());
 	}
 
 	public void addDescription(String description) { 

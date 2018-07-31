@@ -208,7 +208,16 @@ public class Controller {
 	}
 	
 	public boolean writeUnknown() { 
-		
+		UnknownWrite unknownWrite = new UnknownWrite(userInput.getOutputFilePath(), userInput.getOutputFileName(), dataWriter.getUnknownDataList(), lasFileReader.getDescriptionList());
+		unknownWrite.formatLoop();
+		unknownWrite.display();
+		try {
+			unknownWrite.write();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			return true;
+		} 
 		return false;
 	}
 }

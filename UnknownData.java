@@ -7,6 +7,10 @@ public class UnknownData {
 	public String getUwi() { return uwi; } 
 	
 	public int size() { return unknownMnemonics.size(); } 
+	
+	public String getUnknownMnemonic(int i) { 
+		return unknownMnemonics.get(i);
+	}
 	public UnknownData(String uwi) {
 		this.uwi = uwi; 
 		unknownMnemonics = new ArrayList<String>(); 

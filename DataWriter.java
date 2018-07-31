@@ -198,7 +198,9 @@ public class DataWriter {
 			formattedData.setMdTrue(); 
 		}
 		if (unknownOutput) {
-			unknownDataList.add(unknownData);
+			if (unknownData.size() != 0) {
+				unknownDataList.add(unknownData);
+			}
 		}
 		return formattedData;
 	}
@@ -310,7 +312,9 @@ public class DataWriter {
 			formattedData.setMdTrue(); 
 		}
 		if (unknownOutput) {
-			unknownDataList.add(unknownData);
+			if (unknownData.size() != 0) {
+				unknownDataList.add(unknownData);
+			}
 		}
 		return formattedData;
 	}

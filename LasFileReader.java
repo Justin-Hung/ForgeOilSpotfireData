@@ -40,10 +40,6 @@ public class LasFileReader {
 	}
 	
 	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists, boolean unknownOutput) { 
-		LasDescriptionData descriptionData = null; 
-		if (unknownOutput) {
-			descriptionData = new LasDescriptionData(topData.getUwi());
-		}
 		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
@@ -96,7 +92,10 @@ public class LasFileReader {
 			if (usingMdforDir) {
 				lasContainer.setMdTrue();
 			}
-
+			LasDescriptionData descriptionData = null; 
+			if (unknownOutput) {
+				descriptionData = new LasDescriptionData(topData.getUwi());
+			}
 			while((line = bufferedReader.readLine()) != null) {
 				if (line.contains("~Curve Information") && unknownOutput) { 
 					line = bufferedReader.readLine();
