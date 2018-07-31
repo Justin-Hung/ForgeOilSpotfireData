@@ -148,7 +148,6 @@ public class TopFileReader {
 							town = Integer.parseInt(lineArray[index].substring(9, 12));
 						}
 						try { 
-							System.out.println(sortUwi);
 							if (sortUwi < lowerbound || sortUwi > upperbound || lineArray[formationCol].equals("") || rangeCheck(range, town) || lineArray[tvdCol].equals("")) {
 								break;
 							}
