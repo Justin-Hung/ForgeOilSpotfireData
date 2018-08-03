@@ -6,10 +6,9 @@ public class DataWriter {
 	
 	private ArrayList<UnknownData> unknownDataList;
 	private String header;
-	private int row;
 	private ArrayList<MnemonicData> mnemonics;
 	private ArrayList<Integer> unknownPositions; 
-	private int[] position;
+	private ArrayList<ArrayList<Integer>> positionList;
 	private int[] columnArray;
 	private int headerOffset; 
 	
@@ -19,7 +18,7 @@ public class DataWriter {
 	
 	public DataWriter(ArrayList<MnemonicData> m) { 
 		mnemonics = m;
-		position = new int[m.size()+1];
+		positionList = new ArrayList<ArrayList<Integer>>(); 
 		unknownDataList = new ArrayList<UnknownData>(); 
 	}
 	
@@ -99,9 +98,9 @@ public class DataWriter {
 		
 		String finalHeader = header; 
 		
-		for (int j = 0 ; j < position.length ; j++) {
-			if (position[j] != 0) {
-				finalHeader += formattedHeader.split(",")[position[j]] + ",";
+		for (int j = 0 ; j < positionList.size() ; j++) {
+			if (!positionList.get(j).isEmpty()) {
+				finalHeader += formattedHeader.split(",")[positionList.get(j).get(0)] + ",";
 			}
 			else {
 				finalHeader += ",";
@@ -143,22 +142,27 @@ public class DataWriter {
 			String formattedRow = generalWellInfo + data; 
 			
 			String finalRow = generalWellInfo + ",";	
-			for (int j = 0 ; j < position.length ; j++) {
-				boolean checkNum = true; 
-				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
+			for (int j = 0 ; j < positionList.size() ; j++) {
+				String value = "-999"; 
+				for (int k = 0 ; k < positionList.get(j).size() ; k++) {
+					if (!getCol(formattedRow, positionList.get(j).get(k)).contains("-999")) {
+						value = getCol(formattedRow, positionList.get(j).get(k));
+					}
+				}
+				if (!value.contains("-999")){
 					if (j == 18) {
-						double density = Double.parseDouble(getCol(formattedRow, position[j]));
+						double density = Double.parseDouble(value);
 						if ( density <= 4.0 && density >= 0.0) {
 							finalRow += String.valueOf((density*1000)) + ",";
 						}
 						else {
-							finalRow += getCol(formattedRow, position[j]) + ","; 
+							finalRow += value + ","; 
 						}
 					}
 					else if (j > 20 && j < 33) {
 						double porosity = -999;
 						try {
-							porosity = Double.parseDouble(getCol(formattedRow, position[j]));
+							porosity = Double.parseDouble(value);
 						}
 						catch (NumberFormatException e) {
 							e.printStackTrace();
@@ -167,11 +171,11 @@ public class DataWriter {
 							finalRow += String.valueOf((porosity*100)) + ",";
 						}
 						else {
-							finalRow += getCol(formattedRow, position[j]) + ","; 
+							finalRow += value + ","; 
 						}
 					}
 					else {
-						finalRow += getCol(formattedRow, position[j]) + ","; 	
+						finalRow += value + ","; 	
 					}
 				}
 				else {
@@ -226,9 +230,9 @@ public class DataWriter {
 		
 		String finalHeader = header; 
 		
-		for (int j = 0 ; j < position.length ; j++) {
-			if (position[j] != 0) {
-				finalHeader += formattedHeader.split(",")[position[j]] + ",";
+		for (int j = 0 ; j < positionList.size() ; j++) {
+			if (!positionList.get(j).isEmpty()) {
+				finalHeader += formattedHeader.split(",")[positionList.get(j).get(0)] + ",";
 			}
 			else {
 				finalHeader += ",";
@@ -262,29 +266,40 @@ public class DataWriter {
 			String formattedRow = generalWellInfo + data; 
 			
 			String finalRow = generalWellInfo + ",";	
-			for (int j = 0 ; j < position.length ; j++) {
-				boolean checkNum = true; 
-				if (position[j] != 0 && !getCol(formattedRow, position[j]).contains("-999")){
+			for (int j = 0 ; j < positionList.size() ; j++) {
+				String value = "-999"; 
+				for (int k = 0 ; k < positionList.get(j).size() ; k++) {
+					if (!getCol(formattedRow, positionList.get(j).get(k)).contains("-999")) {
+						value = getCol(formattedRow, positionList.get(j).get(k));
+					}
+				}
+				if (!value.contains("-999")){
 					if (j == 18) {
-						double density = Double.parseDouble(getCol(formattedRow, position[j]));
+						double density = Double.parseDouble(value);
 						if ( density <= 4.0 && density >= 0.0) {
 							finalRow += String.valueOf((density*1000)) + ",";
 						}
 						else {
-							finalRow += getCol(formattedRow, position[j]) + ","; 
+							finalRow += value + ","; 
 						}
 					}
 					else if (j > 20 && j < 33) {
-						double porosity = Double.parseDouble(getCol(formattedRow, position[j]));
+						double porosity = -999;
+						try {
+							porosity = Double.parseDouble(value);
+						}
+						catch (NumberFormatException e) {
+							e.printStackTrace();
+						}
 						if ( porosity < 1.0 && porosity > -1.0) {
 							finalRow += String.valueOf((porosity*100)) + ",";
 						}
 						else {
-							finalRow += getCol(formattedRow, position[j]) + ","; 
+							finalRow += value + ","; 
 						}
 					}
 					else {
-						finalRow += getCol(formattedRow, position[j]) + ","; 	
+						finalRow += value + ","; 	
 					}
 				}
 				else {
@@ -336,7 +351,7 @@ public class DataWriter {
 	}
 	
 	public void resetPosition() {
-		position = new int[mnemonics.size() + 1];
+		positionList = new ArrayList<ArrayList<Integer>>(); 
 	}
 	
 	public String addCalcValues(String row) {
@@ -458,26 +473,24 @@ public class DataWriter {
 		String[] headerArray = header.split(",");
 		
 		for (int i = 0 ; i < mnemonics.size()-1 ; i++) {
+			ArrayList<Integer> columnPosition = new ArrayList<Integer>(); 
 			for (int j = 0 ; j < mnemonics.get(i).getMnemonics().size() ; j++) {
-				if (position[i] == 0) {
-					for (int k = 0 ; k < headerArray.length ; k++) {
-						if (headerArray[k].equals(mnemonics.get(i).getMnemonics().get(j))) { 
-							position[i] = k; 
-						}
+				for (int k = 0 ; k < headerArray.length ; k++) {
+					if (headerArray[k].equals(mnemonics.get(i).getMnemonics().get(j))) { 
+						columnPosition.add(k); 
 					}
 				}
-				else {
-					break;
-				}
 			}
+			positionList.add(columnPosition);
 		}
 		
 		int caliperIndex = 0;
+		ArrayList<Integer> firstCalPosition = new ArrayList<Integer>(); 
 		while (caliperIndex < mnemonics.get(mnemonics.size()-1).getMnemonics().size()) {
-			if (position[mnemonics.size()-1] == 0) {
+			if (firstCalPosition.size() == 0) {
 				for (int j = 0 ; j < headerArray.length ; j++) {
 					if (headerArray[j].equals(mnemonics.get(mnemonics.size()-1).getMnemonics().get(caliperIndex))) {
-						position[mnemonics.size()-1] = j; 
+						firstCalPosition.add(j); 
 					}
 				}
 			}
@@ -486,11 +499,13 @@ public class DataWriter {
 			}
 			caliperIndex++;
 		}
+		positionList.add(firstCalPosition);
+		ArrayList<Integer> secondCalPosition = new ArrayList<Integer>(); 
 		while (caliperIndex < mnemonics.get(mnemonics.size()-1).getMnemonics().size()) {
-			if (position[mnemonics.size()] == 0) {
+			if (secondCalPosition.size() == 0) {
 				for (int j = 0 ; j < headerArray.length ; j++) {
 					if (headerArray[j].equals(mnemonics.get(mnemonics.size()-1).getMnemonics().get(caliperIndex))) {
-						position[mnemonics.size()] = j; 
+						secondCalPosition.add(j); 
 					}
 				}
 			}
@@ -498,7 +513,8 @@ public class DataWriter {
 				break; 
 			}
 			caliperIndex++;
-		}	
+		}
+		positionList.add(secondCalPosition);
 	}
 
 	public String getCol(String row, int index) {
