@@ -9,6 +9,8 @@ public class DataWriter {
 	private ArrayList<MnemonicData> mnemonics;
 	private ArrayList<Integer> unknownPositions; 
 	private ArrayList<ArrayList<Integer>> positionList;
+	private LasDescriptionData descriptionData;
+	
 	private int[] columnArray;
 	private int headerOffset; 
 	
@@ -22,8 +24,28 @@ public class DataWriter {
 		unknownDataList = new ArrayList<UnknownData>(); 
 	}
 	
+	public void setDescriptionData(LasDescriptionData descriptionData) {
+		this.descriptionData = descriptionData;
+	}
+	
 	public ArrayList<UnknownData> getUnknownDataList() { 
 		return unknownDataList; 
+	}
+	
+	public ArrayList<ArrayList<String>> getMnemonicUnits(ArrayList<ArrayList<String>> mnemonicsUsed, String uwi) { 
+		ArrayList<ArrayList<String>> unitList = new ArrayList<ArrayList<String>>(); 
+		for(int i = 0; i < mnemonicsUsed.size() ; i++) {
+			ArrayList<String> unit = new ArrayList<String>();
+			for (int j = 0 ; j < mnemonicsUsed.get(i).size() ; j++) { 
+				for (int k = 0 ; k < descriptionData.size() ; k++) {
+					if (mnemonicsUsed.get(i).get(j).equals(descriptionData.getMnemonic(k))) { 
+						unit.add(descriptionData.getUnit(k));
+					}
+				}
+			}
+			unitList.add(unit);
+		}
+		return unitList;
 	}
 	
 	public void setColumnArray(String head) {
@@ -96,8 +118,17 @@ public class DataWriter {
 			getUnknownPositions(formattedHeader);
 		}
 		
-		String finalHeader = header; 
+		ArrayList<ArrayList<String>> mnemonicsUsed = new ArrayList<ArrayList<String>>();
+		for (int i = 0 ; i < positionList.size() ; i++) {
+			ArrayList<String> mnemonics = new ArrayList<String>(); 
+			for (int j = 0 ; j < positionList.get(i).size() ; j++) {
+				mnemonics.add(formattedHeader.split(",")[positionList.get(i).get(j)]); 
+			}
+			mnemonicsUsed.add(mnemonics);
+		}
 		
+		String finalHeader = header; 
+
 		for (int j = 0 ; j < positionList.size() ; j++) {
 			if (!positionList.get(j).isEmpty()) {
 				finalHeader += formattedHeader.split(",")[positionList.get(j).get(0)] + ",";
@@ -121,7 +152,12 @@ public class DataWriter {
 		finalHeader = removeNewLine(finalHeader);
 		
 		formattedData.addHeader(finalHeader);
-
+		
+		ArrayList<ArrayList<String>> unitList = null;
+		if (descriptionData != null) {
+			unitList = getMnemonicUnits(mnemonicsUsed, topData.getUwi());
+		}
+		
 		for (int i = 0; i < lasData.getSize(); i++) {
 			String formatRow = lasData.getRow(i).trim().replaceAll(" +", ",") + ",";
 
@@ -144,9 +180,12 @@ public class DataWriter {
 			String finalRow = generalWellInfo + ",";	
 			for (int j = 0 ; j < positionList.size() ; j++) {
 				String value = "-999"; 
+				int kValue = 0;
 				for (int k = 0 ; k < positionList.get(j).size() ; k++) {
 					if (!getCol(formattedRow, positionList.get(j).get(k)).contains("-999")) {
+						kValue = k;
 						value = getCol(formattedRow, positionList.get(j).get(k));
+						break;
 					}
 				}
 				if (!value.contains("-999")){
@@ -160,18 +199,38 @@ public class DataWriter {
 						}
 					}
 					else if (j > 20 && j < 33) {
-						double porosity = -999;
-						try {
-							porosity = Double.parseDouble(value);
+						if (unitList == null) { 
+							double porosity = -999;
+							try {
+								porosity = Double.parseDouble(value);
+							}
+							catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+							if ( porosity < 1.0 && porosity > -1.0) {
+								finalRow += String.valueOf((porosity*100)) + ",";
+							}
+							else {
+								finalRow += value + ","; 
+							}
 						}
-						catch (NumberFormatException e) {
-							e.printStackTrace();
+						else if (unitList.get(j).get(kValue).contains("%") || unitList.get(j).get(kValue).toUpperCase().contains("PERC")) {
+							finalRow += value + ",";
 						}
-						if ( porosity < 1.0 && porosity > -1.0) {
-							finalRow += String.valueOf((porosity*100)) + ",";
-						}
-						else {
-							finalRow += value + ","; 
+						else { 
+							double porosity = -999;
+							try {
+								porosity = Double.parseDouble(value);
+							}
+							catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+							if ( porosity < 1.0 && porosity > -1.0) {
+								finalRow += String.valueOf((porosity*100)) + ",";
+							}
+							else {
+								finalRow += value + ","; 
+							}
 						}
 					}
 					else {
@@ -228,6 +287,15 @@ public class DataWriter {
 			getUnknownPositions(formattedHeader);
 		}
 		
+		ArrayList<ArrayList<String>> mnemonicsUsed = new ArrayList<ArrayList<String>>();
+		for (int i = 0 ; i < positionList.size() ; i++) {
+			ArrayList<String> mnemonics = new ArrayList<String>(); 
+			for (int j = 0 ; j < positionList.get(i).size() ; j++) {
+				mnemonics.add(formattedHeader.split(",")[positionList.get(i).get(j)]); 
+			}
+			mnemonicsUsed.add(mnemonics);
+		}
+
 		String finalHeader = header; 
 		
 		for (int j = 0 ; j < positionList.size() ; j++) {
@@ -253,7 +321,19 @@ public class DataWriter {
 		finalHeader = removeNewLine(finalHeader);
 		
 		formattedData.addHeader(finalHeader);
-
+		
+		ArrayList<ArrayList<String>> unitList = null;
+		if (descriptionData != null) {
+			unitList = getMnemonicUnits(mnemonicsUsed, topData.getUwi());
+		}
+		if (topData.getUwi().equals("100/01-01-080-10W6/0")) {
+			for (int i = 0 ; i < unitList.size() ; i++) {
+				for (int j = 0 ; j < unitList.get(i).size() ; j++) {
+					System.out.print(mnemonicsUsed.get(i).get(j) + " " + unitList.get(i).get(j) + " | ");
+				}
+				System.out.println("");
+			}
+		}
 		for (int i = 0; i < lasData.getSize(); i++) {
 			String formatRow = lasData.getRow(i).trim().replaceAll(" +", ",") + ",";
 
@@ -268,9 +348,12 @@ public class DataWriter {
 			String finalRow = generalWellInfo + ",";	
 			for (int j = 0 ; j < positionList.size() ; j++) {
 				String value = "-999"; 
+				int kValue = 0;
 				for (int k = 0 ; k < positionList.get(j).size() ; k++) {
 					if (!getCol(formattedRow, positionList.get(j).get(k)).contains("-999")) {
+						kValue = k;
 						value = getCol(formattedRow, positionList.get(j).get(k));
+						break;
 					}
 				}
 				if (!value.contains("-999")){
@@ -284,18 +367,38 @@ public class DataWriter {
 						}
 					}
 					else if (j > 20 && j < 33) {
-						double porosity = -999;
-						try {
-							porosity = Double.parseDouble(value);
+						if (unitList == null) { 
+							double porosity = -999;
+							try {
+								porosity = Double.parseDouble(value);
+							}
+							catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+							if ( porosity < 1.0 && porosity > -1.0) {
+								finalRow += String.valueOf((porosity*100)) + ",";
+							}
+							else {
+								finalRow += value + ","; 
+							}
 						}
-						catch (NumberFormatException e) {
-							e.printStackTrace();
+						else if (unitList.get(j).get(kValue).contains("%") || unitList.get(j).get(kValue).toUpperCase().contains("PERC")) {
+							finalRow += value + ",";
 						}
-						if ( porosity < 1.0 && porosity > -1.0) {
-							finalRow += String.valueOf((porosity*100)) + ",";
-						}
-						else {
-							finalRow += value + ","; 
+						else { 
+							double porosity = -999;
+							try {
+								porosity = Double.parseDouble(value);
+							}
+							catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+							if ( porosity < 1.0 && porosity > -1.0) {
+								finalRow += String.valueOf((porosity*100)) + ",";
+							}
+							else {
+								finalRow += value + ","; 
+							}
 						}
 					}
 					else {

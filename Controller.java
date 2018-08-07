@@ -127,14 +127,23 @@ public class Controller {
 				LasData lasData = null;
 				if (!workingData.getRow(workingWellRow).split(",")[workingData.getTypeCol()].equals("Vertical"))
 				{
-					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists, userInput.isUnknownRun());
+					lasData = lasFileReader.readFile(topDataList.get(topRow), true, lasFileExists, meridianExists);
 				}
 				else {
-					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists, meridianExists, userInput.isUnknownRun());
+					lasData = lasFileReader.readFile(topDataList.get(topRow), false, lasFileExists, meridianExists);
 				}
 				
 				if (lasData != null) { 
 					FormattedData formattedData = null;
+					ArrayList<LasDescriptionData> descriptionDataList = lasFileReader.getDescriptionList();
+					if (descriptionDataList.get(descriptionDataList.size()-1).getUwi().equals(topDataList.get(topRow).getUwi())) { 
+						System.out.println(topDataList.get(topRow).getUwi() + "description set!"); 
+						dataWriter.setDescriptionData(descriptionDataList.get(descriptionDataList.size()-1));
+					}
+					else { 
+						System.err.println(topDataList.get(topRow).getUwi() + "NOT SET PROPERLY");
+						dataWriter.setDescriptionData(null);
+					}
 					if (secondaryTopDataList == null) { 
 						formattedData = dataWriter.formatData(workingData.getHeader(), workingData.getRow(workingWellRow), lasData, topDataList.get(topRow), userInput.isUnknownRun());
 					}
