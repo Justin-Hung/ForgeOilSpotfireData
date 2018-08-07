@@ -147,11 +147,11 @@ public class FileGui {
 			JOptionPane.showMessageDialog(frame, "GWI file can not be found");
 			return true; 
 		}
-		if (outputNameTextField.getText().equals("")) {
+		if (outputNameTextField.getText().equals("") && !chckbxDontCreateOutput.isSelected()) {
 			JOptionPane.showMessageDialog(frame, "Please specify output file name");
 			return true;
 		}	
-		if (new File(outputTextField.getText() + "\\" + outputNameTextField.getText()).exists()) {
+		if (new File(outputTextField.getText() + "\\" + outputNameTextField.getText()).exists() && !chckbxDontCreateOutput.isSelected()) {
 			JOptionPane.showMessageDialog(frame, "Output file name exists already. Please rename output file name.");
 			return true; 
 		}

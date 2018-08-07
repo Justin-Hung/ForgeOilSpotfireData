@@ -542,6 +542,7 @@ public class UserInputGui {
 		});
 		chckbxRunWithUnknown.setSelected(true);
 		GridBagConstraints gbc_chckbxRunWithUnknown = new GridBagConstraints();
+		gbc_chckbxRunWithUnknown.anchor = GridBagConstraints.SOUTH;
 		gbc_chckbxRunWithUnknown.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxRunWithUnknown.gridx = 1;
 		gbc_chckbxRunWithUnknown.gridy = 14;
@@ -586,6 +587,13 @@ public class UserInputGui {
 				new FileGui(user);
 			}
 		});
+		
+		JCheckBox checkBox = new JCheckBox("Run Lite Version?");
+		checkBox.setSelected(true);
+		panel_18.add(checkBox);
+		
+		Component horizontalStrut_7 = Box.createHorizontalStrut(8);
+		panel_18.add(horizontalStrut_7);
 		panel_18.add(button);
 		
 		JButton button_1 = new JButton("Run");
