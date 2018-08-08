@@ -22,6 +22,7 @@ public class UserInput {
 	private int upperRange;
 	private int lowerRange; 
 	private boolean unknownMnemonicOutput;
+	private boolean liteVersion; 
 	
 	public UserInput() {
 		formations = new ArrayList<String>();
@@ -32,7 +33,10 @@ public class UserInput {
 		upperBuffer = 0.0001; 
 		lowerBuffer = 0.0001; 
 		unknownMnemonicOutput = true;
+		liteVersion = true; 
 	}
+	
+	public boolean isLiteVersion() { return liteVersion; } 
 	
 	public boolean isUnknownRun() { return unknownMnemonicOutput; } 
 	
@@ -64,6 +68,10 @@ public class UserInput {
 			return true;
 		}
 		return false;
+	}
+	
+	public void setliteVersion(boolean value) { 
+		liteVersion = value; 
 	}
 	
 	public void setUnknownMnemonicOutput(boolean value) {

@@ -44,6 +44,7 @@ public class UserInputGui {
 	private JTextField lowerFormationTextField;
 	private JTextField upperFormationTextField;
 	private JCheckBox chckbxRunWithUnknown = new JCheckBox("Run unknown mnemonics?");
+	private JCheckBox checkBox = new JCheckBox("Run Lite Version?");
 	
 	/**
 	 * Launch the application.
@@ -179,6 +180,7 @@ public class UserInputGui {
 		}	
 		
 		chckbxRunWithUnknown.setSelected(user.isUnknownRun());
+		checkBox.setSelected(user.isLiteVersion());
 	}
 	
 	public String formatNumber(String number, int desiredSize) {
@@ -588,7 +590,16 @@ public class UserInputGui {
 			}
 		});
 		
-		JCheckBox checkBox = new JCheckBox("Run Lite Version?");
+		checkBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (checkBox.isSelected()) { 
+					user.setUnknownMnemonicOutput(true);
+				}
+				else { 
+					user.setUnknownMnemonicOutput(false);
+				}
+			}
+		});
 		checkBox.setSelected(true);
 		panel_18.add(checkBox);
 		

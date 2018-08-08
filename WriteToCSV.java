@@ -151,6 +151,7 @@ public class WriteToCSV {
 				fileWriter.write(System.lineSeparator());
 			}
 			
+			
 			if (data.get(0).isMdforDir()) {
 				data.get(0).write(fileWriter, true);
 			}
