@@ -8,6 +8,7 @@ public class LiteFormat {
 	private ArrayList<FormattedData> liteData;
 	private ArrayList<Integer> grabColumns; 
 	private ArrayList<String> grabStrings; 
+	private int liteHeaderOffset;
 	private String header; 
 	private String liteActualHeader;
 	
@@ -36,10 +37,11 @@ public class LiteFormat {
 			}
 		}
 		
+		liteHeaderOffset = grabColumns.size();
+		
 		for(int i = 0; i < grabStrings.size() ; i++) {
 			for (int j = dataCol ; j < headerArray.length ; j++) {
 				if (grabStrings.get(i).equals(headerArray[j])) { 
-					System.out.println(grabStrings.get(i) + j);
 					grabColumns.add(j);
 					break;
 				}
@@ -70,8 +72,14 @@ public class LiteFormat {
 		try {
 			fileWriter.write(liteActualHeader);
 			fileWriter.write(System.lineSeparator());
+			String dummyLine = getDummyLine(liteData.get(0).getRow(0));
+			fileWriter.write(dummyLine);
 			fileWriter.write(System.lineSeparator());
-			for (int i = 0 ; i < liteData.size() ; i++) {
+			for (int i = 0 ; i < liteData.get(0).getSize() ; i++) {
+				fileWriter.write(liteData.get(0).getRow(i));
+				fileWriter.write(System.lineSeparator());
+			}
+			for (int i = 1 ; i < liteData.size() ; i++) {
 				fileWriter.write(liteData.get(i).getHeader());
 				fileWriter.write(System.lineSeparator());
 				for (int j = 0 ; j < liteData.get(i).getSize() ; j++) {
@@ -83,6 +91,26 @@ public class LiteFormat {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getDummyLine(String firstRow) {
+		firstRow += "placeholder";
+		String[] firstRowArray = firstRow.split(","); 
+		firstRowArray[firstRowArray.length-1] = firstRowArray[firstRowArray.length-1].substring(0, firstRowArray[firstRowArray.length-1].indexOf("placeholder"));
+		String[] liteHeaderArray = liteActualHeader.split(",");
+		WriteToCSV dummyGetter = new WriteToCSV(); 
+		String dummyRow = "";
+		for(int i = 1 ; i < liteHeaderOffset-2 ; i++) {
+			dummyRow+= ",";
+			if (firstRowArray[i].equals("")) {
+				dummyRow += dummyGetter.getDummyTypeFromHeader(liteHeaderArray[i]);
+			}
+		}
+		for (int i = liteHeaderOffset-2 ; i < firstRowArray.length-1 ; i++) {
+			dummyRow += ",-999.25";
+		}
+		dummyRow += ",placeholder";
+		return dummyRow;
 	}
 	
 	public String formatRow(String[] rowArray) { 

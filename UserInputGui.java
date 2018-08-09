@@ -593,10 +593,10 @@ public class UserInputGui {
 		checkBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (checkBox.isSelected()) { 
-					user.setUnknownMnemonicOutput(true);
+					user.setliteVersion(true);
 				}
 				else { 
-					user.setUnknownMnemonicOutput(false);
+					user.setliteVersion(false);
 				}
 			}
 		});

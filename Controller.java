@@ -136,8 +136,7 @@ public class Controller {
 				if (lasData != null) { 
 					FormattedData formattedData = null;
 					ArrayList<LasDescriptionData> descriptionDataList = lasFileReader.getDescriptionList();
-					if (descriptionDataList.get(descriptionDataList.size()-1).getUwi().equals(topDataList.get(topRow).getUwi())) { 
-						System.out.println(topDataList.get(topRow).getUwi() + "description set!"); 
+					if (descriptionDataList.get(descriptionDataList.size()-1).getUwi().equals(topDataList.get(topRow).getUwi())) {  
 						dataWriter.setDescriptionData(descriptionDataList.get(descriptionDataList.size()-1));
 					}
 					else { 

@@ -16,6 +16,9 @@ public class WriteToCSV {
 	private UserInput userInput;
 	private ArrayList<FormattedData> data;
 	
+	public WriteToCSV() {
+	}
+	
 	public WriteToCSV(ArrayList<FormattedData> d) { 
 		data = d;
 	}
@@ -220,16 +223,36 @@ public class WriteToCSV {
 	
 	public String getDummyTypeFromHeader(String headerName) { 
 		String [] commonBlankHeaders = {   
+				"Fluid",
+				"Pool Name",
+				"Producing Zone",
 				"Projected Total Depth", 
 				"On Production Date",
 				"Projected Total Depth",
-				"Unit Name"
+				"Unit Name",
+				"Cum Oil (bbl)",
+				"Cum Gas (mcf)",
+				"Cum Water (bbl)",
+				"Cum Prd Cond (bbl)",
+				"Cal Dly Oil First(12) Prod (bbl/d)",
+				"Cal Dly Gas First(12) Prod (mcf/d)",
+				"VKNS Isopach"
 		};
 		String [] dummyType = {
+				"placeholder",
+				"placeholder",
+				"placeholder",
 				"-999.25", 
 				"7/6/2000",
 				"placeholder",
-				"placeholder"
+				"placeholder",
+				"-999.25", 
+				"-999.25", 
+				"-999.25", 
+				"-999.25", 
+				"-999.25", 
+				"-999.25",
+				"-999.25"
 		};
 		
 		for (int i = 0 ; i < commonBlankHeaders.length ; i++) {
