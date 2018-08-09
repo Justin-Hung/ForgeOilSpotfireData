@@ -190,7 +190,7 @@ public class Controller {
 				return true;
 			}
 			writer.saveParameters(); 
-			if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
+			if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList, userInput.isLiteVersion())) {
 				return true;
 			}   
 			if (!userInput.getOutputFilePath().endsWith(".csv")) {
@@ -208,7 +208,7 @@ public class Controller {
 	}
 	
 	public boolean appendToFile() {
-		if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList)) {
+		if (writer.write(workingData.getHeader(), mnemonicList, userInput.secondaryTopFileExist(), formattedDataList, userInput.isLiteVersion())) {
 			return true;
 		}
 		formattedDataList.clear();

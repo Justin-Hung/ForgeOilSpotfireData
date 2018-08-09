@@ -86,7 +86,7 @@ public class WriteToCSV {
 		userInput.write(previousParameterWrite); 
 	}
 	
-	public boolean write(String header, ArrayList<MnemonicData> mnemonicList, boolean secondaryTopFileExist, ArrayList<FormattedData> formattedData) { 
+	public boolean write(String header, ArrayList<MnemonicData> mnemonicList, boolean secondaryTopFileExist, ArrayList<FormattedData> formattedData, boolean isLite) { 
 		try {
 			data = formattedData; 
 			String outputFilePath = saveFile.getPath().substring(0, saveFile.getPath().lastIndexOf("\\"));
@@ -124,6 +124,15 @@ public class WriteToCSV {
 			}
 
 			header += ",Caliper2,Bit,Service Co.,Separation,Medium-Shallow Separation,Deep-Medium Separation,Mudcakes,Subsea,Calculated Density Porosity Sandstone,Calculated Density Porosity Limestone,Calculated Density Porosity Dolomite";
+			
+			if (isLite) {
+				LiteFormat liteFormat = new LiteFormat(formattedData, header); 
+				liteFormat.findColumns();
+				liteFormat.format();
+				liteFormat.write(fileWriter);
+				fileWriter.close();
+				return false;
+			}
 			
 			if (!userInput.getOutputFilePath().endsWith("csv")) {
 				fileWriter.write("Break, Using MD values for directional well?," + header);

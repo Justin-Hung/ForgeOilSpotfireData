@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,6 +9,7 @@ public class LiteFormat {
 	private ArrayList<Integer> grabColumns; 
 	private ArrayList<String> grabStrings; 
 	private String header; 
+	private String liteActualHeader;
 	
 	public LiteFormat(ArrayList<FormattedData> formattedData, String header) {
 		this.formattedData = formattedData;
@@ -15,7 +18,10 @@ public class LiteFormat {
 	
 	public void findColumns() {  
 		grabStrings = new ArrayList<String>( Arrays.asList("GR: Gamma Ray", "SRES: Shallow Resistivity", "MRES: Medium Resistivity", 
-				"DRES: Deep Resistivity", "DENS: Density", ));
+				"DRES: Deep Resistivity", "DENS: Density", "NPHI: Neutron Porosity", "Separation", "Calculated Density Porosity Sandstone",
+				"NPHI-SS: Neutron Porosity Sandstone", "Calculated Density Porosity Limestone", "NPHI-LS: Neutron Porosity Limestone", 
+				"Calculated Density Porosity Dolomite", "NPHI-DL: Neutron Porosity Dolomite", "DT: Interval Transit Time",
+				"SP: Spontaneous Potential", "PE: Photoelectric Effect", "Caliper", "Bit", "Mudcakes", "Service Co."));
 		grabColumns = new ArrayList<Integer>(); 
 		String[] headerArray = header.split(",");
 		int dataCol = 0; 
@@ -30,24 +36,67 @@ public class LiteFormat {
 			}
 		}
 		
-		for (int i = dataCol ; i < headerArray.length ; i++) {
-			if (headerArray[i].contains("")) { 
-				grabColumns.add(i);
+		for(int i = 0; i < grabStrings.size() ; i++) {
+			for (int j = dataCol ; j < headerArray.length ; j++) {
+				if (grabStrings.get(i).equals(headerArray[j])) { 
+					System.out.println(grabStrings.get(i) + j);
+					grabColumns.add(j);
+					break;
+				}
 			}
 		}
-		
-		
 	}
 	
-	public ArrayList<FormattedData> format() { 
+	public void format() { 
 		liteData = new ArrayList<FormattedData>();
+		liteActualHeader = formatRow(header.split(","));
 		for (int i = 0 ; i < formattedData.size() ; i++) { 
-			String[] headerArray = formattedData.get(i).getHeader().split(",");
-			
+			FormattedData liteFormattedData = new FormattedData(); 
+		 	String[] headerArray = formattedData.get(i).getHeader().split(",");
+			String liteHeader = formatRow(headerArray); 
+			liteFormattedData.addHeader(liteHeader);
+			for (int j = 0 ; j < formattedData.get(i).getSize() ; j++) {
+				String line = formattedData.get(i).getRow(j);
+				line += "placeholder";
+				String [] lineArray = line.split(","); 
+				lineArray[lineArray.length-1] = lineArray[lineArray.length-1].substring(0, lineArray[lineArray.length-1].indexOf("placeholder"));
+				liteFormattedData.addRow(formatRow(lineArray));
+			}
+			liteData.add(liteFormattedData);
 		}
-
 	}
 	
+	public void write(FileWriter fileWriter) {
+		try {
+			fileWriter.write(liteActualHeader);
+			fileWriter.write(System.lineSeparator());
+			fileWriter.write(System.lineSeparator());
+			for (int i = 0 ; i < liteData.size() ; i++) {
+				fileWriter.write(liteData.get(i).getHeader());
+				fileWriter.write(System.lineSeparator());
+				for (int j = 0 ; j < liteData.get(i).getSize() ; j++) {
+					fileWriter.write(liteData.get(i).getRow(j));
+					fileWriter.write(System.lineSeparator());
+				}
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	public String formatRow(String[] rowArray) { 
+		try {
+			String liteRow = rowArray[grabColumns.get(0)]; 
+			for (int i = 1 ; i < grabColumns.size() ; i++) {
+				liteRow += "," + rowArray[grabColumns.get(i)];
+			}
+			return liteRow; 
+		}
+		catch(ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 }
