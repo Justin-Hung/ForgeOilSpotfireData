@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class Controller {
@@ -216,6 +217,10 @@ public class Controller {
 	}
 	
 	public boolean writeUnknown() { 
+		if (lasFileReader.getDescriptionList().isEmpty() || dataWriter.getUnknownDataList().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "No unknown mnemonics", "", JOptionPane.INFORMATION_MESSAGE);
+			return false; 
+		}
 		UnknownWrite unknownWrite = new UnknownWrite(userInput.getOutputFilePath(), userInput.getOutputFileName(), dataWriter.getUnknownDataList(), lasFileReader.getDescriptionList());
 		unknownWrite.formatLoop();
 		unknownWrite.display();

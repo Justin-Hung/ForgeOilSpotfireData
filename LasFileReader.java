@@ -40,10 +40,10 @@ public class LasFileReader {
 	}
 	
 	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
-		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
+		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
 		try {
 			boolean usingMdforDir = false;
 			String bit = null;
@@ -180,7 +180,11 @@ public class LasFileReader {
 	}
 	
 	public String convertUwiWithPath(String uwi, boolean dir) {
-		String township = uwi.substring(11,13);
+		String township = uwi.substring(10,13);
+		if (township.startsWith("0")) {
+			township = uwi.substring(1);
+		}
+		System.out.println(township);
 		String range = uwi.substring(14,16); 
 		String meridian = uwi.substring(17,18); 
 		String fileUwi = uwi.replaceFirst("/", "");

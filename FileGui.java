@@ -151,6 +151,10 @@ public class FileGui {
 			JOptionPane.showMessageDialog(frame, "Please specify output file name");
 			return true;
 		}	
+		if (outputNameTextField.getText().endsWith(" ") && !chckbxDontCreateOutput.isSelected()) {
+			JOptionPane.showMessageDialog(frame, "Output file name can not end with a space!");
+			return true;
+		}	
 		if (new File(outputTextField.getText() + "\\" + outputNameTextField.getText()).exists() && !chckbxDontCreateOutput.isSelected()) {
 			JOptionPane.showMessageDialog(frame, "Output file name exists already. Please rename output file name.");
 			return true; 

@@ -130,7 +130,6 @@ public class TopFileReader {
 			line = bufferedReader.readLine();
 			while (line != null) {
 				String[] lineArray = line.split(",");
-				
 				int index = 0; 
 				while (index < lineArray.length) {
 					if (index == uwiCol) {
@@ -224,12 +223,14 @@ public class TopFileReader {
 			if (data.isEmpty()) {
 				System.out.println("ERRROR");
 			}
-			if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
-				checkBottom = false;
-			}
-			else {
-				topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
+			if (data.size() > 2) {
+				if (formations.get(formations.size()-1).equals("TD") || checkBottom) {
+					topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, true, formations.get(0)));
+					checkBottom = false;
+				}
+				else {
+					topDataList.add(new TopData(data, upperbuffer, lowerbuffer, upperFormation, false, formations.get(0))); 
+				}
 			}
 			bufferedReader.close();
 			return topDataList;

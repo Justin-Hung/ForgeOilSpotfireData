@@ -20,7 +20,7 @@ encouraged for all input files.
 
 #Formatting: 
 
-**Note: Sorting and formatting is not an issue when using Accumap's export manager with default System Tops set as the 
+*Note: Sorting and formatting is not an issue when using Accumap's export manager with default System Tops set as the 
 template. The formatting guidelines below are used for user top picks. 
 
 The tops file needs to be sorted by the Sort UWI column from A to Z on the first level. Secondly, the TVD column needs to be
