@@ -68,13 +68,19 @@ public class LiteFormat {
 		}
 	}
 	
-	public void write(FileWriter fileWriter) {
+	public void write(FileWriter fileWriter, boolean append) {
 		try {
-			fileWriter.write(liteActualHeader);
-			fileWriter.write(System.lineSeparator());
-			String dummyLine = getDummyLine(liteData.get(0).getRow(0));
-			fileWriter.write(dummyLine);
-			fileWriter.write(System.lineSeparator());
+			if (!append) {
+				fileWriter.write(liteActualHeader);
+				fileWriter.write(System.lineSeparator());
+				String dummyLine = getDummyLine(liteData.get(0).getRow(0));
+				fileWriter.write(dummyLine);
+				fileWriter.write(System.lineSeparator());
+			}
+			else { 
+				fileWriter.write(liteData.get(0).getHeader());
+				fileWriter.write(System.lineSeparator());
+			}
 			for (int i = 0 ; i < liteData.get(0).getSize() ; i++) {
 				fileWriter.write(liteData.get(0).getRow(i));
 				fileWriter.write(System.lineSeparator());

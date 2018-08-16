@@ -43,7 +43,8 @@ public class LasFileReader {
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
-		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
+//		System.out.println("UWI: " + topData.getUwi() + " LOWER BOUND: " + topData.getLowerBound() + " UPPER BOUND: " + topData.getUpperBound());
+//		topData.displayTop();
 		try {
 			boolean usingMdforDir = false;
 			String bit = null;
@@ -182,9 +183,8 @@ public class LasFileReader {
 	public String convertUwiWithPath(String uwi, boolean dir) {
 		String township = uwi.substring(10,13);
 		if (township.startsWith("0")) {
-			township = uwi.substring(1);
+			township = township.substring(1);
 		}
-		System.out.println(township);
 		String range = uwi.substring(14,16); 
 		String meridian = uwi.substring(17,18); 
 		String fileUwi = uwi.replaceFirst("/", "");
@@ -206,7 +206,6 @@ public class LasFileReader {
 				fileUwi =  "Twp " + township + "W" + meridian + "\\" + township + "-" + range + "W" + meridian + "\\" + fileUwi + "_1000_MD_COMBINED_MERGED.las"; 
 			}
 		}
-		//System.out.println(fileUwi);
 		return fileUwi;
 	}
 }

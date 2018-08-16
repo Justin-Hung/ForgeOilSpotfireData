@@ -18,9 +18,30 @@ public class WorkingFileData {
 	
 	public void addHeader(String head) {
 		header = new DataWriter().removeNewLine(head); 
+		formatHeader();
 		setCol(); 
 	}
 
+	public void formatHeader() {
+		String[] headerArray = header.split(",");
+
+		for (int i = 0 ; i < headerArray.length ; i++) { 
+			if (headerArray[i].equals("Bottom Hole Latitude")) {
+				headerArray[i] = "Latitude"; 
+			}
+			if (headerArray[i].equals("Bottom Hole Longitude")) {
+				headerArray[i] = "Longitude"; 
+			}
+		}
+	
+		header = headerArray[0];
+		
+		for (int i = 1 ; i < headerArray.length ; i++) {
+			header += "," + headerArray[i];
+		}
+		
+		header += ",";
+	}
 	
 	public void setCol() { 
 		String[] headerArray = header.split(",");

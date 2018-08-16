@@ -266,6 +266,7 @@ public class DataWriter {
 	}
 
 	public FormattedData formatData(String h, String uwiInfo, LasData lasData, TopData topData, boolean unknownOutput) {
+		
 		UnknownData unknownData = null;
 		if (unknownOutput) {
 			unknownData = new UnknownData(topData.getUwi());
@@ -431,6 +432,7 @@ public class DataWriter {
 				unknownDataList.add(unknownData);
 			}
 		}
+
 		return formattedData;
 	}
 	

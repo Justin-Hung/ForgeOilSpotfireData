@@ -132,7 +132,12 @@ public class WriteToCSV {
 				LiteFormat liteFormat = new LiteFormat(formattedData, header); 
 				liteFormat.findColumns();
 				liteFormat.format();
-				liteFormat.write(fileWriter);
+				if (userInput.getOutputFilePath().endsWith("csv")) {
+					liteFormat.write(fileWriter,true);
+				}
+				else { 
+					liteFormat.write(fileWriter,false);
+				}
 				fileWriter.close();
 				return false;
 			}

@@ -102,6 +102,7 @@ public class RunLoadingScreen {
 	                }
                 }
                 else { 
+                	System.out.println("WE HEERE");
                 	if (controller.writeToFile()) {
 	                	 JOptionPane.showMessageDialog(jpb.getParent(), "Could not write data to masterfile. Check if masterfile is open.", "Error", JOptionPane.INFORMATION_MESSAGE);
                 	}	                
