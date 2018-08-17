@@ -32,8 +32,8 @@ public class UserInput {
 		townshipSE = "--W"; 
 		upperBuffer = 0.0001; 
 		lowerBuffer = 0.0001; 
-		unknownMnemonicOutput = true;
-		liteVersion = true; 
+		unknownMnemonicOutput = false;
+		liteVersion = false; 
 	}
 	
 	public boolean isLiteVersion() { return liteVersion; } 

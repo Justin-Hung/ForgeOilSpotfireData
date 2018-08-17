@@ -88,6 +88,9 @@ public class Controller {
 		
 		checkIfLasFileExists(); 
 		checkIfLasMeridianExists();
+		if ( topDataList.isEmpty()) {
+			System.err.println("Tops data is EMPTY!!!!!!!!!!!");
+		}
 	}
 	
 	public void checkIfLasMeridianExists() { 

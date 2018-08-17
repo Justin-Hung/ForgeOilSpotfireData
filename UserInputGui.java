@@ -178,7 +178,7 @@ public class UserInputGui {
 				seMerTextField.setText(u.getTownshipSE().split("-")[2].split("W")[1]);
 			}
 		}	
-		
+	
 		chckbxRunWithUnknown.setSelected(user.isUnknownRun());
 		checkBox.setSelected(user.isLiteVersion());
 	}
@@ -542,7 +542,6 @@ public class UserInputGui {
 				}
 			}
 		});
-		chckbxRunWithUnknown.setSelected(true);
 		GridBagConstraints gbc_chckbxRunWithUnknown = new GridBagConstraints();
 		gbc_chckbxRunWithUnknown.anchor = GridBagConstraints.SOUTH;
 		gbc_chckbxRunWithUnknown.insets = new Insets(0, 0, 5, 5);
@@ -573,10 +572,10 @@ public class UserInputGui {
 				forms.add("");
 				forms.add("");
 				if (!upperFormationTextField.getText().equals("")) {
-					forms.set(0, upperFormationTextField.getText().toUpperCase());
+					forms.set(0, upperFormationTextField.getText());
 				}
 				if (!lowerFormationTextField.getText().equals("")) { 
-					forms.set(1, lowerFormationTextField.getText().toUpperCase());
+					forms.set(1, lowerFormationTextField.getText());
 				}
 				user.setFormations(forms);
 				
@@ -600,7 +599,6 @@ public class UserInputGui {
 				}
 			}
 		});
-		checkBox.setSelected(true);
 		panel_18.add(checkBox);
 		
 		Component horizontalStrut_7 = Box.createHorizontalStrut(8);
@@ -616,8 +614,8 @@ public class UserInputGui {
 				user.setUpperBuffer(Double.parseDouble(upperBufferTextField.getText())); 
 				user.setLowerBuffer(Double.parseDouble(lowerBufferTextField.getText()));
 				ArrayList<String> forms = new ArrayList<String>();
-				forms.add(upperFormationTextField.getText().toUpperCase());
-				forms.add(lowerFormationTextField.getText().toUpperCase());
+				forms.add(upperFormationTextField.getText());
+				forms.add(lowerFormationTextField.getText());
 				user.setFormations(forms);
 				user.setTownshipNw("31" + "-" + formatNumber(nwTwpTextField.getText(),3) + "-" + formatNumber(nwRgeTextField.getText(),2)
 								   + "W" + nwMerTextField.getText());
