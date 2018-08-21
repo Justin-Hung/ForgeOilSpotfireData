@@ -93,6 +93,8 @@ public class LiteFormat {
 					fileWriter.write(System.lineSeparator());
 				}
 			}
+			fileWriter.close();
+			liteData.clear();
 		}
 		catch (IOException e) {
 			e.printStackTrace();

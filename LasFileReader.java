@@ -40,6 +40,10 @@ public class LasFileReader {
 	}
 	
 	public LasData readFile(TopData topData, boolean dir, boolean lasFileExists, boolean meridianExists) { 
+		if (topData.getUwi().equals("102/10-15-049-26W4/0"))
+		{
+			System.out.println("asdas");
+		}
 		if (topData.getTvDepth().isEmpty()) {
 			return null;
 		}
@@ -56,8 +60,10 @@ public class LasFileReader {
 				lasFile = convertUwiWithPath(topData.getUwi(), dir);
 			}
 			lasFile = checkForLogPath(lasFile); 
+			String tempFilePath = lasFilePath;
 			if (meridianExists) {
 				lasFile = "W" + topData.getUwi().substring(17,18) + "\\" + lasFile; 
+				tempFilePath = lasFilePath + "W" + topData.getUwi().substring(17,18) + "\\"; 
 			}
 			String fileLocation = lasFilePath + lasFile; 
 			String line = null; 
@@ -75,9 +81,11 @@ public class LasFileReader {
 						else {
 							mdFile = convertUwiWithPath(topData.getUwi(), false);
 						}
-						fileLocation= lasFilePath + mdFile; 
+						mdFile = checkForLogPath(mdFile);
+						fileLocation= tempFilePath + mdFile; 
 						fileTest = new File(fileLocation);
 						usingMdforDir = true;
+						System.out.println(fileLocation);
 						if (!fileTest.exists()) {
 							return null;
 						}
@@ -87,6 +95,8 @@ public class LasFileReader {
 					}
 				}
 			}
+	
+			
 			FileReader fileReader = new FileReader(fileLocation); 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			LasData lasContainer = new LasData(topData.getUwi()); 
@@ -94,7 +104,7 @@ public class LasFileReader {
 				lasContainer.setMdTrue();
 			}
 			LasDescriptionData descriptionData = new LasDescriptionData(topData.getUwi());
-
+			
 			while((line = bufferedReader.readLine()) != null) {
 				if (line.contains("~Curve Information")) { 
 					line = bufferedReader.readLine();
