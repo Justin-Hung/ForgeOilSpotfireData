@@ -1,15 +1,59 @@
 import java.util.ArrayList;
 
 public class WorkingFileData {
+	private int typeCol; 
+	private int producingCol;
 	private String header;
 	private ArrayList<String> rows; 
 	
 	public WorkingFileData() {
+		typeCol = -1; 
+		producingCol = -1; 
 		rows = new ArrayList<String>(); 
 	}
 	
+	public int getTypeCol() { return typeCol; } 
+	
+	public int getProducingCol() { return producingCol; }
+	
 	public void addHeader(String head) {
-		header = head; 
+		header = new DataWriter().removeNewLine(head); 
+		formatHeader();
+		setCol(); 
+	}
+
+	public void formatHeader() {
+		String[] headerArray = header.split(",");
+
+		for (int i = 0 ; i < headerArray.length ; i++) { 
+			if (headerArray[i].equals("Bottom Hole Latitude")) {
+				headerArray[i] = "Latitude"; 
+			}
+			if (headerArray[i].equals("Bottom Hole Longitude")) {
+				headerArray[i] = "Longitude"; 
+			}
+		}
+	
+		header = headerArray[0];
+		
+		for (int i = 1 ; i < headerArray.length ; i++) {
+			header += "," + headerArray[i];
+		}
+		
+		header += ",";
+	}
+	
+	public void setCol() { 
+		String[] headerArray = header.split(",");
+		
+		for (int i = 0 ; i < headerArray.length ; i++) {
+			if (headerArray[i].equals("Producing Zone")) {
+				producingCol = i; 
+			}
+			if (headerArray[i].equals("Type")) {
+				typeCol = i;
+			}
+		}
 	}
     
 	public void addRow(String row) {

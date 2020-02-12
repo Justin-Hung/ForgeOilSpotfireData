@@ -16,4 +16,12 @@ public class MnemonicData {
 	public String getName() { 
 		return name; 
 	}
+	
+	public void display() { 
+		System.out.println("\n--------------------------------------------");
+		System.out.println(name + ": ");
+		for (int i = 0 ; i < mnemonics.size() ; i++) {
+			System.out.print(mnemonics.get(i) + ",");
+		}
+	}
 }
